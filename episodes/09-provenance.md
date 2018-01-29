@@ -48,7 +48,7 @@ If we want to create our own entry for the history attribute, we'll need to be a
 
 * Time stamp  
 * Record of what was entered at the command line in order to execute `plot_precipitation_climatology.py`  
-* Method of indicating which verion of the script was run (i.e. because the script is in our git repository)  
+* Method of indicating which version of the script was run (i.e. because the script is in our git repository)  
 
 ## Time stamp
 
