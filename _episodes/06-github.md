@@ -223,8 +223,8 @@ by getting the URL from the corresponding page on GitHub:
 >
 > Someone who clones your repository can't push changes directly to it
 > (unless you add them as a collaborator).
-> They could, however, submit suggested changes via a "pull request".
+> They could, however, "fork" your repository and submit suggested changes via a "pull request".
 > Collaborators and pull requests are beyond the scope of this lesson,
 > but you may come across them as you get more experienced with 
-> using git and GitHub
+> using git and GitHub.
 {: .callout}
