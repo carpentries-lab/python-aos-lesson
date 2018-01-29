@@ -35,7 +35,8 @@ $ cd Desktop/data-carpentry
 
 ## Environment
 
-You can install the required Python libraries by entering the following at the command line:
+To install the required Python libraries,
+open a terminal or git bash and enter the following commands:
 
 ~~~
 $ conda config --add channels conda-forge
@@ -48,14 +49,15 @@ The lesson on [software installation using conda](https://data-lessons.github.io
 explains more about conda and what these commands mean.
 
 To start a Jupyter notebook (which can be used for some of the lessons),
-open a terminal or git bash and type the command:
+open a terminal or git bash and type the following command:
 
 ~~~
 $ jupyter notebook &
 ~~~
 {: .language-bash}
 
-To start the Python interpreter without the notebook, open a terminal or git bash and type the command:
+To start the Python interpreter without the notebook,
+open a terminal or git bash and type the following command:
 
 ~~~
 $ ipython
