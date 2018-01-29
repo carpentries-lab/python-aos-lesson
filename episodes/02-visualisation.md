@@ -244,6 +244,8 @@ plt.show()
 > 
 > > ## Solution
 > > ~~~
+> > import iris.coord_categorisation
+> >
 > > cube = iris.load_cube(access_pr_file, 'precipitation_flux')
 > > iris.coord_categorisation.add_month(cube, 'time')
 > > cube = cube.extract(iris.Constraint(month='Jun'))
@@ -275,6 +277,8 @@ plt.show()
 >
 > > ## Solution
 > > ~~~
+> > import cmocean
+> >
 > > iplt.contourf(clim, cmap=cmocean.cm.haline_r, levels=numpy.arange(0, 10), extend='max')
 > > ~~~
 > > {: .language-python}
