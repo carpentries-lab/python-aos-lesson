@@ -684,7 +684,7 @@ no changes added to commit (use "git add" and/or "git commit -a")
 ~~~
 {: .output}
 
-We can put things back the way they were
+We can put things back the way they were at the time of our last commit
 by using `git checkout`:
 
 ~~~
@@ -705,12 +705,9 @@ As you might guess from its name,
 In this case,
 we're telling Git that we want to recover the version of the file recorded in `HEAD`,
 which is the last saved commit.
-If we want to go back even further,
-we can use a commit identifier (e.g. 444c3c0) or the `HEAD~1` style notation instead:
-e.g.
 
-~~~
-$ git checkout 444c3c0 plot_precipitation_climatology.py
-~~~
-{: .bash}
+We've lost the random comment that we inserted
+(that change hadn't been committed)
+but everything else is there.
+
 
