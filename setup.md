@@ -33,12 +33,22 @@ $ cd Desktop/data-carpentry
 ~~~
 {: .language-bash}
 
-If you will be using the Jupyter (IPython) notebook for the lesson,
-you should have already
-[installed Anaconda](http://swcarpentry.github.io/workshop-template/#python)
-which includes the notebook.
+## Environment
 
-To start the notebook, open a terminal or git bash and type the command:
+You can install the required Python libraries by entering the following at the command line:
+
+~~~
+$ conda config --add channels conda-forge
+$ conda create -n pyaos-lesson jupyter iris cmocean gitpython
+$ source activate pyaos-lesson
+~~~
+{: .language-bash}
+
+The lesson on [software installation using conda](https://data-lessons.github.io/python-aos-lesson/01-conda/index.html)
+explains more about conda and what these commands mean.
+
+To start a Jupyter notebook (which can be used for some of the lessons),
+open a terminal or git bash and type the command:
 
 ~~~
 $ jupyter notebook &
