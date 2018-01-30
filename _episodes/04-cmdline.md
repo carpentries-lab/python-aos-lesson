@@ -211,6 +211,8 @@ if __name__ == '__main__':
     parser.add_argument("outfile", type=str, help="Output file name")
 
     args = parser.parse_args()
+    
+    main(args)
 ~~~
 {: .language-python}
 
