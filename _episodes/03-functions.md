@@ -184,7 +184,7 @@ well documented functions can dramatically speed up your data science.
 >     Args:
 >       pr_file (str): Precipitation data file
 >       month (str): Month (3 letter abbreviation, e.g. Jun)
->       cmap: matplotlib colormap
+>       gridlines (bool): Select whether to plot gridlines
 >    
 >     """
 >
