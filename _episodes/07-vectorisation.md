@@ -264,17 +264,16 @@ print(cube.data[0, 100:110, 0:10])
 > should look something like the following:
 >
 > ~~~
+> import pdb
 > import argparse
+> import numpy
+> import matplotlib.pyplot as plt
+> import calendar
 > import iris
 > iris.FUTURE.netcdf_promote = True
-> import matplotlib.pyplot as plt
 > import iris.plot as iplt
 > import iris.coord_categorisation
 > import cmocean
-> import numpy
-> import calendar
-> import pdb
->
 >
 > def read_data(fname, month):
 >     """Read an input data file"""
