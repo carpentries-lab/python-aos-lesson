@@ -71,7 +71,13 @@ def plot_data(cube, month, gridlines=False, levels=None):
 
 
 def write_metadata(outfile, previous_history):
-    """Write the history record to file."""
+    """Write the history record to file.
+    
+    This output metadata file has exactly the same
+      name as the output figure, just with the file
+      extension .txt 
+    
+    """
     
     new_history = provenance.get_history_record()
     complete_history = '%s \n %s' %(new_history, previous_history)
