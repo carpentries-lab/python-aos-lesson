@@ -15,9 +15,10 @@ keypoints:
 
 ## Background
 
-The Python package installer ([pip](https://pip.pypa.io)) only works for libraries written in pure Python.
-Many scientific Python libraries have C and/or Fortran dependencies,
-so the easy solution to this problem is to use a distribution like Anaconda or Canopy, 
+The Python package installer ([pip](https://pip.pypa.io)) works really well for libraries written in pure Python.
+However, many scientific Python libraries have C and/or Fortran dependencies,
+and the binary wheels format lacks some desired features like the use shared library instead of static links that bloat the environment.
+The easy solution to this problem is to use a distribution like Anaconda or Canopy, 
 which come with all the most popular libraries pre-installed.
 These distributions also come with a package manager for installing libraries that weren't pre-installed.
 This tutorial focuses on [conda](https://conda.io/docs/),
@@ -26,19 +27,19 @@ which is the package manager associated with Anaconda
 
 ## Basic usage
 
-Anaconda comes with around 75 of the most widely used libraries (and their depedencies).
+Anaconda comes with many of the most widely used libraries (and their dependencies).
 
-In addition, there are around 330 libraries available via `conda install`,
+In addition, there are a huge number libraries available via `conda install`,
 which can be installed via the Anaconda Navigator graphical user interface or at the command line.
 For instance, installing the popular `xarray` library can be achieved
-by simply entering the following at the command line:  
+by simply entering the following at the command line:
 ~~~
 $ conda install xarray
 ~~~
 {: .language-bash}
 
 You can use `conda search -f xarray` (or the Navigator)
-to find out if the packge you want is in the 330.
+to find out if the package you want is available.
 
 > ## Miniconda
 >
@@ -58,27 +59,28 @@ where the community can contribute conda installation packages.
 You can search Anaconda Cloud
 to find the command line entry needed to install the package. e.g:
 ~~~
-$ conda install -c https://conda.anaconda.org/scitools iris
+$ conda install -c conda-forge iris
 ~~~
 {: .language-bash}
 
-In many cases, there are many versions of the same package up on Anaconda Cloud.
-To address this problem, [conda-forge](https://conda-forge.github.io/)
-has been launched to have a central place for just a single version.
-You can therefore expand the selection of packages available via `conda install`
-beyond the chosen 330 by adding conda-forge:
+In many cases there are many versions of the same package up on Anaconda Cloud.
+We recommend to add the  [conda-forge](https://conda-forge.github.io/),
+in additional to the default channel, to avoid mixing packages from multiple third party channels.
 ~~~
 $ conda config --add channels conda-forge
 ~~~
 {: .language-bash}
 
+
+Mixing packages from multiple channels can cause some headaches like binary incompatibilities.
+
 ### Environments
 
 Now we can go ahead and use conda to install the libraries we need for this lesson.
 Rather than install everything in the same place
-(which can get unweidly if you've got mutliple data science projects on the go)
+(which can get unwieldy if you've got multiple data science projects on the go)
 it's common practice to create separate environments
-for the various projects you're working on. 
+for the various projects you're working on.
 
 Let's call this environment `pyaos-lesson`
 and include the [jupyter](https://jupyter.org/) library (so we can use the jupyter notebook),
@@ -104,7 +106,7 @@ $ source activate pyaos-lesson
 > {: .language-bash}
 {: .challenge}
 
-If we list all the libraries in this new envrionment,
+If we list all the libraries in this new environment,
 we can see that jupyter, iris, cmocean, gitpython
 and all their required dependencies have been installed:
 
