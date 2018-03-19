@@ -27,9 +27,10 @@ which is the package manager associated with Anaconda (as we’ll see, it has so
 
 ## Basic usage
 
-Anaconda comes with around 150 of the most widely used libraries (and their dependencies).
+According to the [latest documentation](https://docs.anaconda.com/anaconda/#anaconda-navigator-or-conda),
+Anaconda comes with over 150 of the most widely used data science libraries (and their dependencies).
 
-In addition, there are around 250 libraries available via `conda install`,
+In addition, there are over 250 libraries available via `conda install`,
 which can be installed via the Anaconda Navigator graphical user interface or at the command line.
 For instance, installing the popular `xarray` library can be achieved
 by simply entering the following at the command line:
@@ -55,6 +56,10 @@ to find out if the package you want is available.
 This is all great, but up until now Anaconda gives us nothing that Canopy doesn't.
 The real advantage of Anaconda is the [Anaconda Cloud](https://anaconda.org) website,
 where the community can contribute conda installation packages.
+This is critical for the atmosphere and ocean science community,
+because many of our libraries are discipline specific,
+which means they'll never make it into the top 400 or so data science libraries
+supported by Anaconda and Canopy.
 
 You can search Anaconda Cloud
 to find the command line entry needed to install the package. e.g:
@@ -63,14 +68,13 @@ $ conda install -c conda-forge iris
 ~~~
 {: .language-bash}
 
-In many cases there are many versions of the same package up on Anaconda Cloud.
-We recommend to add the  [conda-forge](https://conda-forge.github.io/),
+In many cases there are multiple versions of the same package up on Anaconda Cloud.
+We recommend to add the [conda-forge](https://conda-forge.github.io/) channel,
 in additional to the default channel, to avoid mixing packages from multiple third party channels.
 ~~~
 $ conda config --add channels conda-forge
 ~~~
 {: .language-bash}
-
 
 Mixing packages from multiple channels can cause some headaches like binary incompatibilities.
 
