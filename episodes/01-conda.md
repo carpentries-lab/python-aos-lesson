@@ -15,21 +15,21 @@ keypoints:
 
 ## Background
 
-The Python package installer ([pip](https://pip.pypa.io)) works really well for libraries written in pure Python.
-However, many scientific Python libraries have C and/or Fortran dependencies,
-and the binary wheels format lacks some desired features like the use shared library instead of static links that bloat the environment.
-The easy solution to this problem is to use a distribution like Anaconda or Canopy, 
-which come with all the most popular libraries pre-installed.
-These distributions also come with a package manager for installing libraries that weren't pre-installed.
+Until recently, the Python package installer (pip) only worked for libraries written in pure Python.
+This was a major limitation for the data science community,
+because many scientific Python libraries have C and/or Fortran dependencies.
+To spare people the pain of installing these dependencies,
+distributions like [Anaconda](https://www.anaconda.com/distribution/) and [Canopy](https://www.enthought.com/product/canopy/) have been released,
+which come with the most popular data science libraries and their dependencies pre-installed.
+These distributions also come with a package manager for installing libraries that weren’t pre-installed.
 This tutorial focuses on [conda](https://conda.io/docs/),
-which is the package manager associated with Anaconda
-(as we'll see, it's better than the Canopy package manager).
+which is the package manager associated with Anaconda (as we’ll see, it has some advantages over the Canopy package manager).
 
 ## Basic usage
 
-Anaconda comes with many of the most widely used libraries (and their dependencies).
+Anaconda comes with around 150 of the most widely used libraries (and their dependencies).
 
-In addition, there are a huge number libraries available via `conda install`,
+In addition, there are around 250 libraries available via `conda install`,
 which can be installed via the Anaconda Navigator graphical user interface or at the command line.
 For instance, installing the popular `xarray` library can be achieved
 by simply entering the following at the command line:
