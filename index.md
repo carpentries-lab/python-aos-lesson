@@ -19,7 +19,7 @@ that aren’t so easy to glean from a quick Google search.
 
 > ## raster vs vector data
 >
-> These lessons work with raster or “gridded” data that are stored as a grid of values using the netCDF file format.
+> These lessons work with raster or “gridded” data that are stored as a uniform grid of values using the netCDF file format.
 > This is the most common data format and file type in the atmosphere and ocean sciences; 
 > essentially all output from weather, climate and ocean models is gridded data stored as a series of netCDF files.
 > 
