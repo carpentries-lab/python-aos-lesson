@@ -68,15 +68,18 @@ $ conda install -c conda-forge iris
 ~~~
 {: .language-bash}
 
-In many cases there are multiple versions of the same package up on Anaconda Cloud.
-We recommend to add the [conda-forge](https://conda-forge.github.io/) channel,
-in additional to the default channel, to avoid mixing packages from multiple third party channels.
+In many cases, there are multiple versions of the same package up on Anaconda Cloud.
+To try and address this duplication problem, [conda-forge](https://conda-forge.github.io/) has been launched,
+which aims to be a central repository that contains just a single (working) version of each package on Anaconda Cloud.
+You can therefore expand the selection of packages available via `conda install` beyond the chosen 400
+by adding the conda-forge channel:
 ~~~
 $ conda config --add channels conda-forge
 ~~~
 {: .language-bash}
 
-Mixing packages from multiple channels can cause some headaches like binary incompatibilities.
+We recommned not adding any other third-party channels unless absolutely necessary,
+because mixing packages from multiple channels can cause headaches like binary incompatibilities.
 
 ### Environments
 
