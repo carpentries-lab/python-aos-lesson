@@ -14,8 +14,21 @@ reinventing a lot of wheels,
 and a nagging uncertainty at the end of it all
 regarding the reliability and reproducibility of the results.
 To help address these issues,
-this one day Data Carpentry workshop covers a suite of programming best practices
+this one day Data Carpentry workshop covers a suite of programming and data management best practices
 that aren’t so easy to glean from a quick Google search. 
+
+> ## raster vs vector data
+>
+> These lessons work with raster or “gridded” data that are stored as a grid of values using the netCDF file format.
+> This is the most common data format and file type in the atmosphere and ocean sciences 
+> (e.g. essentially all output from weather, climate and ocean models is stored in this format),
+> however there are a significant number of atmosphere and ocean scientists working with vector data.
+> In contrast to raster data, these vector data are composed of discrete geometric locations (x, y values) known as vertices
+> that define the “shape” of a spatial point, line or polygon.
+> They are not stored using the netCDF file format.
+> [Data Carpentry](http://www.datacarpentry.org/lessons/) have separate lessons on working with geospatial vector data.
+>
+{: .callout}
 
 > ## Prerequisites
 >
