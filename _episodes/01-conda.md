@@ -39,7 +39,7 @@ $ conda install xarray
 ~~~
 {: .language-bash}
 
-You can use `conda search -f xarray` (or the Navigator)
+You can use `conda search -f {package_name}` (or the Navigator)
 to find out if the package you want is available.
 
 > ## Miniconda
@@ -62,13 +62,12 @@ which means they'll never make it into the top 400 or so data science libraries
 supported by Anaconda and Canopy.
 
 You can search Anaconda Cloud
-to find the command line entry needed to install the package. e.g:
-~~~
-$ conda install -c conda-forge iris
-~~~
-{: .language-bash}
+to find the command line entry needed to install the package.
+For instance, here is the search result for the iris package:
 
-In many cases, there are multiple versions of the same package up on Anaconda Cloud.
+![Iris search on Anaconda Cloud](../fig/01-iris-search.png)
+
+The problem here is that there are often multiple versions of the same package up on Anaconda Cloud.
 To try and address this duplication problem, [conda-forge](https://conda-forge.github.io/) has been launched,
 which aims to be a central repository that contains just a single (working) version of each package on Anaconda Cloud.
 You can therefore expand the selection of packages available via `conda install` beyond the chosen 400
@@ -90,14 +89,21 @@ it's common practice to create separate environments
 for the various projects you're working on.
 
 Let's call this environment `pyaos-lesson`
-and include the [jupyter](https://jupyter.org/) library (so we can use the jupyter notebook),
-[iris](http://scitools.org.uk/iris/) (for handling our CMIP5 data),
-[cmocean](http://matplotlib.org/cmocean/) (for nice color palettes) and 
-[gitpython](http://gitpython.readthedocs.io)
-(for integrating version control information into data provenance):
+and include the following Python libraries:
+
+* [jupyter](https://jupyter.org/) - so we can use the jupyter notebook  
+* [iris](http://scitools.org.uk/iris/) - for handling our CMIP5 data  
+* [cmocean](http://matplotlib.org/cmocean/) - for nice color palettes  
+* [cmdline_provenance](http://cmdline-provenance.readthedocs.io/en/latest/) - to record our data processing steps
+
+Since conda can handle non-Python packages,
+we will also install the following command line tools:
+
+* [NCO](http://nco.sourceforge.net/) - for editing the attributes of netCDF files  
+* [CDO](https://code.mpimet.mpg.de/projects/cdo/) - for performing basic climate calculations on netCDF files
 
 ~~~
-$ conda create -n pyaos-lesson jupyter iris cmocean gitpython
+$ conda create -n pyaos-lesson jupyter iris cmocean cmdline-provenance nco cdo
 $ source activate pyaos-lesson
 ~~~
 {: .language-bash}
@@ -107,14 +113,16 @@ $ source activate pyaos-lesson
 > Go ahead and create your own `pyaos-lesson` environment to use in this workshop:
 > ~~~
 > $ conda config --add channels conda-forge
-> $ conda create -n pyaos-lesson jupyter iris cmocean gitpython
+> $ conda create -n pyaos-lesson jupyter iris cmocean cmdline-provenance nco cdo
 > $ source activate pyaos-lesson
 > ~~~
 > {: .language-bash}
+> (Note that CDO is not available on Windows.)
+>
 {: .challenge}
 
 If we list all the libraries in this new environment,
-we can see that jupyter, iris, cmocean, gitpython
+we can see that jupyter, iris, cmocean, cmdline-provenance, nco and cdo
 and all their required dependencies have been installed:
 
 ~~~
