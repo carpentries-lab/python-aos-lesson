@@ -270,7 +270,6 @@ print(cube.data[0, 100:110, 0:10])
 > import matplotlib.pyplot as plt
 > import calendar
 > import iris
-> iris.FUTURE.netcdf_promote = True
 > import iris.plot as iplt
 > import iris.coord_categorisation
 > import cmocean

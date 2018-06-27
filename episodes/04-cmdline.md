@@ -146,7 +146,6 @@ $ cat plot_precipitation_climatology.py
 ~~~
 import argparse
 import iris
-iris.FUTURE.netcdf_promote = True
 import matplotlib.pyplot as plt
 import iris.plot as iplt
 import iris.coord_categorisation
@@ -336,7 +335,6 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > ~~~
 > import argparse
 > import iris
-> iris.FUTURE.netcdf_promote = True
 > import matplotlib.pyplot as plt
 > import iris.plot as iplt
 > import iris.coord_categorisation

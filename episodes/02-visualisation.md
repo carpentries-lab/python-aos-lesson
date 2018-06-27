@@ -26,7 +26,6 @@ We are going to use the Met Office's [iris](http://scitools.org.uk/iris/) librar
 which has been specifically written with the analysis of CMIP data in mind.
 ~~~
 import iris
-iris.FUTURE.netcdf_promote = True
 import iris.plot as iplt
 import matplotlib.pyplot as plt
 import numpy
@@ -204,7 +203,6 @@ Putting all the code together
 
 ~~~
 import iris
-iris.FUTURE.netcdf_promote = True
 import matplotlib.pyplot as plt
 import iris.plot as iplt
 import numpy
