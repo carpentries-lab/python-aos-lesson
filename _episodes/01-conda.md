@@ -180,7 +180,7 @@ $ conda list
 {: .callout}
 
 
-> ## Create your own environment
+> ## Install the libraries required for this lesson
 >
 > Go ahead and install jupyter, iris and cmocean using either the command line 
 > or Anaconda Navigator.
