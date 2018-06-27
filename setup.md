@@ -37,10 +37,7 @@ $ cd Desktop/data-carpentry
 
 The lesson on [software installation using conda](https://data-lessons.github.io/python-aos-lesson/01-conda/index.html)
 explains how to install the required Python libraries:
-
-* [iris](http://scitools.org.uk/iris/)  
-* [jupyter](https://jupyter.org/)
-* [cmocean](http://matplotlib.org/cmocean/)
+[iris](http://scitools.org.uk/iris/), [jupyter](https://jupyter.org/) and [cmocean](http://matplotlib.org/cmocean/).
 
 Windows users will need to use the Anaconda Navigator to do the installation,
 whereas Mac and Linux users may elect to use the command line instead.
