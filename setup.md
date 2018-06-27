@@ -35,34 +35,16 @@ $ cd Desktop/data-carpentry
 
 ## Environment
 
-To install the required Python libraries,
-open a terminal or git bash and enter the following commands:
-
-~~~
-$ conda config --add channels conda-forge
-$ conda create -n pyaos-lesson jupyter iris cmocean gitpython
-$ source activate pyaos-lesson
-~~~
-{: .language-bash}
-
 The lesson on [software installation using conda](https://data-lessons.github.io/python-aos-lesson/01-conda/index.html)
-explains more about conda and what these commands mean.
+explains how to install the required Python libraries:
 
-To start a Jupyter notebook (which can be used for some of the lessons),
-open a terminal or git bash and type the following command:
+* [iris](http://scitools.org.uk/iris/)  
+* [jupyter](https://jupyter.org/)
+* [cmocean](http://matplotlib.org/cmocean/)
 
-~~~
-$ jupyter notebook &
-~~~
-{: .language-bash}
+Windows users will need to use the Anaconda Navigator to do the installation,
+whereas Mac and Linux users may elect to use the command line instead.
 
-To start the Python interpreter without the notebook,
-open a terminal or git bash and type the following command:
-
-~~~
-$ ipython
-~~~
-{: .language-bash}
 
 [pr_access_file]: {{ page.root }}/data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc
 [pr_csiro_file]: {{ page.root }}/data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc

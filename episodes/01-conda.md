@@ -93,7 +93,6 @@ atmosphere and ocean scientists will typically do most of their work with either
 or [xarray](http://xarray.pydata.org/en/stable/) library.
 These libraries are built on top of more generic data science libraries like numpy and matplotlib,
 to make the types of analysis we do faster and more efficient.
-
 To learn more about the PyAOS "stack" shown in the diagram below
 (i.e. the collection of libraries that are typically used for
 data analysis and visualisation in the atmosphere and ocean sciences),
@@ -104,7 +103,7 @@ check out [this post](https://drclimate.wordpress.com/2016/10/04/the-weatherclim
 For this particular lesson we will use iris,
 but all the same tasks could be performed with xarray.
 We'll also install
-[jupyter](https://jupyter.org/) (so we can use the jupyter notebook),
+[jupyter](https://jupyter.org/) (so we can use the jupyter notebook)
 and [cmocean](http://matplotlib.org/cmocean/) (for nice color palettes).  
 
 We could install these libraries from Anaconda Navigator (not shown) or at the command line:
@@ -127,9 +126,8 @@ $ conda list
 > ## Creating separate environments
 >
 > If you've got multiple data science projects on the go,
-> installing all your packages in the same conda environment
-> (by default they are installed in the root/base environment)
-> can get a little messy.
+> installing all your packages in the same conda environment can get a little messy.
+> (By default they are installed in the root/base environment.)
 > It's therefore common practice to create separate environments
 > for the various projects you're working on.
 >
@@ -145,7 +143,7 @@ $ conda list
 >
 > (it's `source deactivate` to exit)
 >
-> You can have lots of different environments:
+> You can have lots of different environments,
 >
 > ~~~
 > $ conda info --envs
@@ -159,7 +157,7 @@ $ conda list
 > ~~~
 > {: .language-bash}
 >
-> You can then upload the environment to your account at Anaconda Cloud:
+> You can then upload the environment to your account at Anaconda Cloud,
 >
 > ~~~
 > $ conda env upload -f pyaos-lesson
