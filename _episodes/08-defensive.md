@@ -271,7 +271,6 @@ that their understanding matches what the code is doing.
 > import matplotlib.pyplot as plt
 > import calendar
 > import iris
-> iris.FUTURE.netcdf_promote = True
 > import iris.plot as iplt
 > import iris.coord_categorisation
 > import cmocean
