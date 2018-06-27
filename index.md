@@ -14,8 +14,13 @@ reinventing a lot of wheels,
 and a nagging uncertainty at the end of it all
 regarding the reliability and reproducibility of the results.
 To help address these issues,
-this Data Carpentry workshop covers a suite of programming and data management best practices
+these Data Carpentry lessons cover a suite of programming and data management best practices
 that aren’t so easy to glean from a quick Google search. 
+
+The skills covered in the lessons are taught in the context of a typical data analysis task:
+creating a command line program that plots the precipitation climatology for any given month,
+so that two different CMIP5 models (ACCESS1-3 and CSIRO-Mk3-6-0) can be compared visually.
+
 
 > ## raster vs vector data
 >
