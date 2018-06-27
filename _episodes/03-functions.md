@@ -24,7 +24,6 @@ using the following commands:
 
 ~~~
 import iris
-iris.FUTURE.netcdf_promote = True
 import matplotlib.pyplot as plt
 import iris.plot as iplt
 import iris.coord_categorisation

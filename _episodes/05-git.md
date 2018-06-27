@@ -430,7 +430,6 @@ import numpy
 import matplotlib.pyplot as plt
 import calendar
 import iris
-iris.FUTURE.netcdf_promote = True
 import iris.plot as iplt
 import iris.coord_categorisation
 import cmocean
@@ -453,7 +452,6 @@ index a0aa9e4..29a40fb 100644
 +import numpy
 +import matplotlib.pyplot as plt
  import iris
- iris.FUTURE.netcdf_promote = True
 -import matplotlib.pyplot as plt
  import iris.plot as iplt
  import iris.coord_categorisation
@@ -726,7 +724,6 @@ but everything else is there.
 > import matplotlib.pyplot as plt
 > import calendar
 > import iris
-> iris.FUTURE.netcdf_promote = True
 > import iris.plot as iplt
 > import iris.coord_categorisation
 > import cmocean

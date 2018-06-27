@@ -27,7 +27,6 @@ into the history attribute of the output netCDF file.
 
 ~~~
 import iris
-iris.FUTURE.netcdf_promote = True
 
 access_pr_file = 'data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
 cube = iris.load_cube(access_pr_file, 'precipitation_flux')
@@ -361,7 +360,6 @@ FILE
 > import matplotlib.pyplot as plt
 > import calendar
 > import iris
-> iris.FUTURE.netcdf_promote = True
 > import iris.plot as iplt
 > import iris.coord_categorisation
 > import cmocean
