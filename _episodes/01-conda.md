@@ -8,7 +8,6 @@ objectives:
 - "Explain the advantages of Anaconda over other Python distributions."
 - "Extend the number of packages available via conda using conda-forge."
 - "Create a conda environment with the libraries needed for this workshop."
-- "Upload that environment to Anaconda Cloud so that others can install it." 
 keypoints:
 - "Use conda to install and manage your Python environments."
 ---
@@ -28,19 +27,22 @@ which is the package manager associated with Anaconda (as we’ll see, it has so
 ## Basic usage
 
 According to the [latest documentation](https://docs.anaconda.com/anaconda/#anaconda-navigator-or-conda),
-Anaconda comes with over 150 of the most widely used data science libraries (and their dependencies).
+Anaconda comes with over 150 of the most widely used data science libraries (and their dependencies) pre-installed.
 
-In addition, there are over 250 libraries available via `conda install`,
-which can be installed via the Anaconda Navigator graphical user interface or at the command line.
-For instance, installing the popular `xarray` library can be achieved
-by simply entering the following at the command line:
+In addition, there are over 250 libraries available via the `conda install` command,
+which can be executed at the command line or via the Anaconda Navigator graphical user interface.
+For instance, the popular `xarray` library could be installed by:
 ~~~
 $ conda install xarray
 ~~~
 {: .language-bash}
 
-You can use `conda search -f {package_name}` (or the Navigator)
-to find out if the package you want is available.
+(You can use `conda search -f {package_name}` to find out if a package you want is available.)
+
+OR
+
+![Anaconda Navigator xarray search](../fig/01-navigator-xarray.png)
+
 
 > ## Miniconda
 >
@@ -61,13 +63,12 @@ because many of our libraries are discipline specific,
 which means they'll never make it into the top 400 or so data science libraries
 supported by Anaconda and Canopy.
 
-You can search Anaconda Cloud
-to find the command line entry needed to install the package.
+You can search Anaconda Cloud to find the command line entry needed to install the package.
 For instance, here is the search result for the iris package:
 
 ![Iris search on Anaconda Cloud](../fig/01-iris-search.png)
 
-The problem here is that there are often multiple versions of the same package up on Anaconda Cloud.
+The problem is that there are often multiple versions of the same package up on Anaconda Cloud.
 To try and address this duplication problem, [conda-forge](https://conda-forge.github.io/) has been launched,
 which aims to be a central repository that contains just a single (working) version of each package on Anaconda Cloud.
 You can therefore expand the selection of packages available via `conda install` beyond the chosen 400
@@ -77,103 +78,115 @@ $ conda config --add channels conda-forge
 ~~~
 {: .language-bash}
 
+OR
+
+![Anaconda Navigator conda-forge](../fig/01-navigator-conda-forge.png)
+
 We recommned not adding any other third-party channels unless absolutely necessary,
 because mixing packages from multiple channels can cause headaches like binary incompatibilities.
 
-### Environments
+### Workshop setup
 
-Now we can go ahead and use conda to install the libraries we need for this lesson.
-Rather than install everything in the same place
-(which can get unwieldy if you've got multiple data science projects on the go)
-it's common practice to create separate environments
-for the various projects you're working on.
+The packages we need to install for this lesson are
+[jupyter](https://jupyter.org/) (so we can use the jupyter notebook),
+[iris](http://scitools.org.uk/iris/) (for handling the data from our netCDF files),  
+and [cmocean](http://matplotlib.org/cmocean/) (for nice color palettes).  
 
-Let's call this environment `pyaos-lesson`
-and include the following Python libraries:
+> ## The PyAOS Stack
+>
+> If you're wondering why we've selected iris as the primary package for our work,
+> check out [this post](https://drclimate.wordpress.com/2016/10/04/the-weatherclimate-python-stack/)
+> on the PyAOS "stack" (i.e. the collection of libraries that are typically used for
+> data analysis and visualisation in the atmosphere and ocean sciences).
+{: .callout}
 
-* [jupyter](https://jupyter.org/) - so we can use the jupyter notebook  
-* [iris](http://scitools.org.uk/iris/) - for handling our CMIP5 data  
-* [cmocean](http://matplotlib.org/cmocean/) - for nice color palettes  
-* [cmdline_provenance](http://cmdline-provenance.readthedocs.io/en/latest/) - to record our data processing steps
-
-Since conda can handle non-Python packages,
-we will also install the following command line tools:
-
-* [NCO](http://nco.sourceforge.net/) - for editing the attributes of netCDF files  
-* [CDO](https://code.mpimet.mpg.de/projects/cdo/) - for performing basic climate calculations on netCDF files
-
+We could install these libraries from Anaconda Navigator (not shown) or at the command line:
 ~~~
-$ conda create -n pyaos-lesson jupyter iris cmocean cmdline-provenance nco cdo
-$ source activate pyaos-lesson
+$ conda install jupyter iris cmocean
 ~~~
 {: .language-bash}
 
-> ## Create your own environment
->
-> Go ahead and create your own `pyaos-lesson` environment to use in this workshop:
-> ~~~
-> $ conda config --add channels conda-forge
-> $ conda create -n pyaos-lesson jupyter iris cmocean cmdline-provenance nco cdo
-> $ source activate pyaos-lesson
-> ~~~
-> {: .language-bash}
-> (Note that CDO is not available on Windows.)
->
-{: .challenge}
-
-If we list all the libraries in this new environment,
-we can see that jupyter, iris, cmocean, cmdline-provenance, nco and cdo
-and all their required dependencies have been installed:
-
+If we then list all the libraries that we've got installed,
+we can see that jupyter, iris and cmocean (and their dependencies)
+are now there:
 ~~~
 $ conda list
 ~~~
 {: .language-bash}
 
-(it's `source deactivate` to exit)
+(This list can also be viewed in the environments tab of the Navigator.)
 
-You can have lots of different environments:
 
-~~~
-$ conda info --envs
-~~~
-{: .language-bash}
-
-and you can export them (to a YAML configuration file) for others to use:
-
-~~~
-$ conda env export -n pyaos-lesson -f pyaos-lesson
-~~~
-{: .language-bash}
-
-You can then upload the environment to your account at Anaconda Cloud:
-
-~~~
-$ conda env upload -f pyaos-lesson
-~~~
-{: .language-bash}
-
-so that others can re-create your environment as follows:
-
-~~~
-$ conda env create damienirving/pyaos-lesson
-$ source activate pyaos-lesson
-~~~
-
-> ## Deleting things
->
-> To delete an environment:
-> ~~~
-> $ conda env remove -n pyaos-lesson
-> ~~~
-> {: .language-bash}
-> To delete Anaconda, just find the Anaconda folder on your system and delete it.
+> > ## Creating separate environments
+> >
+> > If you've got multiple data science projects on the go,
+> > installing all your packages in the same conda environment
+> > (by default they are installed in the root/base environment)
+> > can get a little messy.
+> >
+> > It's therefore common practice to create separate environments
+> > for the various projects you're working on.
+> >
+> > For instance, we could create an environment called `pyaos-lesson` for this lesson.
+> > The process of creating a new environment can be managed in the environments tab
+> > of the Navigator or via the command line:
+> >
+> > ~~~
+> > $ conda create -n pyaos-lesson jupyter iris cmocean
+> > $ source activate pyaos-lesson
+> > ~~~
+> > {: .language-bash}
+> > (it's `source deactivate` to exit)
+> >
+> > You can have lots of different environments:
+> >
+> > ~~~
+> > $ conda info --envs
+> > ~~~
+> > {: .language-bash}
+> >
+> > and you can export them (to a YAML configuration file) for others to use:
+> >
+> > ~~~
+> > $ conda env export -n pyaos-lesson -f pyaos-lesson
+> > ~~~
+> > {: .language-bash}
+> >
+> > You can then upload the environment to your account at Anaconda Cloud:
+> >
+> > ~~~
+> > $ conda env upload -f pyaos-lesson
+> > ~~~
+> > {: .language-bash}
+> >
+> > so that others can re-create your environment as follows:
+> > 
+> > ~~~
+> > $ conda env create damienirving/pyaos-lesson
+> > $ source activate pyaos-lesson
+> > ~~~
+> >
+> > To delete the environment:
+> > ~~~
+> > $ conda env remove -n pyaos-lesson
+> > ~~~
+> > {: .language-bash}
 {: .callout}
 
-> ## conda kapsel
+
+> ## Create your own environment
 >
-> To make the management and sharing of environments even easier,
-> [conda kapsel](https://www.continuum.io/blog/developer-blog/automate-your-readme-conda-kapsel-beta-1)
-> has been released.
+> Go ahead and install jupyter, iris and cmocean using either the command line 
+> or Anaconda Navigator.
+> 
+> * Those using Windows will have to use the Navigator, since the conda command isn't available in Git Bash  
+> * Those using Mac or Linux may like to create a separate `pyaos-lesson` environment, but this is not necessary
 >
-{: .callout}
+{: .challenge}
+
+
+
+
+
+
+
