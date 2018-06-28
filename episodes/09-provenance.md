@@ -6,17 +6,15 @@ questions:
 - "How can keep track of my data processing steps?"
 objectives:
 - "Automate the process of recording the history of what was entered at the command line to produce a given data file or image."
-- "Write (and import) modules that contain commonly used code to avoid duplication."
 keypoints:
-- "It is possible (in only a few lines of code) to record the provenance of a given data file or image."
-- "Write (and import) modules to avoid code duplication."
+- "It is possible (in only a few lines of code) to record the provenance of a data file or image."
 ---
 
 We've now successfully created a command line program - `plot_precipitation_climatology.py` -
 that calculates and plots the precipitation climatology for a given month.
 The last step is to capture the provenance of that plot.
 In other words, we need a log of all the data processing steps
-that were taken from the intial download of the data files to the end result
+that were taken from the intial download of the data file to the end result
 (i.e. the .png image).
 
 The simplest way to do this is to follow the lead of the
@@ -50,7 +48,7 @@ We can install that package from the command line (Mac, Linux) or Anaconda Promp
 ~~~
 $ pip install cmdline-provenance
 ~~~   
-{: .language-python}
+{: .language-bash}
 
 and use it to generate a new command line record:
 
@@ -66,19 +64,17 @@ print(new_record)
 ~~~
 {: .output}
 
-(Noting that in a real example of this process in action,
-the new record would refer to what was entered at the command line to run
-`plot_precipitation_climatology.py`,
-as opposed to running `ipykernel_launcher.py` to run a notebook.)
+(i.e. This is the command that was run to launch the jupyter notebook we're using.)
 
 
 > ## Generate a log file
 >
 > In order to capture the complete provenance of the precipitation plot,
-> modify `plot_precipitation_climatology.py` so that it
-> extracts the history attribute from the input files
-> and combines them with the new command line record,
-> in order to create a log file.
+> add a few lines of code to the end of the `main` function
+> in `plot_precipitation_climatology.py` so that it:
+> 
+> 1. Extracts the history attribute from the input file and combines it with the current command line entry (using the `cmdprov.new_log` function)
+> 2. Outputs a log file containing that information (using `cmdprov.write_log`; the file should have name as the plot, replacing .png with .txt)
 >
 > (Hint: The documentation for [cmdline-provenance](http://cmdline-provenance.readthedocs.io/en/latest/)
 > explains the process.)
