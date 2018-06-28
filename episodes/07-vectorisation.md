@@ -267,7 +267,7 @@ print(cube.data[0, 100:110, 0:10])
 > import pdb
 > import argparse
 > import calendar
-
+>
 > import numpy
 > import matplotlib.pyplot as plt
 > import iris

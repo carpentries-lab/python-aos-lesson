@@ -268,7 +268,7 @@ that their understanding matches what the code is doing.
 > import pdb
 > import argparse
 > import calendar
-
+>
 > import numpy
 > import matplotlib.pyplot as plt
 > import iris
