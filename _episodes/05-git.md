@@ -419,16 +419,17 @@ to the staging area
 and into long-term storage.
 First,
 we'll tweak the section of the script that imports all the libraries we need,
-by putting them in approximate order of how widely used the libraries are
-(you absolutely don't have to do this in all your scripts -
-it's just a personal preference of mine):
+by putting them in the order suggested by the
+[PEP 8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/#imports)
+(standard library imports, related third party imports, then local application/library specific imports):
 
 ~~~
 import pdb
 import argparse
+import calendar
+
 import numpy
 import matplotlib.pyplot as plt
-import calendar
 import iris
 import iris.plot as iplt
 import iris.coord_categorisation
@@ -449,6 +450,8 @@ index a0aa9e4..29a40fb 100644
 @@ -1,13 +1,12 @@
 +import pdb
  import argparse
+ import calendar
++
 +import numpy
 +import matplotlib.pyplot as plt
  import iris
@@ -465,12 +468,12 @@ Let's save our changes:
 
 ~~~
 $ git add plot_precipitation_climatology.py
-$ git commit -m "Ordered imports according to popularity"
+$ git commit -m "Ordered imports according to PEP 8"
 ~~~
 {: .bash}
 
 ~~~
-[master f9fb238] Ordered imports according to popularity
+[master f9fb238] Ordered imports according to PEP 8
  1 file changed, 2 insertions(+), 2 deletions(-)
 ~~~
 {: .output}
@@ -506,7 +509,7 @@ commit f9fb2388a096a217aa2c9e4695bf786605b946c9
 Author: Damien Irving <my@email.com>
 Date:   Mon Dec 18 15:43:17 2017 +1100
 
-    Ordered imports according to popularity
+    Ordered imports according to PEP 8
 
 commit 444c3c045dc69a323e40d4a04813b88e4b89e05e
 Author: Damien Irving <my@email.com>
@@ -720,9 +723,10 @@ but everything else is there.
 > ~~~
 > import pdb
 > import argparse
+> import calendar
+
 > import numpy
 > import matplotlib.pyplot as plt
-> import calendar
 > import iris
 > import iris.plot as iplt
 > import iris.coord_categorisation

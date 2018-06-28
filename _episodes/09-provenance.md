@@ -111,9 +111,10 @@ print(new_record)
 > ~~~
 > import pdb
 > import argparse
+> import calendar
+
 > import numpy
 > import matplotlib.pyplot as plt
-> import calendar
 > import iris
 > import iris.plot as iplt
 > import iris.coord_categorisation

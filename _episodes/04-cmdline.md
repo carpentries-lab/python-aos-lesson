@@ -334,6 +334,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 >
 > ~~~
 > import argparse
+> import calendar
 > import iris
 > import matplotlib.pyplot as plt
 > import iris.plot as iplt
