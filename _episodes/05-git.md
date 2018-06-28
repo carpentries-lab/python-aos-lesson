@@ -724,7 +724,7 @@ but everything else is there.
 > import pdb
 > import argparse
 > import calendar
-
+>
 > import numpy
 > import matplotlib.pyplot as plt
 > import iris
