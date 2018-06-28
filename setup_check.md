@@ -1,6 +1,6 @@
 ## Setup check
 
-### 1. Open the bash shell
+### 1. Open the Bash Shell
 
 *Windows*: Open a terminal by running the program Git Bash from the Windows start menu.
 
@@ -8,7 +8,7 @@
 
 *Linux*: Open the Terminal program via the applications menu.  The default shell is usually Bash.  If you aren't sure what yours is, type `echo $SHELL`.  If the shell listed is not bash, type `bash` and press Enter to access Bash.
 
-### 2. Check that git is installed
+### 2. Check that Git is installed
 
 In the terminal, type `git --version` to check that it is installed.  
 
@@ -23,7 +23,7 @@ In the terminal, type `git --version` to check that it is installed.
 
 *Windows*: If you receive an error message about python or conda not being found, try the following:
 
-* Open the Anaconda Prompt and enter the following to find the path of the Anaconda3 directory:
+* Run the program Anaconda Prompt from the Windows start menu and enter the following to find the path of the Anaconda3 directory:
   ```
   where python
   ```
