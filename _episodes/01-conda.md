@@ -135,7 +135,7 @@ $ conda list
 >
 > For instance, we could create an environment called `pyaos-lesson` for this lesson.
 > The process of creating a new environment can be managed in the environments tab
-> of the Navigator or via the following commands:
+> of the Anaconda Navigator interface or via the following commands:
 >
 > ~~~
 > $ conda create -n pyaos-lesson jupyter iris cmocean
