@@ -29,9 +29,8 @@ which is the package manager associated with Anaconda (as we’ll see, it has so
 According to the [latest documentation](https://docs.anaconda.com/anaconda/#anaconda-navigator-or-conda),
 Anaconda comes with over 150 of the most widely used data science libraries (and their dependencies) pre-installed.
 In addition, there are over 250 libraries available via the `conda install` command,
-which can be executed at the command line (Mac, Linux) or Anaconda Prompt (Windows).
-It is also possible to install packages using the Anaconda Navigator graphical user interface
-(on any operating system).
+which can be executed using the Bash Shell or Anaconda Prompt (Windows only).
+It is also possible to install packages using the Anaconda Navigator graphical user interface.
 
 For instance, the popular `xarray` library could be installed using the following command,
 ~~~
@@ -41,7 +40,7 @@ $ conda install xarray
 
 (Use `conda search -f {package_name}` to find out if a package you want is available.)
 
-OR using Navigator:
+OR using Anaconda Navigator:
 
 ![Anaconda Navigator xarray search](../fig/01-navigator-xarray.png)
 
@@ -108,7 +107,7 @@ We'll also install
 and [cmocean](http://matplotlib.org/cmocean/) (for nice color palettes).  
 
 We could install these libraries from Anaconda Navigator (not shown)
-or at the command line (Mac, Linux) / Anaconda Prompt (Windows):
+or using the Bash Shell or Anaconda Prompt (Windows):
 ~~~
 $ conda install jupyter iris cmocean
 ~~~
@@ -135,15 +134,15 @@ $ conda list
 >
 > For instance, we could create an environment called `pyaos-lesson` for this lesson.
 > The process of creating a new environment can be managed in the environments tab
-> of the Anaconda Navigator interface or via the following commands:
+> of the Anaconda Navigator interface or via the following Bash Shell / Anaconda Prompt commands:
 >
 > ~~~
 > $ conda create -n pyaos-lesson jupyter iris cmocean
-> $ source activate pyaos-lesson
+> $ conda activate pyaos-lesson
 > ~~~
 > {: .language-bash}
 >
-> (it's `source deactivate` to exit)
+> (it's `conda deactivate` to exit)
 >
 > You can have lots of different environments,
 >
@@ -170,7 +169,7 @@ $ conda list
 > 
 > ~~~
 > $ conda env create damienirving/pyaos-lesson
-> $ source activate pyaos-lesson
+> $ conda activate pyaos-lesson
 > ~~~
 >
 > To delete the environment:
@@ -185,12 +184,9 @@ $ conda list
 > ## Install the libraries required for this lesson
 >
 > Go ahead and install jupyter, iris and cmocean using either the Anaconda Navigator interface
-> or the command line (Mac, Linux) / Anaconda Prompt (Windows). 
+> Bash Shell or Anaconda Prompt (Windows). 
 > 
-> (Those using Mac or Linux may like to create a separate `pyaos-lesson` environment,
-> but this is not necessary.
-> Windows users shouldn't create a separate environment,
-> because it's not possible to activate environments from the Git Bash terminal emulator,
-> which is something we'll do in later lessons.)
+> (You may like to create a separate `pyaos-lesson` environment,
+> but this is not necessary to complete the lessons.)
 >
 {: .challenge}
