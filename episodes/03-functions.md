@@ -161,20 +161,21 @@ plt.show()
 
 ![Precipitation climatology](../fig/03-functions-csiro-jan-gridlines.svg)
 
-Our function now works, but at 16 lines of code it's starting to get a little long.
-In general, people can only fit around 7-12 pieces of information in their short term memory.
-The readability of your code can therefore be greatly enhanced
-by keeping your functions short and sharp.
-The speed at which people can analyse their data is usually limited
-by the time it takes to read/understand/edit their code
-(as opposed to the time it takes the code to actually run),
-so the frequent use of short,
-well documented functions can dramatically speed up your data science.
 
-> ## Functions
+> ## Short functions
 >
-> Break the contents of `plot_pr_climatology()` into a series of small functions,
-> such that it reads as follows:
+> Our `plot_pr_climatology` function works, but at 16 lines of code it's starting to get a little long.
+> In general, people can only fit around 7-12 pieces of information in their short term memory.
+> The readability of your code can therefore be greatly enhanced
+> by keeping your functions short and sharp.
+> The speed at which people can analyse their data is usually limited
+> by the time it takes to read/understand/edit their code
+> (as opposed to the time it takes the code to actually run),
+> so the frequent use of short,
+> well documented functions can dramatically speed up your data science.
+>
+> 1. Cut and paste the `plot_pr_climatology` function (defined in the notes above) into your own notebook and try running it with different input arguments. 
+> 2. Break the contents of `plot_pr_climatology` down into a series of smaller functions, such that it reads as follows:
 >
 > ~~~
 > def plot_pr_climatology(pr_file, month, gridlines=False):
@@ -194,9 +195,9 @@ well documented functions can dramatically speed up your data science.
 > ~~~
 > {: .language-python}
 >
-> In other words, you'll need to define new `read_data()`,
-> `convert_pr_units()` and `plot_data()`
-> functions using code from the existing `plot_pr_climatology()` function.
+> In other words, you'll need to define new `read_data`,
+> `convert_pr_units` and `plot_data`
+> functions using code from the existing `plot_pr_climatology` function.
 >
 > > ## Solution
 > > ~~~
@@ -256,3 +257,28 @@ well documented functions can dramatically speed up your data science.
 > > {: .language-python}
 > {: .solution}
 {: .challenge} 
+
+> ## Writing your own modules
+>
+> We've used functions to avoid code duplication in this particular notebook/script,
+> but what if we wanted to convert precipitation units from kg m-2 s-1 to mm/day
+> in a different notebook/script?
+>
+> To avoid cutting and pasting from this notebook/script to another,
+> the solution would be to place the `convert_pr_units` function
+> in a separate script full of similar functions.
+>
+> For instance,
+> we could put all our unit conversion functions in a script called `unit_conversion.py`.
+> When we want to convert precipitation units (in any script or notebook we're working on),
+> we can simply import that "module" and use the `convert_pr_units` function:
+>
+> ~~~
+> import unit_conversion
+> cube = unit_conversion.convert_pr_units(cube)
+> ~~~
+> {: .language-python}
+>
+> No copy and paste required! 
+>
+{: .callout}
