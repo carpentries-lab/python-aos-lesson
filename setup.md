@@ -9,7 +9,10 @@ root: .
 If your instructor hasn't sent you instructions on how to install the required software,
 follow the default Software Carpentry instructions on their
 [workshop website template](https://swcarpentry.github.io/workshop-template/).
-You need to install the bash shell, git, text editor and Python. 
+You need to install the bash shell, git, text editor and Python.
+
+To check that everything installed correctly,
+complete the [Setup Check](https://github.com/data-lessons/python-aos-lesson/blob/gh-pages/setup_check.md).
 
 
 ## Data
