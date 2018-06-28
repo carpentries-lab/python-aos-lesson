@@ -1,6 +1,8 @@
 import pdb
 import argparse
 import calendar
+import warnings
+warnings.filterwarnings('ignore')
 
 import numpy
 import matplotlib.pyplot as plt
