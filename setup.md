@@ -12,7 +12,7 @@ follow the default Software Carpentry instructions on their
 You need to install the bash shell, git, text editor and Python.
 
 To check that everything installed correctly,
-complete the [Setup Check](https://github.com/data-lessons/python-aos-lesson/blob/gh-pages/setup_check.md).
+complete the [Software Check](https://github.com/data-lessons/python-aos-lesson/blob/gh-pages/software_check.md).
 
 
 ## Data
