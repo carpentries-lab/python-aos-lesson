@@ -16,6 +16,7 @@ keypoints:
 - "Put docstrings in functions to provide help for that function."
 - "Specify default values for parameters when defining a function using `name=value` in the parameter list."
 - "The readability of your code can be greatly enhanced by using numerous short functions."
+- "Write (and import) modules to avoid code duplication."
 ---
 
 In the previous lesson
