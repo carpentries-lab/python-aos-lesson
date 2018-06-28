@@ -1,4 +1,4 @@
-## Setup check
+## Software check
 
 ### 1. Open the Bash Shell
 
