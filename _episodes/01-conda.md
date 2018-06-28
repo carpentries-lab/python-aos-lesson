@@ -29,10 +29,11 @@ which is the package manager associated with Anaconda (as we’ll see, it has so
 According to the [latest documentation](https://docs.anaconda.com/anaconda/#anaconda-navigator-or-conda),
 Anaconda comes with over 150 of the most widely used data science libraries (and their dependencies) pre-installed.
 In addition, there are over 250 libraries available via the `conda install` command,
-which can be executed at the command line or via the Anaconda Navigator graphical user interface.
+which can be executed at the command line (Mac, Linux) or Anaconda Prompt (Windows).
+It is also possible to install packages using the Anaconda Navigator graphical user interface
+(on any operating system).
 
-
-For instance, the popular `xarray` library could be installed by:
+For instance, the popular `xarray` library could be installed using the following command,
 ~~~
 $ conda install xarray
 ~~~
@@ -40,7 +41,7 @@ $ conda install xarray
 
 (Use `conda search -f {package_name}` to find out if a package you want is available.)
 
-OR
+OR using Navigator:
 
 ![Anaconda Navigator xarray search](../fig/01-navigator-xarray.png)
 
@@ -64,7 +65,7 @@ because many of our libraries are discipline specific,
 which means they'll never make it into the top 400 or so data science libraries
 supported by Anaconda and Canopy.
 
-You can search Anaconda Cloud to find the command line entry needed to install the package.
+You can search Anaconda Cloud to find the command needed to install the package.
 For instance, here is the search result for the iris package:
 
 ![Iris search on Anaconda Cloud](../fig/01-iris-search.png)
@@ -106,7 +107,8 @@ We'll also install
 [jupyter](https://jupyter.org/) (so we can use the jupyter notebook)
 and [cmocean](http://matplotlib.org/cmocean/) (for nice color palettes).  
 
-We could install these libraries from Anaconda Navigator (not shown) or at the command line:
+We could install these libraries from Anaconda Navigator (not shown)
+or at the command line (Mac, Linux) / Anaconda Prompt (Windows):
 ~~~
 $ conda install jupyter iris cmocean
 ~~~
@@ -133,7 +135,7 @@ $ conda list
 >
 > For instance, we could create an environment called `pyaos-lesson` for this lesson.
 > The process of creating a new environment can be managed in the environments tab
-> of the Navigator or via the command line:
+> of the Navigator or via the following commands:
 >
 > ~~~
 > $ conda create -n pyaos-lesson jupyter iris cmocean
@@ -182,10 +184,13 @@ $ conda list
 
 > ## Install the libraries required for this lesson
 >
-> Go ahead and install jupyter, iris and cmocean using either the command line 
-> or Anaconda Navigator.
+> Go ahead and install jupyter, iris and cmocean using either the Anaconda Navigator interface
+> or the command line (Mac, Linux) / Anaconda Prompt (Windows). 
 > 
-> * Those using Windows will have to use the Navigator, since the conda command isn't available in Git Bash  
-> * Those using Mac or Linux may like to create a separate `pyaos-lesson` environment, but this is not necessary
+> (Those using Mac or Linux may like to create a separate `pyaos-lesson` environment,
+> but this is not necessary.
+> Windows users shouldn't create a separate environment,
+> because it's not possible to activate environments from the Git Bash terminal emulator,
+> which is something we'll do in later lessons.)
 >
 {: .challenge}
