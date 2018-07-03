@@ -183,7 +183,7 @@ $ conda list
 
 > ## Install the libraries required for this lesson
 >
-> Go ahead and install jupyter, iris and cmocean using either the Anaconda Navigator interface
+> Go ahead and install jupyter, iris and cmocean using either the Anaconda Navigator,
 > Bash Shell or Anaconda Prompt (Windows). 
 > 
 > (You may like to create a separate `pyaos-lesson` environment,
