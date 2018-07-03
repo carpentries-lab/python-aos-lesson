@@ -134,7 +134,7 @@ $ conda list
 >
 > For instance, we could create an environment called `pyaos-lesson` for this lesson.
 > The process of creating a new environment can be managed in the environments tab
-> of the Anaconda Navigator interface or via the following Bash Shell / Anaconda Prompt commands:
+> of the Anaconda Navigator or via the following Bash Shell / Anaconda Prompt commands:
 >
 > ~~~
 > $ conda create -n pyaos-lesson jupyter iris cmocean
@@ -151,26 +151,66 @@ $ conda list
 > ~~~
 > {: .language-bash}
 >
-> and you can export them (to a YAML configuration file) for others to use:
+> ~~~
+> # conda environments:
+> #
+> base                  *  /anaconda3
+> pyaos-lesson             /anaconda3/envs/pyaos-lesson
+> test                     /anaconda3/envs/test
+> ~~~
+> {: .output}
+> 
+> the details of which can be exported to a YAML configuration file:
 >
 > ~~~
-> $ conda env export -n pyaos-lesson -f pyaos-lesson
+> $ conda env export -n pyaos-lesson -f pyaos-lesson.yml
+> $ cat pyaos-lesson.yml
 > ~~~
 > {: .language-bash}
 >
-> You can then upload the environment to your account at Anaconda Cloud,
->
 > ~~~
-> $ conda env upload -f pyaos-lesson
+> name: pyaos-lesson
+> channels:
+>   - conda-forge
+>   - defaults
+> dependencies:
+>   - appnope=0.1.0=py36_0
+>   - asn1crypto=0.24.0=py36_0
+>   - backcall=0.1.0=py_0
+>   - bleach=2.1.3=py_0
+>   - bokeh=0.12.16=py36_0
+>   - ca-certificates=2018.4.16=0
+>   - cartopy=0.16.0=py36_0
+>   - ...
+> ~~~
+> {: .output}
+>
+> 
+> Other people (or you on a different computer) can then re-create that exact environment
+> using the YAML file:
+> 
+> ~~~
+> $ conda env create -f pyaos-lesson.yml
 > ~~~
 > {: .language-bash}
 >
-> so that others can re-create your environment as follows:
+> For ease of sharing the YAML file,
+> it can be uploaded to your account at the Anaconda Cloud website,
+>
+> ~~~
+> $ conda env upload -f pyaos-lesson.yml
+> ~~~
+> {: .language-bash}
+>
+> so that others can re-create the environment by simply refering to your Anaconda username:
 > 
 > ~~~
 > $ conda env create damienirving/pyaos-lesson
 > $ conda activate pyaos-lesson
 > ~~~
+>
+> The ease with which others can recreate your environment (on any operating system)
+> is a huge breakthough for reproducible research.
 >
 > To delete the environment:
 >
