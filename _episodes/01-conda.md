@@ -129,7 +129,7 @@ $ conda list
 > If you've got multiple data science projects on the go,
 > installing all your packages in the same conda environment can get a little messy.
 > (By default they are installed in the root/base environment.)
-> It's therefore common practice to create separate environments
+> It's therefore common practice to [create separate conda environments](https://conda.io/docs/user-guide/tasks/manage-environments.html)
 > for the various projects you're working on.
 >
 > For instance, we could create an environment called `pyaos-lesson` for this lesson.
