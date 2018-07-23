@@ -21,7 +21,7 @@ Python 3.6.5 :: Anaconda, Inc.
 ```
 In other words, the default Python program on your laptop needs to the the Anaconda installation of Python.
 
-2. In the terminal, type `conda --version`. You should see the version of your conda program listed.
+2. In the Bash Shell, type `conda --version`. You should see the version of your conda program listed.
 
-3. In the terminal, type `jupyter notebook` to run Jupyter Notebook. After a few seconds, text should appear in your terminal and Jupyter Notebook should pop up in a browser window. You can close the browser window and press `CTRL+C` in the terminal to exit the program.
+3. In the Bash Shell, type `jupyter notebook` to run Jupyter Notebook. After a few seconds, text should appear in your terminal and Jupyter Notebook should pop up in a browser window. You can close the browser window and press `CTRL+C` in the terminal to exit the program.
 
