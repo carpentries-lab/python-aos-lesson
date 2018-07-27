@@ -43,7 +43,7 @@ CMIP5 compliant file produced from raw ACCESS model output using the ACCESS Post
 
 Fortunately, there is a Python package called [cmdline-provenance](http://cmdline-provenance.readthedocs.io/en/latest/)
 that creates NCO/CDO-style records of what was executed at the command line.
-We can install that package from the command line (Mac, Linux) or Anaconda Prompt (Windows),
+We can install that package using the following Bash Shell / Anaconda Prompt command:
 
 ~~~
 $ pip install cmdline-provenance
