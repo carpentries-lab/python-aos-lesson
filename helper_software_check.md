@@ -20,7 +20,7 @@ $ pip install cmdline-provenance
 5. Run the final version of the script that participants will develop throughout the workshop:
 
 ```
-$ python code/plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc Jan test.png
+$ python code/plot_precipitation_climatology_final.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc Jan test.png
 ```
 
 It should produce an image file (`test.png`) as well as a log of command line entries (`test.txt`).
