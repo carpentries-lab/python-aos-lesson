@@ -307,13 +307,32 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > > ~~~
 > > ...
 > >
-> > if gridlines:
-> >     plt.gca().gridlines()
+> > def plot_data(cube, month, gridlines=False):
+> >    
+> >     ...
+> >  
+> >     if gridlines:
+> >         plt.gca().gridlines()
 > >
 > > ...
 > >
-> > parser.add_argument("--gridlines", action="store_true", default=False,
-> >                     help="Include gridlines on the plot")
+> > def main(inargs):
+> >
+> >    ... 
+> >
+> >    plot_data(clim, inargs.month, gridlines=inargs.gridlines)
+> >
+> > ...
+> >
+> > if __name__ == '__main__':
+> >
+> >     ... 
+> > 
+> >     parser.add_argument("--gridlines", action="store_true", default=False,
+> >                         help="Include gridlines on the plot")
+> >
+> > ... 
+> > 
 > > ~~~
 > > {: .language-python}
 > {: .solution}
@@ -344,7 +363,6 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > > ...
 > >
 > > def main(inargs):
-> >    """Run the program."""
 > >
 > >    ... 
 > >
@@ -353,8 +371,15 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > >
 > > ...
 > >
-> > parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-> >                     help='list of levels / tick marks to appear on the colourbar') 
+> > if __name__ == '__main__':
+> >
+> >     ... 
+> > 
+> >     parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
+> >                         help='list of levels / tick marks to appear on the colourbar')
+> >
+> > ... 
+> > 
 > > ~~~
 > > {: .language-python}
 > {: .solution}
