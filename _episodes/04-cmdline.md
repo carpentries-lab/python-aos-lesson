@@ -259,16 +259,18 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 
 > ## Choices
 >
-> Take (i.e. cut and paste to create a new file)
-> the `plot_precipitation_climatology.py` script shown above
-> and save it in your `data-carpentry` directory.
+> For this series of challenges,
+> you are required to make improvements to the `plot_precipitation_climatology.py` script 
+> that you downloaded earlier from the setup tab at the top of the page. 
+>  
+> For the first improvement,
+> edit the line of code that defines the month command line argument
+> (`parser.add_argument("month", type=str, help="Month to plot")`)
+> so that it only allows the user to input a valid three letter abbreviation
+> (i.e. `['Jan', 'Feb', ...]`).
 >
-> Using the [argparse tutorial](https://docs.python.org/3/howto/argparse.html) as a guide
-> and `pdb` to debug where necessary,
-> now make the following improvement to `plot_precipitation_climatology.py`: 
->
-> The `parser.add_argument()` function has an optional `choices` keyword argument.
-> Use it to define the valid input months (i.e. `['Jan', 'Feb', ...]`).
+> (Hint: Read about the `choices` keyword argument
+> at the [argparse tutorial](https://docs.python.org/3/howto/argparse.html).) 
 >
 > > ## Solution
 > >
@@ -292,10 +294,19 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 
 > ## Gridlines
 > 
-> Add a true/false optional `argparse` argument to allow the user to add gridlines to the plot.
+> Add an optional command line argument that allows the user to add gridlines to the plot.
 > 
+> (Hint: Read about the `action="store_true"` keyword argument
+> at the [argparse tutorial](https://docs.python.org/3/howto/argparse.html).) 
+>
 > > ## Solution
+> >
+> > Make the following additions to `plot_precipitation_climatology.py`
+> > (code omitted from this abbreviated version of the script is denoted `...`):
+> >
 > > ~~~
+> > ...
+> >
 > > if gridlines:
 > >     plt.gca().gridlines()
 > >
@@ -310,10 +321,38 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 
 > ## Colorbar levels
 >
-> Add an optional `argparse` argument that allows the user to specify the tick levels used in the colourbar 
+> Add an optional command line argument that allows the user to specify the tick levels used in the colourbar 
+>
+> (Hint: You'll need to use the `nargs='*'` keyword argument.)
 >
 > > ## Solution
+> >
+> > Make the following additions to `plot_precipitation_climatology.py`
+> > (code omitted from this abbreviated version of the script is denoted `...`):
+> >
 > > ~~~
+> > ...
+> >
+> > def plot_data(cube, month, gridlines=False, levels=None):
+> >     """Plot the data."""
+> >        
+> >     fig = plt.figure(figsize=[12, 5])    
+> >     iplt.contourf(cube, cmap=cmocean.cm.haline_r, 
+> >                   levels=levels,
+> >                   extend='max')
+> >
+> > ...
+> >
+> > def main(inargs):
+> >    """Run the program."""
+> >
+> >    ... 
+> >
+> >    plot_data(clim, inargs.month, gridlines=inargs.gridlines,
+> >              levels=inargs.cbar_levels)
+> >
+> > ...
+> >
 > > parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
 > >                     help='list of levels / tick marks to appear on the colourbar') 
 > > ~~~
