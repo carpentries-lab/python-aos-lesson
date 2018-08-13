@@ -17,9 +17,6 @@ $ cd python-aos-lesson
 $ conda config --add channels conda-forge
 $ conda create -n pyaos-lesson jupyter iris cmocean
 ```
-If you get a HTTP error, 
-try a faster internet connection (e.g. an ethernet connection rather than wifi)
-and/or one of the solutions suggested at [this Stack Overflow thread](https://stackoverflow.com/questions/42563757/conda-update-condahttperror-http-none). 
 
 5. Activate the new environment by typing `source activate pyaos-lesson`. If that doesn't work, try `conda activate pyaos-lesson`.
 
