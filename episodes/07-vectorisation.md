@@ -229,7 +229,7 @@ print(cube.data[0, 100:110, 0:10])
 > >     if inargs.mask:
 > >         sftlf_file, realm = inargs.mask
 > >         sftlf_cube = iris.load_cube(sftlf_file, 'land_area_fraction')
-> >         clim = apply_mask(clim, sftlf_cube, realm    
+> >         clim = apply_mask(clim, sftlf_cube, realm) 
 > >
 > >     ...
 > >
