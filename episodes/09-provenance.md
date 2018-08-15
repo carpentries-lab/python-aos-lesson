@@ -196,7 +196,6 @@ print(new_record)
 >     plot_data(clim, inargs.month, gridlines=inargs.gridlines,
 >               levels=inargs.cbar_levels)
 >     plt.savefig(inargs.outfile)
->     write_metadata(inargs.outfile, cube.attributes['history'])
 >
 >     new_log = cmdprov.new_log(infile_history={inargs.infile: cube.attributes['history']})
 >     fname, extension = inargs.outfile.split('.')
