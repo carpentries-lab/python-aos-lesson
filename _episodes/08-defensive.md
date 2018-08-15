@@ -309,7 +309,6 @@ that their understanding matches what the code is doing.
 >     else:
 >         mask = numpy.where(sftlf_cube.data < 50, True, False)
 >    
->     pr_cube.data = numpy.ma.asarray(pr_cube.data)
 >     pr_cube.data.mask = mask
 >    
 >     return pr_cube
