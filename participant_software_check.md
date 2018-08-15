@@ -29,7 +29,6 @@ In other words, the default Python program on your laptop needs to the the Anaco
 
 2. In the Bash Shell, type `conda --version`. You should see the version of your conda program listed.
 
-3. In the Bash Shell, type `jupyter notebook` to run Jupyter Notebook. After a few seconds, text should appear in your terminal and Jupyter Notebook should pop up in a browser window. You can close the browser window and press `CTRL+C` in the terminal to exit the program.
 
 # Pre-workshop downloads
 
