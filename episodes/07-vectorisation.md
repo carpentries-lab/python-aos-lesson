@@ -123,7 +123,8 @@ land_mask = numpy.where(sftlf_cube.data > 50, True, False)
 
 
 For a given iris cube (e.g. containing precipitation data from the ACCESS1-3 model),
-we could then convert the data type to a numpy masked array and apply our mask:
+we could then replace the current data mask (which is false at all points)
+with our new ocean mask:
 
 ~~~
 cube = iris.load_cube('data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc',
@@ -133,21 +134,14 @@ type(cube.data)
 {: .language-python}
 
 ~~~
-numpy.ndarray
-~~~
-{: .output}
-
-~~~
-cube.data = numpy.ma.asarray(cube.data)
-cube.data.mask = ocean_mask
-type(cube.data)
-~~~
-{: .language-python}
-
-~~~
 numpy.ma.core.MaskedArray
 ~~~
 {: .output}
+
+~~~
+cube.data.mask = ocean_mask
+~~~
+{: .language-python}
 
 By printing the array we can see that some values are now masked:
 
@@ -221,7 +215,6 @@ print(cube.data[0, 100:110, 0:10])
 > >     else:
 > >         mask = numpy.where(sftlf_cube.data < 50, True, False)
 > >    
-> >     pr_cube.data = numpy.ma.asarray(pr_cube.data)
 > >     pr_cube.data.mask = mask
 > > 
 > > ...
@@ -303,7 +296,6 @@ print(cube.data[0, 100:110, 0:10])
 >     else:
 >         mask = numpy.where(sftlf_cube.data < 50, True, False)
 >    
->     pr_cube.data = numpy.ma.asarray(pr_cube.data)
 >     pr_cube.data.mask = mask
 >    
 >     return pr_cube
