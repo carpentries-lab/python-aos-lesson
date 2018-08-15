@@ -120,7 +120,7 @@ type(cube.data)
 {: .language-python}
 
 ~~~
-numpy.ndarray
+numpy.ma.core.MaskedArray
 ~~~
 {: .output}
 
