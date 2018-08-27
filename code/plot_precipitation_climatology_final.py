@@ -1,114 +1,100 @@
-import pdb
 import argparse
-import calendar
-import warnings
-warnings.filterwarnings('ignore')
-
-import numpy
+import xarray
 import matplotlib.pyplot as plt
-import iris
-import iris.plot as iplt
-import iris.coord_categorisation
+import cartopy.crs as ccrs
+import numpy
 import cmocean
-import cmdline_provenance as cmdprov
 
 
-def read_data(fname, month):
-    """Read an input data file"""
+def convert_pr_units(darray):
+    """Convert kg m-2 s-1 to mm day-1.
     
-    cube = iris.load_cube(fname, 'precipitation_flux')
+    Args:
+      darray (xarray.core.dataarray.DataArray): Precipitation data
     
-    iris.coord_categorisation.add_month(cube, 'time')
-    cube = cube.extract(iris.Constraint(month=month))
+    """
     
-    return cube
+    darray.data = darray.data * 86400
+    darray.attrs['units'] = 'mm/day'
+    
+    return darray
 
 
-def convert_pr_units(cube):
-    """Convert kg m-2 s-1 to mm day-1"""
+def apply_mask(darray, sftlf_file, realm):
+    """Mask ocean or land using a sftlf (land surface fraction) file.
     
-    assert cube.units == 'kg m-2 s-1', "Program assumes that input units are kg m-2 s-1"
+    Args:
+      darray (xarray.core.dataarray.DataArray): Data to mask
+      sftlf_file (str): Land surface fraction file
+      realm (str): Realm to mask
     
-    cube.data = cube.data * 86400
-    cube.units = 'mm/day'
-    
-    return cube
-
-
-def apply_mask(pr_cube, sftlf_cube, realm):
-    """Mask ocean using a sftlf (land surface fraction) file."""
-    
-    assert pr_cube.shape == sftlf_cube.shape 
-    
+    """
+   
+    dset = xarray.open_dataset(sftlf_file)
+    sftlf_darray = dset['sftlf']
+   
     if realm == 'land':
-        mask = numpy.where(sftlf_cube.data > 50, True, False)
+        masked_darray = darray.where(sftlf_darray.data < 50)
     else:
-        mask = numpy.where(sftlf_cube.data < 50, True, False)
+        masked_darray = darray.where(sftlf_darray.data > 50)   
+   
+    return masked_darray
+
+
+def plot_climatology(clim_darray, model_name, season, gridlines=False):
+    """Plot the precipitation climatology.
     
-    pr_cube.data = numpy.ma.asarray(pr_cube.data)
-    pr_cube.data.mask = mask
+    Args:
+      clim_darray (xarray.core.dataarray.DataArray): Precipitation climatology data
+      season (str): Season    
     
-    return pr_cube
-
-
-def plot_data(cube, month, gridlines=False, levels=None):
-    """Plot the data."""
-
-    if not levels:
-        levels = numpy.arange(0, 10)
-
-    fig = plt.figure(figsize=[12,5])    
-    iplt.contourf(cube, cmap=cmocean.cm.haline_r, 
-                  levels=levels,
-                  extend='max')
-
-    plt.gca().coastlines()
+    """
+        
+    fig = plt.figure(figsize=[12,5])
+    ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
+    clim_darray.sel(season=season).plot.contourf(ax=ax,
+                                                 levels=numpy.arange(0, 15, 1.5),
+                                                 extend='max',
+                                                 transform=ccrs.PlateCarree(),
+                                                 cbar_kwargs={'label': clim_darray.units},
+                                                 cmap=cmocean.cm.haline_r)
+    ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
-    cbar = plt.colorbar()
-    cbar.set_label(str(cube.units))
     
-    title = '%s precipitation climatology (%s)' %(cube.attributes['model_id'], month)
+    title = '%s precipitation climatology (%s)' %(model_name, season)
     plt.title(title)
 
 
 def main(inargs):
     """Run the program."""
 
-    cube = read_data(inargs.infile, inargs.month)   
-    cube = convert_pr_units(cube)
-    clim = cube.collapsed('time', iris.analysis.MEAN)
+    dset = xarray.open_dataset(inargs.pr_file)
+    pr_darray = dset['pr']
+    
+    clim_darray = pr_darray.groupby('time.season').mean(dim='time')
+    clim_darray = convert_pr_units(clim_darray)
 
     if inargs.mask:
         sftlf_file, realm = inargs.mask
-        assert realm in ['land', 'ocean']
-        sftlf_cube = iris.load_cube(sftlf_file, 'land_area_fraction')
-        clim = apply_mask(clim, sftlf_cube, realm)
+        clim_darray = apply_mask(clim_darray, sftlf_file, realm)
 
-    plot_data(clim, inargs.month, gridlines=inargs.gridlines,
-              levels=inargs.cbar_levels)
-    plt.savefig(inargs.outfile)
-    
-    new_log = cmdprov.new_log(infile_history={inargs.infile: cube.attributes['history']})
-    fname, extension = inargs.outfile.split('.')
-    cmdprov.write_log(fname+'.txt', new_log)
+    plot_climatology(clim_darray, dset.attrs['model_id'], inargs.season)
+    plt.savefig(inargs.output_file, dpi=200)
 
 
 if __name__ == '__main__':
-
     description='Plot the precipitation climatology.'
     parser = argparse.ArgumentParser(description=description)
     
-    parser.add_argument("infile", type=str, help="Input file name")
-    parser.add_argument("month", type=str, choices=calendar.month_abbr[1:], help="Month to plot")
-    parser.add_argument("outfile", type=str, help="Output file name")
+    parser.add_argument("pr_file", type=str, help="Precipitation data file")
+    parser.add_argument("season", type=str, help="Season to plot")
+    parser.add_argument("output_file", type=str, help="Output file name")
 
-    parser.add_argument("--gridlines", action="store_true", default=False,
-                        help="Include gridlines on the plot")
-    parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-                        help='list of levels / tick marks to appear on the colourbar')
-    parser.add_argument("--mask", type=str, nargs=2, metavar=('SFTLF_FILE', 'REALM'), default=None,
-                        help='Apply a land or ocean mask (specify the realm to mask: "land" or "ocean")')
+    parser.add_argument("--mask", type=str, nargs=2,
+                        metavar=('SFTLF_FILE', 'REALM'), default=None,
+                        help='Realm to mask: "land" or "ocean")')
 
-    args = parser.parse_args()            
+    args = parser.parse_args()
+    
     main(args)
