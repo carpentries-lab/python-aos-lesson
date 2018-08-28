@@ -20,23 +20,23 @@ def convert_pr_units(darray):
     return darray
 
 
-def plot_climatology(clim_darray, model_name, season, gridlines=False):
+def plot_climatology(clim, model_name, season, gridlines=False):
     """Plot the precipitation climatology.
     
     Args:
-      clim_darray (xarray.core.dataarray.DataArray): Precipitation climatology data
+      clim (xarray.DataArray): Precipitation climatology data
       season (str): Season    
     
     """
         
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-    clim_darray.sel(season=season).plot.contourf(ax=ax,
-                                                 levels=numpy.arange(0, 15, 1.5),
-                                                 extend='max',
-                                                 transform=ccrs.PlateCarree(),
-                                                 cbar_kwargs={'label': clim_darray.units},
-                                                 cmap=cmocean.cm.haline_r)
+    clim.sel(season=season).plot.contourf(ax=ax,
+                                          levels=numpy.arange(0, 13.5, 1.5),
+                                          extend='max',
+                                          transform=ccrs.PlateCarree(),
+                                          cbar_kwargs={'label': clim.units},
+                                          cmap=cmocean.cm.haline_r)
     ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
@@ -49,12 +49,11 @@ def main(inargs):
     """Run the program."""
 
     dset = xarray.open_dataset(inargs.pr_file)
-    pr_darray = dset['pr']
     
-    clim_darray = pr_darray.groupby('time.season').mean(dim='time')
-    clim_darray = convert_pr_units(clim_darray)
+    clim = dset['pr'].groupby('time.season').mean(dim='time')
+    clim = convert_pr_units(clim)
 
-    plot_climatology(clim_darray, dset.attrs['model_id'], inargs.season)
+    plot_climatology(clim, dset.attrs['model_id'], inargs.season)
     plt.savefig(inargs.output_file, dpi=200)
 
 
