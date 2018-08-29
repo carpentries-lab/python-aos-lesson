@@ -16,6 +16,8 @@ def convert_pr_units(darray):
     
     """
     
+    assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
+    
     darray.data = darray.data * 86400
     darray.attrs['units'] = 'mm/day'
     
@@ -81,6 +83,7 @@ def main(inargs):
     dset = xr.open_dataset(inargs.pr_file)
     
     clim = dset['pr'].groupby('time.season').mean('time')
+    clim.attrs = dset['pr'].attrs
     clim = convert_pr_units(clim)
 
     if inargs.mask:
