@@ -1,8 +1,8 @@
 import argparse
-import xarray
+import xarray as xr
 import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
-import numpy
+import numpy as np
 import cmocean
 
 
@@ -32,7 +32,7 @@ def plot_climatology(clim, model_name, season, gridlines=False):
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
     clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=numpy.arange(0, 13.5, 1.5),
+                                          levels=np.arange(0, 13.5, 1.5),
                                           extend='max',
                                           transform=ccrs.PlateCarree(),
                                           cbar_kwargs={'label': clim.units},
@@ -48,9 +48,9 @@ def plot_climatology(clim, model_name, season, gridlines=False):
 def main(inargs):
     """Run the program."""
 
-    dset = xarray.open_dataset(inargs.pr_file)
+    dset = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean(dim='time')
+    clim = dset['pr'].groupby('time.season').mean('time')
     clim = convert_pr_units(clim)
 
     plot_climatology(clim, dset.attrs['model_id'], inargs.season)

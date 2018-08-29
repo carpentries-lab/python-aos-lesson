@@ -3,28 +3,56 @@ title: "Software installation using conda"
 teaching: 20
 exercises: 5
 questions:
+- "What are the main Python libraries used in atmosphere and ocean science?"
 - "How do I install and manage all the Python libraries that I want to use?"
 objectives:
+- "Identify the main Python libraries used in atmosphere and ocean science and the relationships between them."
 - "Explain the advantages of Anaconda over other Python distributions."
 - "Extend the number of packages available via conda using conda-forge."
-- "Create a conda environment with the libraries needed for this workshop."
+- "Create a conda environment with the libraries needed for these lessons."
 keypoints:
+- "xarray and iris are the core Python libraries used in the atmosphere and ocean sciences."
 - "Use conda to install and manage your Python environments."
 ---
 
-## Background
+## The PyAOS stack
 
-Until recently, the Python package installer (pip) only worked for libraries written in pure Python.
+Before we jump in and start analysing our netCDF precipitation data files,
+we need to consider what Python libraries are best suited to the task. 
+
+For reading, writing and analysing data stored in the netCDF file format,
+atmosphere and ocean scientists will typically do most of their work with either the
+[xarray](http://xarray.pydata.org/en/stable/) or [iris](http://scitools.org.uk/iris/) libraries.
+These libraries are built on top of more generic data science libraries like numpy and matplotlib,
+to make the types of analysis we do faster and more efficient.
+To learn more about the PyAOS "stack" shown in the diagram below
+(i.e. the collection of libraries that are typically used for
+data analysis and visualisation in the atmosphere and ocean sciences),
+check out [this post](https://drclimate.wordpress.com/2016/10/04/the-weatherclimate-python-stack/).
+
+![PyAOS stack](../fig/01-pyaos-stack.png) 
+
+
+## Python distributions for data science
+
+Now that we've identified the Python libraries we might want to use,
+how do we go about installing them?
+
+Our first impulse might be to use the Python package installer (pip), 
+but until recently pip only worked for libraries written in pure Python.
 This was a major limitation for the data science community,
 because many scientific Python libraries have C and/or Fortran dependencies.
 To spare people the pain of installing these dependencies,
-distributions like [Anaconda](https://www.anaconda.com/distribution/) and [Canopy](https://www.enthought.com/product/canopy/) have been released,
+distributions like [Anaconda](https://www.anaconda.com/distribution/)
+and [Canopy](https://www.enthought.com/product/canopy/) have been released,
 which come with the most popular data science libraries and their dependencies pre-installed.
 These distributions also come with a package manager for installing libraries that weren’t pre-installed.
 This tutorial focuses on [conda](https://conda.io/docs/),
-which is the package manager associated with Anaconda (as we’ll see, it has some advantages over the Canopy package manager).
+which is the package manager associated with Anaconda
+(as we’ll see, it has some advantages over the Canopy package manager).
 
-## Basic usage
+
+## Introducing conda
 
 According to the [latest documentation](https://docs.anaconda.com/anaconda/#anaconda-navigator-or-conda),
 Anaconda comes with over 150 of the most widely used data science libraries (and their dependencies) pre-installed.
@@ -54,7 +82,7 @@ OR using Anaconda Navigator:
 {: .callout}
 
 
-## Advanced usage
+## Advanced conda
 
 This is all great, but up until now Anaconda gives us nothing that Canopy doesn't.
 The real advantage of Anaconda is the [Anaconda Cloud](https://anaconda.org) website,
@@ -86,35 +114,25 @@ OR
 We recommned not adding any other third-party channels unless absolutely necessary,
 because mixing packages from multiple channels can cause headaches like binary incompatibilities.
 
-### The PyAOS stack
 
-For reading, writing and analysing netCDF data,
-atmosphere and ocean scientists will typically do most of their work with either the [iris](http://scitools.org.uk/iris/)
-or [xarray](http://xarray.pydata.org/en/stable/) library.
-These libraries are built on top of more generic data science libraries like numpy and matplotlib,
-to make the types of analysis we do faster and more efficient.
-To learn more about the PyAOS "stack" shown in the diagram below
-(i.e. the collection of libraries that are typically used for
-data analysis and visualisation in the atmosphere and ocean sciences),
-check out [this post](https://drclimate.wordpress.com/2016/10/04/the-weatherclimate-python-stack/).
+## Software installation for these lessons
 
-![PyAOS stack](../fig/01-pyaos-stack.png) 
-
-For this particular lesson we will use iris,
-but all the same tasks could be performed with xarray.
+For these particular lessons we will use xarray,
+but all the same tasks could be performed with iris.
 We'll also install
-[jupyter](https://jupyter.org/) (so we can use the jupyter notebook)
-and [cmocean](http://matplotlib.org/cmocean/) (for nice color palettes).  
+[cartopy](http://scitools.org.uk/cartopy/) (to help with geographic plot projections),
+[cmocean](http://matplotlib.org/cmocean/) (for nice color palettes)
+and [jupyter](https://jupyter.org/) (so we can use the jupyter notebook).  
 
 We could install these libraries from Anaconda Navigator (not shown)
 or using the Bash Shell or Anaconda Prompt (Windows):
 ~~~
-$ conda install jupyter iris cmocean
+$ conda install jupyter xarray cartopy cmocean
 ~~~
 {: .language-bash}
 
 If we then list all the libraries that we've got installed,
-we can see that jupyter, iris and cmocean (and their dependencies)
+we can see that jupyter, xarray, cartopy and cmocean (and their dependencies)
 are now there:
 ~~~
 $ conda list
@@ -129,7 +147,8 @@ $ conda list
 > If you've got multiple data science projects on the go,
 > installing all your packages in the same conda environment can get a little messy.
 > (By default they are installed in the root/base environment.)
-> It's therefore common practice to [create separate conda environments](https://conda.io/docs/user-guide/tasks/manage-environments.html)
+> It's therefore common practice to
+> [create separate conda environments](https://conda.io/docs/user-guide/tasks/manage-environments.html)
 > for the various projects you're working on.
 >
 > For instance, we could create an environment called `pyaos-lesson` for this lesson.
@@ -137,7 +156,7 @@ $ conda list
 > of the Anaconda Navigator or via the following Bash Shell / Anaconda Prompt commands:
 >
 > ~~~
-> $ conda create -n pyaos-lesson jupyter iris cmocean
+> $ conda create -n pyaos-lesson jupyter xarray cartopy cmocean
 > $ conda activate pyaos-lesson
 > ~~~
 > {: .language-bash}
@@ -174,13 +193,10 @@ $ conda list
 >   - conda-forge
 >   - defaults
 > dependencies:
->   - appnope=0.1.0=py36_0
->   - asn1crypto=0.24.0=py36_0
->   - backcall=0.1.0=py_0
->   - bleach=2.1.3=py_0
->   - bokeh=0.12.16=py36_0
->   - ca-certificates=2018.4.16=0
->   - cartopy=0.16.0=py36_0
+>   - cartopy=0.16.0=py36h81b52dc_1
+>   - certifi=2018.4.16=py36_0
+>   - cftime=1.0.1=py36h7eb728f_0
+>   - cmocean=1.2=py_0
 >   - ...
 > ~~~
 > {: .output}
@@ -223,7 +239,7 @@ $ conda list
 
 > ## Install the libraries required for this lesson
 >
-> Go ahead and install jupyter, iris and cmocean using either the Anaconda Navigator,
+> Go ahead and install jupyter, xarray, cartopy and cmocean using either the Anaconda Navigator,
 > Bash Shell or Anaconda Prompt (Windows). 
 > 
 > (You may like to create a separate `pyaos-lesson` environment,
