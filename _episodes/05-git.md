@@ -258,7 +258,7 @@ by editing the `description` variable
 (which is used by argparse in the help information it displays at the command line).
 
 ~~~
-description='Plot the precipitation climatology for a given month.'
+description='Plot the precipitation climatology for a given season.'
 ~~~
 {: .language-python}
 
@@ -315,10 +315,10 @@ index 056b433..a0aa9e4 100644
  if __name__ == '__main__':
  
 -    description='Plot the precipitation climatology.'
-+    description='Plot the precipitation climatology for a given month.'
++    description='Plot the precipitation climatology for a given season.'
      parser = argparse.ArgumentParser(description=description)
      
-     parser.add_argument("infile", type=str,
+     parser.add_argument("pr_file", type=str,
 ~~~
 
 The output is cryptic because
@@ -426,13 +426,11 @@ by putting them in the order suggested by the
 ~~~
 import pdb
 import argparse
-import calendar
 
-import numpy
+import numpy as np
 import matplotlib.pyplot as plt
-import iris
-import iris.plot as iplt
-import iris.coord_categorisation
+import xarray as xr
+import cartopy.crs as ccrs
 import cmocean
 ~~~
 {: .language-python}
@@ -450,16 +448,13 @@ index a0aa9e4..29a40fb 100644
 @@ -1,13 +1,12 @@
 +import pdb
  import argparse
- import calendar
 +
-+import numpy
++import numpy as np
 +import matplotlib.pyplot as plt
- import iris
+ import xarray as xr
 -import matplotlib.pyplot as plt
- import iris.plot as iplt
- import iris.coord_categorisation
  import cmocean
--import numpy
+-import numpy as np
 -import pdb
  ~~~
 {: .output}
@@ -557,8 +552,9 @@ index 29a40fb..344a34e 100644
  
 +# A random comment
  
- def read_data(fname, month):
-     """Read an input data file"""
+ def convert_pr_units(darray):
+     """Convert kg m-2 s-1 to mm day-1.
+
 ~~~
 {: .output}
 
@@ -585,7 +581,7 @@ $ git show HEAD~1 plot_precipitation_climatology.py
 
 ~~~
 commit 444c3c045dc69a323e40d4a04813b88e4b89e05e
-Author: Damien Irving <irving.damien@gmail.com>
+Author: Damien Irving <my@email.com>
 Date:   Mon Dec 18 14:59:47 2017 +1100
 
     Small improvement to help information
@@ -599,10 +595,10 @@ index 056b433..a0aa9e4 100644
  if __name__ == '__main__':
  
 -    description='Plot the precipitation climatology.'
-+    description='Plot the precipitation climatology for a given month.'
++    description='Plot the precipitation climatology for a given season.'
      parser = argparse.ArgumentParser(description=description)
      
-     parser.add_argument("infile", type=str,
+     parser.add_argument("pr_file", type=str,
 ~~~
 {: .output}
 
@@ -625,7 +621,7 @@ $ git diff 444c3c0 plot_precipitation_climatology.py
 
 ~~~
 commit 444c3c045dc69a323e40d4a04813b88e4b89e05e
-Author: Damien Irving <irving.damien@gmail.com>
+Author: Damien Irving <my@email.com>
 Date:   Mon Dec 18 14:59:47 2017 +1100
 
     Small improvement to help information
@@ -639,10 +635,10 @@ index 056b433..a0aa9e4 100644
  if __name__ == '__main__':
  
 -    description='Plot the precipitation climatology.'
-+    description='Plot the precipitation climatology for a given month.'
++    description='Plot the precipitation climatology for a given season.'
      parser = argparse.ArgumentParser(description=description)
      
-     parser.add_argument("infile", type=str,
+     parser.add_argument("pr_file", type=str,
 ~~~
 {: .output}
 
@@ -723,85 +719,91 @@ but everything else is there.
 > ~~~
 > import pdb
 > import argparse
-> import calendar
 >
-> import numpy
+> import numpy as np
 > import matplotlib.pyplot as plt
-> import iris
-> import iris.plot as iplt
-> import iris.coord_categorisation
+> import xarray as xr
+> import cartopy.crs as ccrs
 > import cmocean
 >
 >
-> def read_data(fname, month):
->     """Read an input data file"""
+> def convert_pr_units(darray):
+>     """Convert kg m-2 s-1 to mm day-1.
 >    
->     cube = iris.load_cube(fname, 'precipitation_flux')
+>     Args:
+>       darray (xarray.DataArray): Precipitation data
+>     
+>     """
+>     
+>     darray.data = darray.data * 86400
+>     darray.attrs['units'] = 'mm/day'
 >    
->     iris.coord_categorisation.add_month(cube, 'time')
->     cube = cube.extract(iris.Constraint(month=month))
->    
->     return cube
+>     return darray
 >
 >
-> def convert_pr_units(cube):
->     """Convert kg m-2 s-1 to mm day-1"""
+> def create_plot(clim, model_name, season, gridlines=False, levels=None):
+>     """Plot the precipitation climatology.
 >    
->     cube.data = cube.data * 86400
->     cube.units = 'mm/day'
->    
->     return cube
->
->
-> def plot_data(cube, month, gridlines=False, levels=None):
->     """Plot the data."""
->
+>     Args:
+>       clim (xarray.DataArray): Precipitation climatology data
+>       model_name (str): Name of the climate model
+>       season (str): Season
+>       
+>     Kwargs:
+>       gridlines (bool): Select whether to plot gridlines
+>       levels (list): Tick marks on the colorbar    
+>     
+>     """
+> 
 >     if not levels:
->         levels = numpy.arange(0, 10)
->
->     fig = plt.figure(figsize=[12,5])    
->     iplt.contourf(cube, cmap=cmocean.cm.haline_r, 
->                   levels=levels,
->                   extend='max')
->
->     plt.gca().coastlines()
+>         levels = np.arange(0, 13.5, 1.5)
+>         
+>     fig = plt.figure(figsize=[12,5])
+>     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
+>     clim.sel(season=season).plot.contourf(ax=ax,
+>                                           levels=levels,
+>                                           extend='max',
+>                                           transform=ccrs.PlateCarree(),
+>                                           cbar_kwargs={'label': clim.units},
+>                                           cmap=cmocean.cm.haline_r)
+>     ax.coastlines()
 >     if gridlines:
 >         plt.gca().gridlines()
->     cbar = plt.colorbar()
->     cbar.set_label(str(cube.units))
->    
->     title = '%s precipitation climatology (%s)' %(cube.attributes['model_id'], month)
+>     
+>     title = '%s precipitation climatology (%s)' %(model_name, season)
 >     plt.title(title)
 >
 >
 > def main(inargs):
 >     """Run the program."""
->
->     cube = read_data(inargs.infile, inargs.month)   
->     cube = convert_pr_units(cube)
->     clim = cube.collapsed('time', iris.analysis.MEAN)
->
->     plot_data(clim, inargs.month, gridlines=inargs.gridlines,
->               levels=inargs.cbar_levels)
->     plt.savefig(inargs.outfile)
+> 
+>     dset = xr.open_dataset(inargs.pr_file)
+>     
+>     clim = dset['pr'].groupby('time.season').mean('time')
+>     clim = convert_pr_units(clim)
+> 
+>     create_plot(clim, dset.attrs['model_id'], inargs.season,
+>                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
+>     plt.savefig(inargs.output_file, dpi=200)
 >
 >
 > if __name__ == '__main__':
->
->     description='Plot the precipitation climatology for a given month.'
+>     description='Plot the precipitation climatology for a given season.'
 >     parser = argparse.ArgumentParser(description=description)
->     
->     parser.add_argument("infile", type=str, help="Input file name")
->     parser.add_argument("month", type=str, choices=calendar.month_abbr[1:], help="Month to plot")
->     parser.add_argument("outfile", type=str, help="Output file name")
->
+>    
+>     parser.add_argument("pr_file", type=str, help="Precipitation data file")
+>     parser.add_argument("season", type=str, help="Season to plot")
+>     parser.add_argument("output_file", type=str, help="Output file name")
+> 
 >     parser.add_argument("--gridlines", action="store_true", default=False,
 >                         help="Include gridlines on the plot")
 >     parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
->                         help='list of levels / tick marks to appear on the colourbar')
+>                         help='list of levels / tick marks to appear on the colorbar')
 >
->     args = parser.parse_args()            
+>     args = parser.parse_args()
+>    
 >     main(args)
+>
 > ~~~
 > {: .language-python}
 {: .solution}
