@@ -145,69 +145,75 @@ $ cat plot_precipitation_climatology.py
 
 ~~~
 import argparse
-import iris
+import xarray as xr
 import matplotlib.pyplot as plt
-import iris.plot as iplt
-import iris.coord_categorisation
+import cartopy.crs as ccrs
+import numpy as np
 import cmocean
-import numpy
 
 
-def read_data(fname, month):
-    """Read an input data file"""
+def convert_pr_units(darray):
+    """Convert kg m-2 s-1 to mm day-1.
     
-    cube = iris.load_cube(fname, 'precipitation_flux')
+    Args:
+      darray (xarray.DataArray): Precipitation data
     
-    iris.coord_categorisation.add_month(cube, 'time')
-    cube = cube.extract(iris.Constraint(month=month))
+    """
     
-    return cube
+    darray.data = darray.data * 86400
+    darray.attrs['units'] = 'mm/day'
+    
+    return darray
 
 
-def convert_pr_units(cube):
-    """Convert kg m-2 s-1 to mm day-1"""
+def create_plot(clim, model_name, season, gridlines=False):
+    """Plot the precipitation climatology.
     
-    cube.data = cube.data * 86400
-    cube.units = 'mm/day'
+    Args:
+      clim (xarray.DataArray): Precipitation climatology data
+      model_name (str): Name of the climate model
+      season (str): Season
+      
+    Kwargs:  
+      gridlines (bool): Select whether to plot gridlines    
     
-    return cube
-
-
-def plot_data(cube, month, gridlines=False):
-    """Plot the data."""
+    """
         
-    fig = plt.figure(figsize=[12,5])    
-    iplt.contourf(cube, cmap=cmocean.cm.haline_r, 
-                  levels=numpy.arange(0, 10),
-                  extend='max')
-
-    plt.gca().coastlines()
+    fig = plt.figure(figsize=[12,5])
+    ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
+    clim.sel(season=season).plot.contourf(ax=ax,
+                                          levels=np.arange(0, 13.5, 1.5),
+                                          extend='max',
+                                          transform=ccrs.PlateCarree(),
+                                          cbar_kwargs={'label': clim.units},
+                                          cmap=cmocean.cm.haline_r)
+    ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
-    cbar = plt.colorbar()
-    cbar.set_label(str(cube.units))
     
-    title = '%s precipitation climatology (%s)' %(cube.attributes['model_id'], month)
+    title = '%s precipitation climatology (%s)' %(model_name, season)
     plt.title(title)
 
 
 def main(inargs):
     """Run the program."""
 
-    cube = read_data(inargs.infile, inargs.month)    
-    cube = convert_pr_units(cube)
-    clim = cube.collapsed('time', iris.analysis.MEAN)
-    plot_data(clim, inargs.month)
-    plt.savefig(inargs.outfile)
+    dset = xr.open_dataset(inargs.pr_file)
+    
+    clim = dset['pr'].groupby('time.season').mean('time')
+    clim = convert_pr_units(clim)
+
+    create_plot(clim, dset.attrs['model_id'], inargs.season)
+    plt.savefig(inargs.output_file, dpi=200)
 
 
 if __name__ == '__main__':
     description='Plot the precipitation climatology.'
     parser = argparse.ArgumentParser(description=description)
     
-    parser.add_argument("infile", type=str, help="Input file name")
-    parser.add_argument("month", type=str, help="Month to plot")
-    parser.add_argument("outfile", type=str, help="Output file name")
+    parser.add_argument("pr_file", type=str, help="Precipitation data file")
+    parser.add_argument("season", type=str, help="Season to plot")
+    parser.add_argument("output_file", type=str, help="Output file name")
 
     args = parser.parse_args()
     
@@ -218,7 +224,7 @@ if __name__ == '__main__':
 ... and then run it at the command line: 
 
 ~~~
-$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc May pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-may-clim.png
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc MAM pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-MAM-clim.png
 ~~~
 {: .language-bash}
 
@@ -230,9 +236,9 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > import pdb
 > 
 > ...
-> cube = read_data(inargs.infile, inargs.month)    
+> clim = convert_pr_units(clim)    
 > pdb.set_trace()
-> cube = convert_pr_units(cube)
+> create_plot(clim, dset.attrs['model_id'], inargs.season)
 > ...
 > ~~~
 > {: .language-python}
@@ -240,12 +246,12 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > When you run the script,
 > it will stop at the tracer and allow you to interrogate the code:
 > ~~~
-> $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc May pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-may-clim.png 
-> /Users/damienirving/Documents/Volunteer/teaching/amos-icshmo/plot_precipitation_climatology.py(73)main()
-> -> cube = convert_pr_units(cube)
+> $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc MAM pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-MAM-clim.png 
+> /Users/damienirving/Desktop/data-carpentry/plot_precipitation_climatology.py(55)main()
+> -> create_plot(clim, dset.attrs['model_id'], inargs.season)
 >
-> (Pdb) print(inargs.month)
-> May
+> (Pdb) print(inargs.season)
+> MAM
 > ~~~
 > {: .language-bash}
 >
@@ -264,10 +270,10 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > that you downloaded earlier from the setup tab at the top of the page. 
 >  
 > For the first improvement,
-> edit the line of code that defines the month command line argument
-> (`parser.add_argument("month", type=str, help="Month to plot")`)
+> edit the line of code that defines the season command line argument
+> (`parser.add_argument("season", type=str, help="Season to plot")`)
 > so that it only allows the user to input a valid three letter abbreviation
-> (i.e. `['Jan', 'Feb', ...]`).
+> (i.e. `['DJF', 'MAM', 'JJA', 'SON']`).
 >
 > (Hint: Read about the `choices` keyword argument
 > at the [argparse tutorial](https://docs.python.org/3/howto/argparse.html).) 
@@ -275,18 +281,9 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > > ## Solution
 > >
 > > ~~~
-> > parser.add_argument("month", type=str,
-> >                     choices=['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'], 
-> >                     help="Month to plot")
-> > ~~~                         
-> > {: .language-python}
-> >
-> > OR
-> >
-> > ~~~
-> > import calendar
-> > parser.add_argument("month", type=str, choices=calendar.month_abbr[1:], 
-> >                     help="Month to plot")
+> > parser.add_argument("season", type=str,
+> >                     choices=['DJF', 'MAM', 'JJA', 'SON'], 
+> >                     help="Season to plot")
 > > ~~~                         
 > > {: .language-python}
 > {: .solution}
@@ -307,20 +304,11 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > > ~~~
 > > ...
 > >
-> > def plot_data(cube, month, gridlines=False):
-> >    
-> >     ...
-> >  
-> >     if gridlines:
-> >         plt.gca().gridlines()
-> >
-> > ...
-> >
 > > def main(inargs):
 > >
 > >    ... 
 > >
-> >    plot_data(clim, inargs.month, gridlines=inargs.gridlines)
+> >    create_plot(clim, dset.attrs['model_id'], inargs.season, gridlines=inargs.gridlines)
 > >
 > > ...
 > >
@@ -352,22 +340,31 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > > ~~~
 > > ...
 > >
-> > def plot_data(cube, month, gridlines=False, levels=None):
-> >     """Plot the data."""
-> >        
-> >     fig = plt.figure(figsize=[12, 5])    
-> >     iplt.contourf(cube, cmap=cmocean.cm.haline_r, 
-> >                   levels=levels,
-> >                   extend='max')
+> > def create_plot(clim, model_name, season, gridlines=False, levels=None):
+> >     """Plot the precipitation climatology.
+> >       ...
+> >       Kwargs:
+> >         gridlines (bool): Select whether to plot gridlines
+> >         levels (list): Tick marks on the colorbar      
+> >    
+> >     """
+> >
+> >     if not levels:
+> >         levels = np.arange(0, 13.5, 1.5)
+> >
+> >     ...
+> >
+> >     clim.sel(season=season).plot.contourf(ax=ax,
+> >                                           levels=levels,
 > >
 > > ...
 > >
 > > def main(inargs):
 > >
-> >    ... 
+> >     ... 
 > >
-> >    plot_data(clim, inargs.month, gridlines=inargs.gridlines,
-> >              levels=inargs.cbar_levels)
+> >     create_plot(clim, dset.attrs['model_id'], inargs.season,
+> >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
 > >
 > > ...
 > >
@@ -376,7 +373,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > >     ... 
 > > 
 > >     parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-> >                         help='list of levels / tick marks to appear on the colourbar')
+> >                         help='list of levels / tick marks to appear on the colorbar')
 > >
 > > ... 
 > > 
@@ -398,85 +395,91 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 >
 > ~~~
 > import argparse
-> import calendar
-> import iris
+> import xarray as xr
 > import matplotlib.pyplot as plt
-> import iris.plot as iplt
-> import iris.coord_categorisation
+> import cartopy.crs as ccrs
+> import numpy as np
 > import cmocean
-> import numpy
 > import pdb
 >
 >
-> def read_data(fname, month):
->     """Read an input data file"""
+> def convert_pr_units(darray):
+>     """Convert kg m-2 s-1 to mm day-1.
 >    
->     cube = iris.load_cube(fname, 'precipitation_flux')
+>     Args:
+>       darray (xarray.DataArray): Precipitation data
+>     
+>     """
+>     
+>     darray.data = darray.data * 86400
+>     darray.attrs['units'] = 'mm/day'
 >    
->     iris.coord_categorisation.add_month(cube, 'time')
->     cube = cube.extract(iris.Constraint(month=month))
->    
->     return cube
+>     return darray
 >
 >
-> def convert_pr_units(cube):
->     """Convert kg m-2 s-1 to mm day-1"""
+> def create_plot(clim, model_name, season, gridlines=False, levels=None):
+>     """Plot the precipitation climatology.
 >    
->     cube.data = cube.data * 86400
->     cube.units = 'mm/day'
->    
->     return cube
->
->
-> def plot_data(cube, month, gridlines=False, levels=None):
->     """Plot the data."""
->
+>     Args:
+>       clim (xarray.DataArray): Precipitation climatology data
+>       model_name (str): Name of the climate model
+>       season (str): Season
+>       
+>     Kwargs:
+>       gridlines (bool): Select whether to plot gridlines
+>       levels (list): Tick marks on the colorbar    
+>     
+>     """
+> 
 >     if not levels:
->         levels = numpy.arange(0, 10)
->
->     fig = plt.figure(figsize=[12,5])    
->     iplt.contourf(cube, cmap=cmocean.cm.haline_r, 
->                   levels=levels,
->                   extend='max')
->
->     plt.gca().coastlines()
+>         levels = np.arange(0, 13.5, 1.5)
+>         
+>     fig = plt.figure(figsize=[12,5])
+>     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
+>     clim.sel(season=season).plot.contourf(ax=ax,
+>                                           levels=levels,
+>                                           extend='max',
+>                                           transform=ccrs.PlateCarree(),
+>                                           cbar_kwargs={'label': clim.units},
+>                                           cmap=cmocean.cm.haline_r)
+>     ax.coastlines()
 >     if gridlines:
 >         plt.gca().gridlines()
->     cbar = plt.colorbar()
->     cbar.set_label(str(cube.units))
->    
->     title = '%s precipitation climatology (%s)' %(cube.attributes['model_id'], month)
+>     
+>     title = '%s precipitation climatology (%s)' %(model_name, season)
 >     plt.title(title)
 >
 >
 > def main(inargs):
 >     """Run the program."""
->
->     cube = read_data(inargs.infile, inargs.month)   
->     cube = convert_pr_units(cube)
->     clim = cube.collapsed('time', iris.analysis.MEAN)
->
->     plot_data(clim, inargs.month, gridlines=inargs.gridlines,
->               levels=inargs.cbar_levels)
->     plt.savefig(inargs.outfile)
+> 
+>     dset = xr.open_dataset(inargs.pr_file)
+>     
+>     clim = dset['pr'].groupby('time.season').mean('time')
+>     clim = convert_pr_units(clim)
+> 
+>     create_plot(clim, dset.attrs['model_id'], inargs.season,
+>                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
+>     plt.savefig(inargs.output_file, dpi=200)
 >
 >
 > if __name__ == '__main__':
->
 >     description='Plot the precipitation climatology.'
 >     parser = argparse.ArgumentParser(description=description)
->     
->     parser.add_argument("infile", type=str, help="Input file name")
->     parser.add_argument("month", type=str, choices=calendar.month_abbr[1:], help="Month to plot")
->     parser.add_argument("outfile", type=str, help="Output file name")
->
+>    
+>     parser.add_argument("pr_file", type=str, help="Precipitation data file")
+>     parser.add_argument("season", type=str, help="Season to plot")
+>     parser.add_argument("output_file", type=str, help="Output file name")
+> 
 >     parser.add_argument("--gridlines", action="store_true", default=False,
 >                         help="Include gridlines on the plot")
 >     parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
->                         help='list of levels / tick marks to appear on the colourbar')
+>                         help='list of levels / tick marks to appear on the colorbar')
 >
->     args = parser.parse_args()            
+>     args = parser.parse_args()
+>    
 >     main(args)
+>
 > ~~~
 > {: .language-python}
 {: .solution}

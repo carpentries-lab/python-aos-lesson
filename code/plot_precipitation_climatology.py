@@ -25,7 +25,11 @@ def create_plot(clim, model_name, season, gridlines=False):
     
     Args:
       clim (xarray.DataArray): Precipitation climatology data
-      season (str): Season    
+      model_name (str): Name of the climate model
+      season (str): Season
+      
+    Kwargs:
+      gridlines (bool): Select whether to plot gridlines    
     
     """
         
