@@ -40,7 +40,7 @@ def apply_mask(darray, sftlf_file, realm):
     return masked_darray
 
 
-def plot_climatology(clim, model_name, season, gridlines=False):
+def create_plot(clim, model_name, season, gridlines=False):
     """Plot the precipitation climatology.
     
     Args:
@@ -77,7 +77,7 @@ def main(inargs):
         sftlf_file, realm = inargs.mask
         clim = apply_mask(clim, sftlf_file, realm)
 
-    plot_climatology(clim, dset.attrs['model_id'], inargs.season)
+    create_plot(clim, dset.attrs['model_id'], inargs.season)
     plt.savefig(inargs.output_file, dpi=200)
 
 

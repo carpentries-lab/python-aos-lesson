@@ -10,7 +10,7 @@ def convert_pr_units(darray):
     """Convert kg m-2 s-1 to mm day-1.
     
     Args:
-      darray (xarray.core.dataarray.DataArray): Precipitation data
+      darray (xarray.DataArray): Precipitation data
     
     """
     
@@ -20,7 +20,7 @@ def convert_pr_units(darray):
     return darray
 
 
-def plot_climatology(clim, model_name, season, gridlines=False):
+def create_plot(clim, model_name, season, gridlines=False):
     """Plot the precipitation climatology.
     
     Args:
@@ -53,7 +53,7 @@ def main(inargs):
     clim = dset['pr'].groupby('time.season').mean('time')
     clim = convert_pr_units(clim)
 
-    plot_climatology(clim, dset.attrs['model_id'], inargs.season)
+    create_plot(clim, dset.attrs['model_id'], inargs.season)
     plt.savefig(inargs.output_file, dpi=200)
 
 
