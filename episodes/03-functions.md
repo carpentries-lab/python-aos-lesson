@@ -24,44 +24,44 @@ we created a plot of the ACCESS1-3 historical precipitation climatology
 using the following commands:
 
 ~~~
-import iris
+import xarray as xr
 import matplotlib.pyplot as plt
-import iris.plot as iplt
-import iris.coord_categorisation
+import cartopy.crs as ccrs
+import numpy as np
 import cmocean
-import numpy
 
-access_pr_file = 'data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
+access_pr_file = '../data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
 
-cube = iris.load_cube(access_pr_file, 'precipitation_flux')
-iris.coord_categorisation.add_month(cube, 'time')
-cube = cube.extract(iris.Constraint(month='Jun'))
+dset = xr.open_dataset(access_pr_file)
 
-cube.data = cube.data * 86400
-cube.units = 'mm/day'
+clim = dset['pr'].groupby('time.season').mean('time')
 
-clim = cube.collapsed('time', iris.analysis.MEAN)
+clim.data = clim.data * 86400
+clim.attrs['units'] = 'mm/day'
 
 fig = plt.figure(figsize=[12,5])
-iplt.contourf(clim, cmap=cmocean.cm.haline_r, 
-              levels=numpy.arange(0, 10), extend='max')
-plt.gca().coastlines()
-cbar = plt.colorbar()
-cbar.set_label(str(cube.units))
+ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
+clim.sel(season='JJA').plot.contourf(ax=ax,
+                                     levels=np.arange(0, 13.5, 1.5),
+                                     extend='max',
+                                     transform=ccrs.PlateCarree(),
+                                     cbar_kwargs={'label': clim.units},
+                                     cmap=cmocean.cm.haline_r)
+ax.coastlines()
 
-title = '%s precipitation climatology (Jun)' %(cube.attributes['model_id'])
+title = '%s precipitation climatology (JJA)' %(dset.attrs['model_id'])
 plt.title(title)
 
 plt.show()
 ~~~
 {: .language-python}
 
-![Precipitation climatology](../fig/03-functions-access-jun.svg)
+![Precipitation climatology](../fig/03-functions-access-jja.svg)
 
 If we wanted to create a similar plot for a different model and/or different month,
 we could cut and paste the code and edit accordingly.
 The problem with that (common) approach is that it increases the chances of a making a mistake.
-If we manually updated the month to 'Mar' for the `cube.extract` command
+If we manually updated the season to 'DJF' for the `clim.sel(season=` command
 but forgot to update it when calling `plt.title`, for instance,
 we'd have a mismatch between the data and title. 
 
@@ -75,36 +75,36 @@ The code itself then remains untouched,
 and we simply call the function with different input arguments.
 
 ~~~
-def plot_pr_climatology(pr_file, month, gridlines=False):
+def plot_pr_climatology(pr_file, season, gridlines=False):
     """Plot the precipitation climatology.
     
     Args:
       pr_file (str): Precipitation data file
-      month (str): Month (3 letter abbreviation, e.g. Jun)
+      season (str): Season (3 letter abbreviation, e.g. JJA)
       gridlines (bool): Select whether to plot gridlines
     
     """
 
-    cube = iris.load_cube(pr_file, 'precipitation_flux')
-    iris.coord_categorisation.add_month(cube, 'time')
-    cube = cube.extract(iris.Constraint(month=month))
+    dset = xr.open_dataset(pr_file)
 
-    cube.data = cube.data * 86400
-    cube.units = 'mm/day'
+    clim = dset['pr'].groupby('time.season').mean('time')
 
-    clim = cube.collapsed('time', iris.analysis.MEAN)
+    clim.data = clim.data * 86400
+    clim.attrs['units'] = 'mm/day'
 
     fig = plt.figure(figsize=[12,5])
-    iplt.contourf(clim, cmap=cmocean.cm.haline_r, 
-                  levels=numpy.arange(0, 10),
-                  extend='max')
-    plt.gca().coastlines()
+    ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
+    clim.sel(season=season).plot.contourf(ax=ax,
+                                          levels=np.arange(0, 13.5, 1.5),
+                                          extend='max',
+                                          transform=ccrs.PlateCarree(),
+                                          cbar_kwargs={'label': clim.units},
+                                          cmap=cmocean.cm.haline_r)
+    ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
-    cbar = plt.colorbar()
-    cbar.set_label(str(cube.units))
-
-    title = '%s precipitation climatology (%s)' %(cube.attributes['model_id'], month)
+    
+    title = '%s precipitation climatology (%s)' %(dset.attrs['model_id'], season)
     plt.title(title)
 ~~~
 {: .language-python}
@@ -119,12 +119,12 @@ help(plot_pr_climatology)
 ~~~
 Help on function plot_pr_climatology in module __main__:
 
-plot_pr_climatology(pr_file, month, gridlines=False)
+plot_pr_climatology(pr_file, season, gridlines=False)
     Plot the precipitation climatology.
     
     Args:
       pr_file (str): Precipitation data file
-      month (str): Month (3 letter abbreviation, e.g. Jun)
+      season (str): Season (3 letter abbreviation, e.g. JJA)
       gridlines (bool): Select whether to plot gridlines
 ~~~
 {: .output}
@@ -132,21 +132,21 @@ plot_pr_climatology(pr_file, month, gridlines=False)
 We can now use this function to create exactly the same plot as before:
 
 ~~~
-plot_pr_climatology('data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc', 'Jun')
+plot_pr_climatology('data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc', 'JJA')
 plt.show()
 ~~~
 
-![Precipitation climatology](../fig/03-functions-access-jun.svg)
+![Precipitation climatology](../fig/03-functions-access-jja.svg)
 
-Plot a different model and month:
+Plot a different model and season:
 
 ~~~
-plot_pr_climatology('data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc', 'Jan')
+plot_pr_climatology('data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc', 'DJF')
 plt.show()
 ~~~
 {: .language-python}
 
-![Precipitation climatology](../fig/03-functions-csiro-jan.svg)
+![Precipitation climatology](../fig/03-functions-csiro-djf.svg)
 
 Or use the optional `gridlines` input argument
 to change the default behaviour of the function
@@ -155,12 +155,12 @@ that the user will only want to change occasionally):
 
 ~~~
 plot_pr_climatology('data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc',
-                    'Jan', gridlines=True)
+                    'DJF', gridlines=True)
 plt.show()
 ~~~
 {: .language-python}
 
-![Precipitation climatology](../fig/03-functions-csiro-jan-gridlines.svg)
+![Precipitation climatology](../fig/03-functions-csiro-djf-gridlines.svg)
 
 
 > ## Short functions
@@ -179,81 +179,84 @@ plt.show()
 > 2. Break the contents of `plot_pr_climatology` down into a series of smaller functions, such that it reads as follows:
 >
 > ~~~
-> def plot_pr_climatology(pr_file, month, gridlines=False):
+> def plot_pr_climatology(pr_file, season, gridlines=False):
 >     """Plot the precipitation climatology.
->    
+>
 >     Args:
 >       pr_file (str): Precipitation data file
->       month (str): Month (3 letter abbreviation, e.g. Jun)
+>       season (str): Season (3 letter abbreviation, e.g. JJA)
 >       gridlines (bool): Select whether to plot gridlines
->    
->     """
 >
->     cube = read_data(pr_file, month)    
->     cube = convert_pr_units(cube)
->     clim = cube.collapsed('time', iris.analysis.MEAN)
->     plot_data(clim, month, gridlines)
+>     """
+> 
+>     dset = xarray.open_dataset(pr_file)
+>     clim = dset['pr'].groupby('time.season').mean('time')
+>     clim = convert_pr_units(clim)
+>     create_plot(clim, dset.attrs['model_id'], season)
+>     plt.show()
 > ~~~
 > {: .language-python}
 >
-> In other words, you'll need to define new `read_data`,
-> `convert_pr_units` and `plot_data`
+> In other words, you'll need to define new ,
+> `convert_pr_units` and `create_plot`
 > functions using code from the existing `plot_pr_climatology` function.
 >
 > > ## Solution
 > > ~~~
-> > def read_data(fname, month):
-> >     """Read an input data file"""
+> > def convert_pr_units(darray):
+> >     """Convert kg m-2 s-1 to mm day-1.
 > >    
-> >     cube = iris.load_cube(fname, 'precipitation_flux')
+> >     Args:
+> >       darray (xarray.DataArray): Precipitation data
 > >    
-> >     iris.coord_categorisation.add_month(cube, 'time')
-> >     cube = cube.extract(iris.Constraint(month=month))
+> >    """
 > >    
-> >     return cube
+> >    darray.data = darray.data * 86400
+> >    darray.attrs['units'] = 'mm/day'
+> >    
+> >    return darray
 > >
 > >
-> > def convert_pr_units(cube):
-> >     """Convert kg m-2 s-1 to mm day-1"""
+> > def create_plot(clim, model_name, season, gridlines=False):
+> >     """Plot the precipitation climatology.
 > >    
-> >     cube.data = cube.data * 86400
-> >     cube.units = 'mm/day'
+> >     Args:
+> >       clim (xarray.DataArray): Precipitation climatology data
+> >       season (str): Season    
 > >    
-> >     return cube
-> >
-> >
-> > def plot_data(cube, month, gridlines=False):
-> >     """Plot the data."""
+> >     """
 > >        
-> >     fig = plt.figure(figsize=[12,5])    
-> >     iplt.contourf(cube, cmap=cmocean.cm.haline_r, 
-> >                   levels=numpy.arange(0, 10),
-> >                   extend='max')
-> >
-> >     plt.gca().coastlines()
+> >     fig = plt.figure(figsize=[12,5])
+> >     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
+> >     clim.sel(season=season).plot.contourf(ax=ax,
+> >                                           levels=np.arange(0, 13.5, 1.5),
+> >                                           extend='max',
+> >                                           transform=ccrs.PlateCarree(),
+> >                                           cbar_kwargs={'label': clim.units},
+> >                                           cmap=cmocean.cm.haline_r)
+> >     ax.coastlines()
 > >     if gridlines:
 > >         plt.gca().gridlines()
-> >     cbar = plt.colorbar()
-> >     cbar.set_label(str(cube.units))
 > >    
-> >     title = '%s precipitation climatology (%s)' %(cube.attributes['model_id'], month)
+> >     title = '%s precipitation climatology (%s)' %(model_name, season)
 > >     plt.title(title)
 > >
 > >
-> > def plot_pr_climatology(pr_file, month, gridlines=False):
+> > def plot_pr_climatology(pr_file, season, gridlines=False):
 > >     """Plot the precipitation climatology.
-> >   
+> >
 > >     Args:
 > >       pr_file (str): Precipitation data file
-> >       month (str): Month (3 letter abbreviation, e.g. Jun)
-> >       cmap: matplotlib colormap
-> >   
-> >     """
+> >       season (str): Season (3 letter abbreviation, e.g. JJA)
+> >       gridlines (bool): Select whether to plot gridlines
 > >
-> >     cube = read_data(pr_file, month)    
-> >     cube = convert_pr_units(cube)
-> >     clim = cube.collapsed('time', iris.analysis.MEAN)
-> >     plot_data(clim, month, gridlines)
+> >     """
+> > 
+> >     dset = xarray.open_dataset(pr_file)
+> >     clim = dset['pr'].groupby('time.season').mean('time')
+> >     clim = convert_pr_units(clim)
+> >     create_plot(clim, dset.attrs['model_id'], season)
+> >     plt.show()
 > > ~~~
 > > {: .language-python}
 > {: .solution}
@@ -276,7 +279,7 @@ plt.show()
 >
 > ~~~
 > import unit_conversion
-> cube = unit_conversion.convert_pr_units(cube)
+> clim.data = unit_conversion.convert_pr_units(clim.data)
 > ~~~
 > {: .language-python}
 >
