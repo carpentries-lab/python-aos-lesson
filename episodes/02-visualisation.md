@@ -164,8 +164,7 @@ Coordinates:
 > If the original 3D data array was much larger than the one we are analysing here
 > (i.e. so large that we'd get a memory error if we attempted to calculate the climatology)
 > xarray can make use of a library called [Dask]()
-> to distribute the task out to multiple cores
-> on the computer you are using.
+> to break the task down into chunks and distribute it to multiple cores if needed.
 >
 {: .callout}
 
