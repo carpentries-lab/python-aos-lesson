@@ -106,7 +106,7 @@ if __name__ == '__main__':
                         help='list of levels / tick marks to appear on the colorbar')
     parser.add_argument("--mask", type=str, nargs=2,
                         metavar=('SFTLF_FILE', 'REALM'), default=None,
-                        help='Realm to mask: "land" or "ocean")')
+                        help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
 
     args = parser.parse_args()
     
