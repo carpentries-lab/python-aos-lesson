@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 import xarray as xr
 import cartopy.crs as ccrs
 import cmocean
+import cmdline_provenance as cmdprov
 
 
 def convert_pr_units(darray):
@@ -93,6 +94,10 @@ def main(inargs):
     create_plot(clim, dset.attrs['model_id'], inargs.season,
                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
     plt.savefig(inargs.output_file, dpi=200)
+
+    new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
+    fname, extension = inargs.output_file.split('.')
+    cmdprov.write_log(fname+'.txt', new_log)
 
 
 if __name__ == '__main__':

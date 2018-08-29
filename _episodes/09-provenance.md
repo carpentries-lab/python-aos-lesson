@@ -11,7 +11,7 @@ keypoints:
 ---
 
 We've now successfully created a command line program - `plot_precipitation_climatology.py` -
-that calculates and plots the precipitation climatology for a given month.
+that calculates and plots the precipitation climatology for a given season.
 The last step is to capture the provenance of that plot.
 In other words, we need a log of all the data processing steps
 that were taken from the intial download of the data file to the end result
@@ -24,13 +24,12 @@ which insert a record of what was executed at the command line
 into the history attribute of the output netCDF file.
 
 ~~~
-import iris
+import xarray as xr
 
-access_pr_file = 'data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
-cube = iris.load_cube(access_pr_file, 'precipitation_flux')
-previous_history = cube.attributes['history']
+access_pr_file = '../data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
+dset = xr.open_dataset(access_pr_file)
 
-print(previous_history)
+print(dset.attrs['history'])
 ~~~
 {: .language-python}
 
@@ -94,8 +93,8 @@ print(new_record)
 > >
 > >     ...
 > >
-> >     new_log = cmdprov.new_log(infile_history={inargs.infile: cube.attributes['history']})
-> >     fname, extension = inargs.outfile.split('.')
+> >     new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
+> >     fname, extension = inargs.output_file.split('.')
 > >     cmdprov.write_log(fname+'.txt', new_log)
 > >
 > > ~~~
@@ -111,115 +110,126 @@ print(new_record)
 > ~~~
 > import pdb
 > import argparse
-> import calendar
 >
-> import numpy
+> import numpy as np
 > import matplotlib.pyplot as plt
-> import iris
-> import iris.plot as iplt
-> import iris.coord_categorisation
+> import xarray as xr
+> import cartopy.crs as ccrs
 > import cmocean
 > import cmdline_provenance as cmdprov
 >
 >
-> def read_data(fname, month):
->     """Read an input data file"""
+> def convert_pr_units(darray):
+>     """Convert kg m-2 s-1 to mm day-1.
+>     
+>     Args:
+>       darray (xarray.DataArray): Precipitation data
 >    
->     cube = iris.load_cube(fname, 'precipitation_flux')
+>    """
 >    
->     iris.coord_categorisation.add_month(cube, 'time')
->     cube = cube.extract(iris.Constraint(month=month))
+>    assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
+>
+>    darray.data = darray.data * 86400
+>    darray.attrs['units'] = 'mm/day'
 >    
->     return cube
+>    return darray
 >
 >
-> def convert_pr_units(cube):
->     """Convert kg m-2 s-1 to mm day-1"""
+> def apply_mask(darray, sftlf_file, realm):
+>     """Mask ocean or land using a sftlf (land surface fraction) file.
 >    
->     assert cube.units == 'kg m-2 s-1', "Program assumes that input units are kg m-2 s-1"
+>     Args:
+>       darray (xarray.DataArray): Data to mask
+>       sftlf_file (str): Land surface fraction file
+>       realm (str): Realm to mask
 >    
->     cube.data = cube.data * 86400
->     cube.units = 'mm/day'
->    
->     return cube
->
->
-> def apply_mask(pr_cube, sftlf_cube, realm):
->     """Mask ocean using a sftlf (land surface fraction) file."""
->    
->     assert pr_cube.shape == sftlf_cube.shape 
->    
+>     """
+>   
+>     dset = xr.open_dataset(sftlf_file)
+>   
 >     if realm == 'land':
->         mask = numpy.where(sftlf_cube.data > 50, True, False)
+>         masked_darray = darray.where(dset['sftlf'].data < 50)
 >     else:
->         mask = numpy.where(sftlf_cube.data < 50, True, False)
+>         masked_darray = darray.where(dset['sftlf'].data > 50)   
 >    
->     pr_cube.data.mask = mask
->    
->     return pr_cube
+>     return masked_darray
 >
 >
-> def plot_data(cube, month, gridlines=False, levels=None):
->     """Plot the data."""
+> def create_plot(clim, model_name, season, gridlines=False, levels=None):
+>     """Plot the precipitation climatology.
+>     
+>     Args:
+>       clim (xarray.DataArray): Precipitation climatology data
+>       model_name (str): Name of the climate model
+>       season (str): Season
+>      
+>     Kwargs:
+>       gridlines (bool): Select whether to plot gridlines
+>       levels (list): Tick marks on the colorbar    
+>     
+>     """
 >
 >     if not levels:
->         levels = numpy.arange(0, 10)
->
->     fig = plt.figure(figsize=[12,5])    
->     iplt.contourf(cube, cmap=cmocean.cm.haline_r, 
->                   levels=levels,
->                   extend='max')
->
->     plt.gca().coastlines()
+>         levels = np.arange(0, 13.5, 1.5)
+>        
+>     fig = plt.figure(figsize=[12,5])
+>     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
+>     clim.sel(season=season).plot.contourf(ax=ax,
+>                                           levels=levels,
+>                                           extend='max',
+>                                           transform=ccrs.PlateCarree(),
+>                                           cbar_kwargs={'label': clim.units},
+>                                           cmap=cmocean.cm.haline_r)
+>     ax.coastlines()
 >     if gridlines:
 >         plt.gca().gridlines()
->     cbar = plt.colorbar()
->     cbar.set_label(str(cube.units))
->    
->     title = '%s precipitation climatology (%s)' %(cube.attributes['model_id'], month)
+>     
+>     title = '%s precipitation climatology (%s)' %(model_name, season)
 >     plt.title(title)
 >
 >
 > def main(inargs):
 >     """Run the program."""
->
->     cube = read_data(inargs.infile, inargs.month)   
->     cube = convert_pr_units(cube)
->     clim = cube.collapsed('time', iris.analysis.MEAN)
->
+> 
+>     dset = xr.open_dataset(inargs.pr_file)
+>     
+>     clim = dset['pr'].groupby('time.season').mean('time')
+>     clim.attrs = dset['pr'].attrs
+>     clim = convert_pr_units(clim)
+> 
 >     if inargs.mask:
 >         sftlf_file, realm = inargs.mask
->         assert realm in ['land', 'ocean']
->         sftlf_cube = iris.load_cube(sftlf_file, 'land_area_fraction')
->         clim = apply_mask(clim, sftlf_cube, realm)
+>         clim = apply_mask(clim, sftlf_file, realm)
 >
->     plot_data(clim, inargs.month, gridlines=inargs.gridlines,
->               levels=inargs.cbar_levels)
->     plt.savefig(inargs.outfile)
+>     create_plot(clim, dset.attrs['model_id'], inargs.season,
+>                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
+>     plt.savefig(inargs.output_file, dpi=200)
 >
->     new_log = cmdprov.new_log(infile_history={inargs.infile: cube.attributes['history']})
->     fname, extension = inargs.outfile.split('.')
+>     new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
+>     fname, extension = inargs.output_file.split('.')
 >     cmdprov.write_log(fname+'.txt', new_log)
 >
 >
 > if __name__ == '__main__':
->
->     description='Plot the precipitation climatology for a given month.'
+>     description='Plot the precipitation climatology for a given season.'
 >     parser = argparse.ArgumentParser(description=description)
->     
->     parser.add_argument("infile", type=str, help="Input file name")
->     parser.add_argument("month", type=str, choices=calendar.month_abbr[1:], help="Month to plot")
->     parser.add_argument("outfile", type=str, help="Output file name")
->
+>    
+>     parser.add_argument("pr_file", type=str, help="Precipitation data file")
+>     parser.add_argument("season", type=str, help="Season to plot")
+>     parser.add_argument("output_file", type=str, help="Output file name")
+> 
 >     parser.add_argument("--gridlines", action="store_true", default=False,
 >                         help="Include gridlines on the plot")
 >     parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
->                         help='list of levels / tick marks to appear on the colourbar')
->     parser.add_argument("--mask", type=str, nargs=2, metavar=('SFTLF_FILE', 'REALM'), default=None,
->                         help='Apply a land or ocean mask (specify the realm to mask: "land" or "ocean")')
+>                         help='list of levels / tick marks to appear on the colorbar')
+>     parser.add_argument("--mask", type=str, nargs=2,
+>                         metavar=('SFTLF_FILE', 'REALM'), default=None,
+>                         help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
 >
->     args = parser.parse_args()            
+>     args = parser.parse_args()
+>   
 >     main(args)
+>
 > ~~~
 > {: .language-python}
 {: .solution}
