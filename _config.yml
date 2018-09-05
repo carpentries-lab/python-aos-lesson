@@ -13,6 +13,9 @@ title: "Python for Atmosphere and Ocean Scientists"
 # or if it's a URL, "https://gitter.im/username/ProjectName".
 email: "mailto:irving.damien@gmail.com"
 
+# Life cycle badge
+life_cycle: "alpha"
+
 #------------------------------------------------------------
 # Generic settings (should not need to change).
 #------------------------------------------------------------
