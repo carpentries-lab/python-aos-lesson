@@ -1,8 +1,7 @@
 ---
 layout: lesson
-root: .
-permalink: index.html  # Is the only page that don't follow the partner /:path/index.html
 ---
+
 Python is rapidly emerging as the programming language of choice for data analysis
 in the atmosphere and ocean sciences.
 By consulting online tutorials and help pages,
