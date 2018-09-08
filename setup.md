@@ -1,7 +1,6 @@
 ---
 layout: page
 title: Setup
-root: .
 ---
 
 ## Software
@@ -30,9 +29,9 @@ you will need to download two Python scripts and four netCDF files and place the
    - [sftlf_fx_CSIRO-Mk3-6-0_historical_r0i0p0.nc][sftlf_csiro_file]
 
 
-[pr_access_file]: {{ page.root }}/data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc
-[pr_csiro_file]: {{ page.root }}/data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc
-[sftlf_access_file]: {{ page.root }}/data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc
-[sftlf_csiro_file]: {{ page.root }}/data/sftlf_fx_CSIRO-Mk3-6-0_historical_r0i0p0.nc
-[template_script]: {{ page.root }}/code/script_template.py
-[precip_script]: {{ page.root }}/code/plot_precipitation_climatology.py
+[pr_access_file]: {{ "/data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc" | relative_url }}
+[pr_csiro_file]: {{ "/data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc" | relative_url }}
+[sftlf_access_file]: {{"/data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc" | relative_url }}
+[sftlf_csiro_file]: {{ "/data/sftlf_fx_CSIRO-Mk3-6-0_historical_r0i0p0.nc" | relative_url }}
+[template_script]: {{ "/code/script_template.py" | relative_url }}
+[precip_script]: {{ "code/plot_precipitation_climatology.py" | relative_url }}
