@@ -11,7 +11,10 @@ title: "Python for Atmosphere and Ocean Scientists"
 # Contact.  This *must* include the protocol: if it's an email
 # address, it must look like "mailto:lessons@software-carpentry.org",
 # or if it's a URL, "https://gitter.im/username/ProjectName".
-email: "mailto:irving.damien@gmail.com"
+email: "irving.damien@gmail.com"
+
+# Life cycle badge
+life_cycle: "alpha"
 
 #------------------------------------------------------------
 # Generic settings (should not need to change).
@@ -72,3 +75,6 @@ exclude:
 
 # Turn on built-in syntax highlighting.
 highlighter: rouge
+
+# Use remote theme
+remote_theme: carpentries/carpentries-theme
