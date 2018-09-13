@@ -111,7 +111,7 @@ OR
 
 ![Anaconda Navigator conda-forge](../fig/01-navigator-conda-forge.png)
 
-We recommned not adding any other third-party channels unless absolutely necessary,
+We recommend not adding any other third-party channels unless absolutely necessary,
 because mixing packages from multiple channels can cause headaches like binary incompatibilities.
 
 
