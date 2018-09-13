@@ -194,7 +194,7 @@ so we can go ahead and multiply that array by 86400 and update the units attribu
 
 ~~~
 clim.data = clim.data * 86400
-clim.units = 'mm/day'
+clim.attrs['units'] = 'mm/day' 
 
 print(clim)
 ~~~
