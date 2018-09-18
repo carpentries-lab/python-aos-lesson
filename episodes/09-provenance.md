@@ -26,17 +26,17 @@ into the history attribute of the output netCDF file.
 ~~~
 import xarray as xr
 
-access_pr_file = '../data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
-dset = xr.open_dataset(access_pr_file)
+csiro_pr_file = '../data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc'
+dset = xr.open_dataset(csiro_pr_file)
 
 print(dset.attrs['history'])
 ~~~
 {: .language-python}
 
 ~~~
-Fri Dec  8 10:05:47 2017: ncatted -O -a history,pr,d,, pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc
-Fri Dec 01 07:59:16 2017: cdo seldate,2001-01-01,2005-12-31 /g/data/ua6/DRSv2/CMIP5/ACCESS1-3/historical/mon/atmos/r1i1p1/pr/latest/pr_Amon_ACCESS1-3_historical_r1i1p1_185001-200512.nc pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc
-CMIP5 compliant file produced from raw ACCESS model output using the ACCESS Post-Processor and CMOR2. 2012-02-08T06:45:54Z CMOR rewrote data to comply with CF standards and CMIP5 requirements. Fri Apr 13 09:55:30 2012: forcing attribute modified to correct value Fri Apr 13 12:13:10 2012: updated version number to v20120413. Fri Apr 13 12:29:34 2012: corrected model_id from ACCESS1-3 to ACCESS1.3
+Fri Dec  8 10:05:56 2017: ncatted -O -a history,pr,d,, pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc
+Fri Dec 01 08:01:43 2017: cdo seldate,2001-01-01,2005-12-31 /g/data/ua6/DRSv2/CMIP5/CSIRO-Mk3-6-0/historical/mon/atmos/r1i1p1/pr/latest/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_185001-200512.nc pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc
+2011-07-27T02:26:04Z CMOR rewrote data to comply with CF standards and CMIP5 requirements.
 ~~~
 {: .output}
 
