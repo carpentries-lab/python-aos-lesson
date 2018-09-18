@@ -1,7 +1,7 @@
 ---
 title: "Data provenance"
-teaching: 25
-exercises: 15
+teaching: 10
+exercises: 20
 questions:
 - "How can keep track of my data processing steps?"
 objectives:
