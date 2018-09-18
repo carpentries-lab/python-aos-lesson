@@ -1,7 +1,7 @@
 ---
 title: "Software installation using conda"
-teaching: 20
-exercises: 5
+teaching: 15
+exercises: 15
 questions:
 - "What are the main Python libraries used in atmosphere and ocean science?"
 - "How do I install and manage all the Python libraries that I want to use?"
