@@ -1,7 +1,7 @@
 ---
 title: "Visualising CMIP data"
 teaching: 20
-exercises: 25
+exercises: 40
 questions:
 - "How can I create a quick plot of my CMIP data?"
 objectives:
