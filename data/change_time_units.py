@@ -1,4 +1,5 @@
 import argparse
+import pdb
 
 import iris
 import cf_units
@@ -17,6 +18,8 @@ def main(inargs):
     new_log = cmdprov.new_log(infile_history={inargs.infile: cube.attributes['history']})
     cube.attributes['history'] = new_log
     
+    if inargs.infile == inargs.outfile:
+        cube.data # to realise lazy data to allow file overwrite
     iris.save(cube, inargs.outfile)
 
 
