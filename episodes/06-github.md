@@ -1,6 +1,6 @@
 ---
 title: "GitHub"
-teaching: 20
+teaching: 25
 exercises: 0
 questions:
 - "How can I make my code available on GitHub?"
