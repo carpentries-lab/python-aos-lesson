@@ -1,7 +1,7 @@
 ---
 title: "Functions"
-teaching: 20
-exercises: 15
+teaching: 15
+exercises: 25
 questions:
 - "How can I define my own functions?"
 objectives:
