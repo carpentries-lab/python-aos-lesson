@@ -1,7 +1,7 @@
 ---
 title: "Command line programs"
-teaching: 25
-exercises: 25
+teaching: 20
+exercises: 30
 questions:
 - "How can I write my own command line programs?"
 objectives:
