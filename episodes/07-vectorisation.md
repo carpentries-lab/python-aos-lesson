@@ -74,7 +74,7 @@ it is a land point (and thus needs to be set to `np.nan`).
 
 ~~~
 dset = xarray.open_dataset('../data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc')
-clim = dset['pr'].mean('time')
+clim = dset['pr'].mean('time', keep_attrs=True)
 
 nlats, nlons = clim.data.shape
 for y in range(nlats):
@@ -185,7 +185,7 @@ Coordinates:
 > >
 > >     dset = xr.open_dataset(inargs.pr_file)
 > >    
-> >     clim = dset['pr'].groupby('time.season').mean('time')
+> >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 > >     clim = convert_pr_units(clim)
 > >
 > >     if inargs.mask:
@@ -300,7 +300,7 @@ Coordinates:
 > 
 >     dset = xr.open_dataset(inargs.pr_file)
 >     
->     clim = dset['pr'].groupby('time.season').mean('time')
+>     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >     clim = convert_pr_units(clim)
 > 
 >     if inargs.mask:

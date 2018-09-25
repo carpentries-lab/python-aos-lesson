@@ -129,7 +129,7 @@ we can make use of the fact that xarray DataArrays have built in functionality
 for averaging over their dimensions. 
 
 ~~~
-clim = dset['pr'].mean('time')
+clim = dset['pr'].mean('time', keep_attrs=True)
 print(clim)
 ~~~
 {: .language-python}
@@ -152,6 +152,11 @@ array([[2.542048e-06, 2.542048e-06, 2.542048e-06, ..., 2.541606e-06,
 Coordinates:
   * lon      (lon) float64 0.0 1.875 3.75 5.625 7.5 9.375 11.25 13.12 15.0 ...
   * lat      (lat) float64 -90.0 -88.75 -87.5 -86.25 -85.0 -83.75 -82.5 ...
+Attributes:
+    standard_name:  precipitation_flux
+    long_name:      Precipitation
+    units:          kg m-2 s-1
+    cell_methods:   time: mean
 ~~~
 {: output}
 
@@ -213,7 +218,10 @@ Coordinates:
   * lon      (lon) float64 0.0 1.875 3.75 5.625 7.5 9.375 11.25 13.12 15.0 ...
   * lat      (lat) float64 -90.0 -88.75 -87.5 -86.25 -85.0 -83.75 -82.5 ...
 Attributes:
-    units:    mm/day
+    standard_name:  precipitation_flux
+    long_name:      Precipitation
+    units:          mm/day
+    cell_methods:   time: mean
 ~~~
 {: .output}
 
@@ -275,7 +283,7 @@ access_pr_file = '../data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
 
 dset = xr.open_dataset(access_pr_file)
 
-clim = dset['pr'].mean('time')
+clim = dset['pr'].mean('time', keep_attrs=True)
 
 clim.data = clim.data * 86400
 clim.attrs['units'] = 'mm/day'
@@ -326,7 +334,7 @@ plt.show()
 >
 > > ## Solution
 > > ~~~
-> > clim = dset['pr'].groupby('time.season').mean('time') 
+> > clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True) 
 > > 
 > > clim.sel(season='JJA').plot.contourf(ax=ax,
 > > ~~~

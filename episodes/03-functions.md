@@ -34,7 +34,7 @@ access_pr_file = '../data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
 
 dset = xr.open_dataset(access_pr_file)
 
-clim = dset['pr'].groupby('time.season').mean('time')
+clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 
 clim.data = clim.data * 86400
 clim.attrs['units'] = 'mm/day'
@@ -87,7 +87,7 @@ def plot_pr_climatology(pr_file, season, gridlines=False):
 
     dset = xr.open_dataset(pr_file)
 
-    clim = dset['pr'].groupby('time.season').mean('time')
+    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 
     clim.data = clim.data * 86400
     clim.attrs['units'] = 'mm/day'
@@ -190,7 +190,7 @@ plt.show()
 >     """
 > 
 >     dset = xarray.open_dataset(pr_file)
->     clim = dset['pr'].groupby('time.season').mean('time')
+>     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >     clim = convert_pr_units(clim)
 >     create_plot(clim, dset.attrs['model_id'], season)
 >     plt.show()
@@ -253,7 +253,7 @@ plt.show()
 > >     """
 > > 
 > >     dset = xarray.open_dataset(pr_file)
-> >     clim = dset['pr'].groupby('time.season').mean('time')
+> >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 > >     clim = convert_pr_units(clim)
 > >     create_plot(clim, dset.attrs['model_id'], season)
 > >     plt.show()

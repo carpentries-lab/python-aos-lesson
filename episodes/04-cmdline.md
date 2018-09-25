@@ -200,7 +200,7 @@ def main(inargs):
 
     dset = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean('time')
+    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
     clim = convert_pr_units(clim)
 
     create_plot(clim, dset.attrs['model_id'], inargs.season)
@@ -455,7 +455,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > 
 >     dset = xr.open_dataset(inargs.pr_file)
 >     
->     clim = dset['pr'].groupby('time.season').mean('time')
+>     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >     clim = convert_pr_units(clim)
 > 
 >     create_plot(clim, dset.attrs['model_id'], inargs.season,
