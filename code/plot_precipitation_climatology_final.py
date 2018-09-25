@@ -83,8 +83,7 @@ def main(inargs):
 
     dset = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean('time')
-    clim.attrs = dset['pr'].attrs
+    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
     clim = convert_pr_units(clim)
 
     if inargs.mask:

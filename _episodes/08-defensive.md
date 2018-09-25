@@ -244,11 +244,6 @@ that their understanding matches what the code is doing.
 > > but the most critical is to check the units of the input data
 > > before converting from kg m-2 s-1 to mm day-1.
 > >
-> > When an operation is performed on an xarray DataArray
-> > most of the associated attributes (such as units) are removed,
-> > so in this solution the original attributes are re-applied to the 
-> > climatology DataArray after it is created.
-> >
 > > ~~~
 > > ...
 > >
@@ -266,17 +261,6 @@ that their understanding matches what the code is doing.
 > >     darray.attrs['units'] = 'mm/day'
 > >    
 > >     return darray
-> >
-> > ...
-> >
-> > def main(inargs):
-> >     """Run the program."""
-> >
-> >    dset = xr.open_dataset(inargs.pr_file)
-> >    
-> >    clim = dset['pr'].groupby('time.season').mean('time')
-> >    clim.attrs = dset['pr'].attrs
-> >    clim = convert_pr_units(clim)
 > >
 > > ...
 > > 
@@ -375,8 +359,7 @@ that their understanding matches what the code is doing.
 > 
 >     dset = xr.open_dataset(inargs.pr_file)
 >     
->     clim = dset['pr'].groupby('time.season').mean('time')
->     clim.attrs = dset['pr'].attrs
+>     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >     clim = convert_pr_units(clim)
 > 
 >     if inargs.mask:
