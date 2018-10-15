@@ -27,26 +27,25 @@ You need to install the bash shell, git, text editor and Python.
 The `conda` command is not automatically available using Git Bash.
 This means that Windows users cannot create and activate a conda environment from the bash shell,
 which is an option in the [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html).
-
 While this is not a big issue (the first lesson can be completed without creating a new environment),
 Windows users who would like to be able create and activate conda environments from the bash shell
-can do one of the following two options:
+can do so by following one of these two options:
 
-1. Access the bash shell from the Anaconda Prompt using the posix package:
+*Option 1:* Access the bash shell from the Anaconda Prompt using the posix package
 
-* Open a terminal by running the Anaconda Prompt program from the Windows start menu
+* Open the Anaconda Prompt program (from the Windows start menu)
 * Type `conda install posix` (this only needs to be done once)
 * Type `bash` to run the Bash Shell
 
-2. Update your Anaconda path so that `conda` is available using Git Bash:
+*Option 2:* Update your Anaconda path so that `conda` is available using Git Bash
 
-* Open the Anaconda Prompt and enter `where python` to find the path of the Anaconda3 directory. The output should show a path similar to `C:\Users\Username\Anaconda3\python.exe`.
+* Open the Anaconda Prompt and enter `where python` to find the path of the Anaconda3 directory (the output should show a path similar to `C:\Users\Username\Anaconda3\python.exe`)
 * Convert that path for use in the next step by doing the following:
     * Replace all instances of `\` with `/`
     * Replace `C:` with `/c`
     * Replace `python.exe` with `Scripts/activate`
-    * e.g. if you got `C:\Users\Username\Anaconda3\python.exe` from the previous step, you will use `/c/Users/Username/Anaconda3/Scripts/activate` for the next step.
-* Go back to the terminal and run `echo  "source [Anaconda path]" >> ~/.profile && source ~/.profile`, replacing `[Anaconda path]` with the path you generated in the previous step. (Please note that you can copy text into the terminal window by right clicking and then selecting "paste".)
+    * e.g. if you got `C:\Users\Username\Anaconda3\python.exe` from the previous step, you will use `/c/Users/Username/Anaconda3/Scripts/activate` for the next step
+* Go back to the terminal and run `echo  "source [Anaconda path]" >> ~/.profile && source ~/.profile`, replacing `[Anaconda path]` with the path you generated in the previous step
 
 
 
