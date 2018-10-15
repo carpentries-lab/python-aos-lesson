@@ -18,7 +18,7 @@ you will need to download two Python scripts and four netCDF files and place the
    - [sftlf_fx_CSIRO-Mk3-6-0_historical_r0i0p0.nc][sftlf_csiro_file]
 
 
-## Software
+## Software installation
 
 If your instructor hasn't sent you instructions on how to install the required software,
 follow the [default Carpentries instructions](https://carpentries.github.io/workshop-template/#setup).
@@ -46,6 +46,36 @@ can do so by following one of these two options:
     * Replace `python.exe` with `Scripts/activate`
     * e.g. if you got `C:\Users\Username\Anaconda3\python.exe` from the previous step, you will use `/c/Users/Username/Anaconda3/Scripts/activate` for the next step
 * Go back to the terminal and run `echo  "source [Anaconda path]" >> ~/.profile && source ~/.profile`, replacing `[Anaconda path]` with the path you generated in the previous step
+
+
+## Software check
+
+To check that everything is installed correctly, follow the instructions below.
+
+**Bash Shell**
+
+*Linux*: Open the Terminal program via the applications menu. The default shell is usually Bash. If you aren't sure what yours is, type `echo $SHELL`. If the shell listed is not bash, type `bash` and press Enter to access Bash.
+
+*Mac*: Open the Applications Folder, and in Utilities select Terminal.
+
+*Windows (standard setup)*: Open the Git Bash program via the Windows start menu.
+
+*Windows (alternative setup)*: Open the Anaconda Prompt program via the Windows start menu. Type `conda install posix` (this only needs to be done once). Type `bash` to run the Bash Shell.
+
+**Git**
+
+At the Bash Shell, type `git --version`. You should see the version of your Git program listed. 
+
+**Anaconda**
+
+1. At the Bash Shell, type `python --version`. You should see the version of your Python program listed, with a reference to Anaconda: e.g. 
+```
+$ python --version
+Python 3.6.5 :: Anaconda, Inc.
+```
+In other words, the default Python program on your laptop needs to the the Anaconda installation of Python.
+
+2. In the Bash Shell, type `conda --version`. You should see the version of your conda program listed.
 
 
 
