@@ -3,24 +3,6 @@ layout: page
 title: Setup
 ---
 
-## Software
-
-If your instructor hasn't sent you instructions on how to install the required software,
-follow the [default Carpentries instructions](https://carpentries.github.io/workshop-template/#setup).
-You need to install the bash shell, git, text editor and Python.
-
-The `conda` command is not automatically available using Git Bash.
-This means that Windows users cannot create and activate a conda environment from the bash shell,
-which is an option in the [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html).
-
-While this is not a big issue (the first lesson can be completed without creating a new environment),
-Windows users who would like to be able create and activate conda environments from the bash shell
-can do one of the following:
-
-1. Update their Anaconda path so that `conda` is available using Git Bash
-2. Access the bash shell from the Anaconda Prompt using the posix package
-
-
 ## Data
 
 In preparation for this lesson,
@@ -34,6 +16,38 @@ you will need to download two Python scripts and four netCDF files and place the
    - [pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc][pr_csiro_file]
    - [sftlf_fx_ACCESS1-3_historical_r0i0p0.nc][sftlf_access_file]
    - [sftlf_fx_CSIRO-Mk3-6-0_historical_r0i0p0.nc][sftlf_csiro_file]
+
+
+## Software
+
+If your instructor hasn't sent you instructions on how to install the required software,
+follow the [default Carpentries instructions](https://carpentries.github.io/workshop-template/#setup).
+You need to install the bash shell, git, text editor and Python.
+
+The `conda` command is not automatically available using Git Bash.
+This means that Windows users cannot create and activate a conda environment from the bash shell,
+which is an option in the [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html).
+
+While this is not a big issue (the first lesson can be completed without creating a new environment),
+Windows users who would like to be able create and activate conda environments from the bash shell
+can do one of the following two options:
+
+1. Access the bash shell from the Anaconda Prompt using the posix package:
+
+* Open a terminal by running the Anaconda Prompt program from the Windows start menu
+* Type `conda install posix` (this only needs to be done once)
+* Type `bash` to run the Bash Shell
+
+2. Update your Anaconda path so that `conda` is available using Git Bash:
+
+* Open the Anaconda Prompt and enter `where python` to find the path of the Anaconda3 directory. The output should show a path similar to `C:\Users\Username\Anaconda3\python.exe`.
+* Convert that path for use in the next step by doing the following:
+    * Replace all instances of `\` with `/`
+    * Replace `C:` with `/c`
+    * Replace `python.exe` with `Scripts/activate`
+    * e.g. if you got `C:\Users\Username\Anaconda3\python.exe` from the previous step, you will use `/c/Users/Username/Anaconda3/Scripts/activate` for the next step.
+* Go back to the terminal and run `echo  "source [Anaconda path]" >> ~/.profile && source ~/.profile`, replacing `[Anaconda path]` with the path you generated in the previous step. (Please note that you can copy text into the terminal window by right clicking and then selecting "paste".)
+
 
 
 [pr_access_file]: {{ "/data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc" | relative_url }}
