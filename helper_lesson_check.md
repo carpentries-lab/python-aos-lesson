@@ -1,4 +1,4 @@
-## Helper software check
+## Helper lesson check
 
 Once you've installed the required software for the workshop (following the instructions given to participants)...
 
