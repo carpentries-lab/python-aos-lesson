@@ -3,6 +3,8 @@ layout: page
 title: "Instructor Notes"
 ---
 
+## Teaching notes
+
 These materials are designed with the core [Carpentries teaching practices](https://carpentries.org/workshops/) in mind.
 In particular, all of the episodes involve the instructor live coding
 (in a Jupyter notebook, bash shell or text editor, depending on the lesson),
@@ -15,3 +17,14 @@ where the participants are required to follow along with the instructor,
 typing and executing every command as the instructor enters them on the screen.
 This is done to reinforce the repetitive "add, commit, push" workflow in git.
 
+## Downloads
+
+At the beginning of the workshop,
+participants are required to download a number of data files
+(instructions at the [setup page](https://carpentrieslab.github.io/python-aos-lesson/setup.html)).
+In the [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html),
+they are then required to install some python libraries (jupyter, xarray and cmocean).
+
+Both these tasks can be problematic at venues with slow wifi,
+so it is often a good idea to ask participants to download the data
+and install the libraries prior to the workshop.
