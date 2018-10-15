@@ -6,12 +6,19 @@ title: Setup
 ## Software
 
 If your instructor hasn't sent you instructions on how to install the required software,
-follow the default Software Carpentry instructions on their
-[workshop website template](https://swcarpentry.github.io/workshop-template/).
+follow the [default Carpentries instructions](https://carpentries.github.io/workshop-template/#setup).
 You need to install the bash shell, git, text editor and Python.
 
-To check that everything installed correctly,
-complete the [Software Check](https://github.com/data-lessons/python-aos-lesson/blob/gh-pages/participant_software_check.md).
+The `conda` command is not automatically available using Git Bash.
+This means that Windows users cannot create and activate a conda environment from the bash shell,
+which is an option in the [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html).
+
+While this is not a big issue (the first lesson can be completed without creating a new environment),
+Windows users who would like to be able create and activate conda environments from the bash shell
+can do one of the following:
+
+1. Update their Anaconda path so that `conda` is available using Git Bash
+2. Access the bash shell from the Anaconda Prompt using the posix package
 
 
 ## Data
