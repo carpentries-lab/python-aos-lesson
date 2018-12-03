@@ -7,13 +7,12 @@ questions:
 objectives:
 - "Explain what an assertion is."
 - "Add assertions that check the program's state is correct."
-- "Correctly add precondition and postcondition assertions to functions."
+- "Debug Python scripts using the `pdb` library."
 - "Identify sources of more advanced lessons on code testing."
 keypoints:
 - "Program defensively, i.e., assume that errors are going to arise, and write code to detect them when they do."
 - "Put assertions in programs to check their state as they run, and to help readers understand how those programs are supposed to work."
-- "Use preconditions to check that the inputs to a function are safe to use."
-- "Use postconditions to check that the output from a function is safe to use."
+- "The `pdb` library can be used to debug a Python script by stepping through line-by-line."
 - "Software Carpentry has more advanced lessons on code testing."
 ---
 
@@ -44,8 +43,9 @@ Python does nothing,
 but if it's false,
 Python halts the program immediately
 and prints the error message if one is provided.
-For example,
-this piece of code halts as soon as the loop encounters a value that isn't positive:
+
+To demonstrate an assertion in action,
+consider this piece of code that halts as soon as the loop encounters a value that isn't positive:
 
 ~~~
 numbers = [1.5, 2.3, 0.7, -0.001, 4.4]
@@ -74,152 +74,157 @@ AssertionError: Data should only contain positive values
 Programs like the Firefox browser are full of assertions:
 10-20% of the code they contain
 are there to check that the other 80-90% are working correctly.
-Broadly speaking,
-assertions fall into three categories:
 
-*   A *precondition* is something that must be true at the start of a function in order for it to work correctly.
-
-*   A *postcondition* is something that the function guarantees is true when it finishes.
-
-*   An *invariant* is something that is always true at a particular point inside a piece of code.
-
-For example,
-suppose we are representing rectangles using a tuple of four coordinates `(x0, y0, x1, y1)`,
-representing the lower left and upper right corners of the rectangle.
-In order to do some calculations,
-we need to normalize the rectangle so that the lower left corner is at the origin
-and the longest side is 1.0 units long.
-
-![Normalizing a rectangle](../fig/08-defensive-normalize.png)
-
-This function does that,
-but checks that its input is correctly formatted and that its result makes sense:
+To see how assertions might be useful
+in the context of the `plot_precipitation_climatology.py` script,
+let's try the following at the command line:
 
 ~~~
-def normalize_rectangle(rect):
-    '''Normalizes a rectangle so that it is at the origin and 1.0 units long on its longest axis.
-    Input should be of the format (x0, y0, x1, y1). 
-    (x0, y0) and (x1, y1) define the lower left and upper right corners of the rectangle, respectively.'''
-    assert len(rect) == 4, 'Rectangles must contain 4 coordinates'
-    x0, y0, x1, y1 = rect
-    assert x0 < x1, 'Invalid X coordinates'
-    assert y0 < y1, 'Invalid Y coordinates'
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc JJA pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc Land
+~~~
+{: .language-bash}
 
-    dx = x1 - x0
-    dy = y1 - y0
-    if dx > dy:
-        scaled = float(dx) / dy
-        upper_x, upper_y = 1.0, scaled
+If we view the resulting image,
+we can see that the ocean has been masked,
+even though we specified the land at the command line.
+
+![Ocean masked rainfall plot](../fig/08-defensive-ocean-mask.svg)
+
+When confronted with perplexing code behaviour like this,
+it can be useful to insert a tracer into your scripts using the Python debugger:
+
+~~~
+import pdb
+
+...
+def apply_mask(darray, sftlf_file, realm):
+    """Mask ocean or land using a sftlf (land surface fraction) file.
+    
+    Args:
+      darray (xarray.DataArray): Data to mask
+      sftlf_file (str): Land surface fraction file
+      realm (str): Realm to mask
+    
+    """
+   
+    dset = xr.open_dataset(sftlf_file)
+    pdb.set_trace()    
+    if realm == 'land':
+        masked_darray = darray.where(dset['sftlf'].data < 50)
     else:
-        scaled = float(dx) / dy
-        upper_x, upper_y = scaled, 1.0
+        masked_darray = darray.where(dset['sftlf'].data > 50)   
+   
+    return masked_darray
 
-    assert 0 < upper_x <= 1.0, 'Calculated upper X coordinate invalid'
-    assert 0 < upper_y <= 1.0, 'Calculated upper Y coordinate invalid'
-
-    return (0, 0, upper_x, upper_y)
+...
 ~~~
 {: .language-python}
 
-The preconditions on lines 3, 5, and 6 catch invalid inputs:
+When we run the script,
+it will stop at the tracer and allow us to interrogate the code:
+~~~
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc JJA pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc Land
+~~~
+{: .language-bash}
 
 ~~~
-print(normalize_rectangle( (0.0, 1.0, 2.0) )) # missing the fourth coordinate
-~~~
-{: .language-python}
-
-~~~
----------------------------------------------------------------------------
-AssertionError                            Traceback (most recent call last)
-<ipython-input-21-3a97b1dcab70> in <module>()
-----> 1 print(normalize_rectangle( (0.0, 1.0, 2.0) )) # missing the fourth coordinate
-
-<ipython-input-20-408dc39f3915> in normalize_rectangle(rect)
-      1 def normalize_rectangle(rect):
-      2     '''Normalizes a rectangle so that it is at the origin and 1.0 units long on its longest axis.'''
-----> 3     assert len(rect) == 4, 'Rectangles must contain 4 coordinates'
-      4     x0, y0, x1, y1 = rect
-      5     assert x0 < x1, 'Invalid X coordinates'
-
-AssertionError: Rectangles must contain 4 coordinates
-~~~
-{: .error}
-
-~~~
-print(normalize_rectangle( (4.0, 2.0, 1.0, 5.0) )) # X axis inverted
-~~~
-{: .language-python}
-
-~~~
----------------------------------------------------------------------------
-AssertionError                            Traceback (most recent call last)
-<ipython-input-22-f05ae7878a45> in <module>()
-----> 1 print(normalize_rectangle( (4.0, 2.0, 1.0, 5.0) )) # X axis inverted
-
-<ipython-input-20-408dc39f3915> in normalize_rectangle(rect)
-      3     assert len(rect) == 4, 'Rectangles must contain 4 coordinates'
-      4     x0, y0, x1, y1 = rect
-----> 5     assert x0 < x1, 'Invalid X coordinates'
-      6     assert y0 < y1, 'Invalid Y coordinates'
-      7
-
-AssertionError: Invalid X coordinates
-~~~
-{: .error}
-
-The post-conditions on lines 17 and 18 help us catch bugs by telling us when our calculations cannot have been correct.
-For example,
-if we normalize a rectangle that is taller than it is wide everything seems OK:
-
-~~~
-print(normalize_rectangle( (0.0, 0.0, 1.0, 5.0) ))
-~~~
-{: .language-python}
-
-~~~
-(0, 0, 0.2, 1.0)
+> /Users/irv033/Desktop/data-carpentry/plot_precipitation_climatology.py(40)apply_mask()
+-> if realm == 'land':
 ~~~
 {: .output}
 
-but if we normalize one that's wider than it is tall,
-the assertion is triggered:
+~~~
+(Pdb) print(realm)
+~~~
+{: .language-bash}
 
 ~~~
-print(normalize_rectangle( (0.0, 0.0, 5.0, 1.0) ))
+Land
+~~~
+{: .output}
+
+~~~
+(Pdb) 'Land' == 'land'
+~~~
+{: .language-bash}
+
+~~~
+False
+~~~
+{: .output}
+
+The problem appears to be that Python strings are case sensitive,
+which means we should have entered `land` as opposed to `Land` at the command line.
+We can fix this issue while in debug mode and then step through the code line by line
+(using `n`) to make sure the correct where statement is executed.
+~~~
+(Pdb) realm = 'land'
+(Pdb) n
+~~~
+{: .language-bash}
+
+~~~
+> /Users/irv033/Desktop/data-carpentry/plot_precipitation_climatology.py(41)apply_mask()
+-> masked_darray = darray.where(dset['sftlf'].data < 50)
+~~~
+{: .output}
+
+Once we're satisfied, we can enter `c` to run the remainder of the script
+(it's `q` to quit at any time).
+
+To avoid making this case sensitive mistake in future,
+we should now remove the debugging tracer and replace it with an assertion
+to catch invalid inputs,
+~~~
+...
+def apply_mask(darray, sftlf_file, realm):
+    """Mask ocean or land using a sftlf (land surface fraction) file.
+    
+    Args:
+      darray (xarray.DataArray): Data to mask
+      sftlf_file (str): Land surface fraction file
+      realm (str): Realm to mask
+    
+    """
+   
+    dset = xr.open_dataset(sftlf_file)
+    assert realm in ['land', 'ocean'], """Valid realms are 'land' or 'ocean'"""   
+    if realm == 'land':
+        masked_darray = darray.where(dset['sftlf'].data < 50)
+    else:
+        masked_darray = darray.where(dset['sftlf'].data > 50)   
+   
+    return masked_darray
+
+...
 ~~~
 {: .language-python}
 
+test to make sure it's working,
 ~~~
----------------------------------------------------------------------------
-AssertionError                            Traceback (most recent call last)
-<ipython-input-24-5f0ef7954aeb> in <module>()
-----> 1 print(normalize_rectangle( (0.0, 0.0, 5.0, 1.0) ))
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc JJA pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc Land
+~~~
+{: .language-bash}
 
-<ipython-input-20-408dc39f3915> in normalize_rectangle(rect)
-     16
-     17     assert 0 < upper_x <= 1.0, 'Calculated upper X coordinate invalid'
----> 18     assert 0 < upper_y <= 1.0, 'Calculated upper Y coordinate invalid'
-     19
-     20     return (0, 0, upper_x, upper_y)
-
-AssertionError: Calculated upper Y coordinate invalid
+~~~
+Traceback (most recent call last):
+  File "plot_precipitation_climatology.py", line 120, in <module>
+    main(args)
+  File "plot_precipitation_climatology.py", line 91, in main
+    clim = apply_mask(clim, sftlf_file, realm)
+  File "plot_precipitation_climatology.py", line 39, in apply_mask
+    assert realm in ['land', 'ocean'], """Valid realms are 'land' or 'ocean'"""
+AssertionError: Valid realms are 'land' or 'ocean'
 ~~~
 {: .error}
 
-Re-reading our function,
-we realize that line 11 should divide `dy` by `dx` rather than `dx` by `dy`.
-(You can display line numbers by typing Ctrl-M, then L.)
-If we had left out the assertion at the end of the function,
-we would have created and returned something that had the right shape as a valid answer,
-but wasn't.
-Detecting and debugging that would almost certainly have taken more time in the long run
-than writing the assertion.
-
-But assertions aren't just about catching errors:
-they also help people understand programs.
-Each assertion gives the person reading the program
-a chance to check (consciously or otherwise)
-that their understanding matches what the code is doing.
+and then commit the changes to git and push to GitHub.
+~~~
+$ git add plot_precipitation_climatology.py
+$ git commit -m "Added realm check"
+$ git push origin master
+~~~
+{: .language-bash}
 
 
 > ## Testing and continuous integration
@@ -233,9 +238,10 @@ that their understanding matches what the code is doing.
 >
 {: .callout}
 
+
 > ## Add your own assertions
 >
-> Add assertions to your copy of `plot_precipitation_climatology.py`.
+> Add some more assertions to your copy of `plot_precipitation_climatology.py`.
 > Once you're done, commit the changes to git and push to GitHub.
 >
 > > ## Solution
@@ -312,7 +318,7 @@ that their understanding matches what the code is doing.
 >     """
 >   
 >     dset = xr.open_dataset(sftlf_file)
->   
+>     assert realm in ['land', 'ocean'], """Valid realms are 'land' or 'ocean'"""
 >     if realm == 'land':
 >         masked_darray = darray.where(dset['sftlf'].data < 50)
 >     else:
