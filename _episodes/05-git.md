@@ -424,7 +424,6 @@ by putting them in the order suggested by the
 (standard library imports, related third party imports, then local application/library specific imports):
 
 ~~~
-import pdb
 import argparse
 
 import numpy as np
@@ -446,7 +445,6 @@ index a0aa9e4..29a40fb 100644
 --- a/plot_precipitation_climatology.py
 +++ b/plot_precipitation_climatology.py
 @@ -1,13 +1,12 @@
-+import pdb
  import argparse
 +
 +import numpy as np
@@ -455,7 +453,6 @@ index a0aa9e4..29a40fb 100644
 -import matplotlib.pyplot as plt
  import cmocean
 -import numpy as np
--import pdb
  ~~~
 {: .output}
 
@@ -717,7 +714,6 @@ but everything else is there.
 > should look something like the following:
 >
 > ~~~
-> import pdb
 > import argparse
 >
 > import numpy as np

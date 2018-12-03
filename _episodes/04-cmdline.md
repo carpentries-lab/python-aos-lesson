@@ -7,11 +7,9 @@ questions:
 objectives:
 - "Use the `argparse` library to manage command-line arguments in a program."
 - "Structure Python scripts according to a simple template."
-- "Debug Python scripts using the `pdb` library."
 keypoints:
 - "Libraries such as `argparse` can be used the efficiently handle command line arguments."
 - "Most Python scripts have a similar structure that can be used as a template."
-- "The `pdb` library can be used to debug a Python script by stepping through line-by-line."
 ---
 
 We've arrived at the point where we have successfully defined the functions
@@ -228,40 +226,6 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 ~~~
 {: .language-bash}
 
-> ## Debugging
->
-> If you want know what your code is doing while it's running,
-> insert a tracer using the Python debugger:
-> ~~~
-> import pdb
-> 
-> ...
-> clim = convert_pr_units(clim)    
-> pdb.set_trace()
-> create_plot(clim, dset.attrs['model_id'], inargs.season)
-> ...
-> ~~~
-> {: .language-python}
->
-> When you run the script,
-> it will stop at the tracer and allow you to interrogate the code:
-> ~~~
-> $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc MAM pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-MAM-clim.png 
-> /Users/damienirving/Desktop/data-carpentry/plot_precipitation_climatology.py(55)main()
-> -> create_plot(clim, dset.attrs['model_id'], inargs.season)
->
-> (Pdb) print(inargs.season)
-> MAM
-> ~~~
-> {: .language-bash}
->
-> You can then enter `n` to go to the next command,
-> `s` to step into the next function,
-> `c` to run the rest of the script or
-> `q` to quit.
->
-{: .callout}
-
 
 > ## Choices
 >
@@ -400,7 +364,6 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > import cartopy.crs as ccrs
 > import numpy as np
 > import cmocean
-> import pdb
 >
 >
 > def convert_pr_units(darray):

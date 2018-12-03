@@ -147,7 +147,7 @@ Coordinates:
 > Test to see if your mask worked by plotting the ACCESS1-3 climatology for JJA:
 >
 > ~~~
-> $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc JJA pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc land
+> $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc JJA pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc ocean
 > ~~~
 > {: .language-bash}
 >
@@ -218,7 +218,6 @@ Coordinates:
 > should look something like the following:
 >
 > ~~~
-> import pdb
 > import argparse
 >
 > import numpy as np
