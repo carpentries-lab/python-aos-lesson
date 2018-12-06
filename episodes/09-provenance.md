@@ -26,7 +26,7 @@ into the history attribute of the output netCDF file.
 ~~~
 import xarray as xr
 
-csiro_pr_file = '../data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc'
+csiro_pr_file = 'data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc'
 dset = xr.open_dataset(csiro_pr_file)
 
 print(dset.attrs['history'])
