@@ -53,7 +53,7 @@ Putting those together,
 here's a template for what most python command line programs look like:
 
 ~~~
-$ cat code/script_template.py
+$ cat script_template.py
 ~~~
 {: .language-bash}
 
