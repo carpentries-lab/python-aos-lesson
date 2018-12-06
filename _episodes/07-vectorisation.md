@@ -73,7 +73,7 @@ it is a land point (and thus needs to be set to `np.nan`).
 (For this example, we are going to define land as any grid point that is more than 50% land.)
 
 ~~~
-dset = xarray.open_dataset('../data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc')
+dset = xarray.open_dataset('data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc')
 clim = dset['pr'].mean('time', keep_attrs=True)
 
 nlats, nlons = clim.data.shape
