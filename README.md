@@ -1,3 +1,4 @@
+[![DOI](http://jose.theoj.org/papers/10.21105/jose.00037/status.svg)](https://doi.org/10.21105/jose.00037)
 [![DOI](https://zenodo.org/badge/117483226.svg)](https://zenodo.org/badge/latestdoi/117483226)
 
 # python-aos-lesson
