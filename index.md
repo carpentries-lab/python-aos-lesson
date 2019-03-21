@@ -50,3 +50,12 @@ so that two different CMIP5 models (ACCESS1-3 and CSIRO-Mk3-6-0) can be compared
 > in the atmosphere and ocean sciences and how they relate to one another.
 >
 {: .prereq}
+
+> ## Citation
+>
+> To cite these lessons, please refer to the following paper:
+>
+> Irving D (2019). [Python for atmosphere and ocean scientists](https://jose.theoj.org/papers/10.21105/jose.00037).
+> *Journal of Open Source Education*. 2(11), 37. doi:10.21105/jose.00037
+> 
+{: .prereq}
