@@ -43,12 +43,6 @@ so that two different CMIP5 models (ACCESS1-3 and CSIRO-Mk3-6-0) can be compared
 > but a strong familiarity with Python syntax and basic constructs
 > such as loops, lists and conditionals (i.e. if statements) is required. 
 >
-> Participants should also read
-> [this post](https://drclimate.wordpress.com/2016/10/04/the-weatherclimate-python-stack/)
-> prior to the workshop,
-> to familiarise themselves with the most commonly used Python libraries
-> in the atmosphere and ocean sciences and how they relate to one another.
->
 {: .prereq}
 
 > ## Citation
