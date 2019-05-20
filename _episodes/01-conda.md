@@ -246,4 +246,11 @@ $ conda list
 > (You may like to create a separate `pyaos-lesson` environment,
 > but this is not necessary to complete the lessons.)
 >
+> > ## Solution
+> > ~~~
+> > $ conda config --add channels conda-forge
+> > $ conda install jupyter xarray netCDF4 cartopy cmocean
+> > ~~~
+> > {: .language-bash}
+> {: .solution}
 {: .challenge}
