@@ -192,7 +192,7 @@ plt.show()
 >     dset = xarray.open_dataset(pr_file)
 >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >     clim = convert_pr_units(clim)
->     create_plot(clim, dset.attrs['model_id'], season)
+>     create_plot(clim, dset.attrs['model_id'], season, gridlines=gridlines)
 >     plt.show()
 > ~~~
 > {: .language-python}
@@ -255,7 +255,7 @@ plt.show()
 > >     dset = xarray.open_dataset(pr_file)
 > >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 > >     clim = convert_pr_units(clim)
-> >     create_plot(clim, dset.attrs['model_id'], season)
+> >     create_plot(clim, dset.attrs['model_id'], season, gridlines=gridlines)
 > >     plt.show()
 > > ~~~
 > > {: .language-python}
