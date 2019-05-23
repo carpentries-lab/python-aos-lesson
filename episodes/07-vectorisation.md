@@ -13,7 +13,7 @@ keypoints:
 ---
 
 A requirement that we haven't yet addressed is the option to apply a land or ocean mask.
-To do this, we need to use the land surface fraction file.
+To do this, we need to use the land area fraction file.
 
 ~~~
 import numpy as np
