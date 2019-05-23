@@ -67,7 +67,7 @@ AssertionError                            Traceback (most recent call last)
       5     total += ob
       6 print('total rainfall is:', total)
 
-AssertionError: Data should only contain positive values
+AssertionError: Rainfall observations should only contain positive values
 ~~~
 {: .error}
 
