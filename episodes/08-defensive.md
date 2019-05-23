@@ -45,15 +45,15 @@ Python halts the program immediately
 and prints the error message if one is provided.
 
 To demonstrate an assertion in action,
-consider this piece of code that halts as soon as the loop encounters a value that isn't positive:
+consider this piece of code that halts as soon as the loop encounters a rainfall observation value that isn't positive:
 
 ~~~
-numbers = [1.5, 2.3, 0.7, -0.001, 4.4]
+rainfall_obs = [1.5, 2.3, 0.7, -0.2, 4.4]
 total = 0.0
-for n in numbers:
-    assert n > 0.0, 'Data should only contain positive values'
-    total += n
-print('total is:', total)
+for ob in rainfall_obs:
+    assert ob >= 0.0, 'Rainfall observations should only contain positive values'
+    total += ob
+print('total rainfall is:', total)
 ~~~
 {: .language-python}
 
@@ -62,10 +62,10 @@ print('total is:', total)
 AssertionError                            Traceback (most recent call last)
 <ipython-input-19-33d87ea29ae4> in <module>()
       2 total = 0.0
-      3 for n in numbers:
-----> 4     assert n > 0.0, 'Data should only contain positive values'
-      5     total += n
-      6 print('total is:', total)
+      3 for ob in rainfall_obs:
+----> 4     assert ob > 0.0, 'Rainfall observations should only contain positive values'
+      5     total += ob
+      6 print('total rainfall is:', total)
 
 AssertionError: Data should only contain positive values
 ~~~
