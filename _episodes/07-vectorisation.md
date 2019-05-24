@@ -133,9 +133,7 @@ Coordinates:
 > ## Mask option
 >
 > Modify `plot_precipitation_climatology.py` so that the user can choose to apply a mask
-> via the following `argparse` option.
-> This should involve defining a new function called `apply_mask()`,
-> in order to keep `main()` short and readable.
+> via the following `argparse` option:
 >
 > ~~~
 > parser.add_argument("--mask", type=str, nargs=2,
@@ -143,6 +141,9 @@ Coordinates:
 >                     help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
 > ~~~
 > {: .language-python}
+>
+> This should involve defining a new function called `apply_mask()`,
+> in order to keep `main()` short and readable.
 >
 > Test to see if your mask worked by plotting the ACCESS1-3 climatology for JJA:
 >
@@ -233,12 +234,12 @@ Coordinates:
 >     Args:
 >       darray (xarray.DataArray): Precipitation data
 >    
->    """
+>     """
 >    
->    darray.data = darray.data * 86400
->    darray.attrs['units'] = 'mm/day'
+>     darray.data = darray.data * 86400
+>     darray.attrs['units'] = 'mm/day'
 >    
->    return darray
+>     return darray
 >
 >
 > def apply_mask(darray, sftlf_file, realm):
