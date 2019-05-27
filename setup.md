@@ -43,13 +43,14 @@ or conda environments approach (see below for instructions).
 
 > ## Installation of python packages: Windows (default)
 >
-> Python packages can be added to your base environment via the Anaconda Navigator.
+> Python packages can be added to your base environment via the Anaconda Navigator
+> (which can be found at the Windows start menu):
 >
 > **Step 1:** Add the `conda-forge` channel. 
 > ![Anaconda Navigator add conda-forge](fig/01-navigator-conda-forge.png)
 >
 > **Step 2:** Install the `jupyter`, `xarray`, `netCDF4`, `cartopy` and `cmocean`
-> packages one-by-one (click apply to install once selected)
+> packages one-by-one (click "apply" to install once selected)
 > ![Anaconda Navigator install xarray](fig/01-navigator-xarray.png)
 {: .solution}
 
@@ -83,21 +84,40 @@ or conda environments approach (see below for instructions).
 > Windows users who would like to be able create and activate conda environments from the bash shell
 > can do so by following one of these two options:
 >
-> *Option 1:* Access the bash shell from the Anaconda Prompt using the posix package
+> **Option 1:** Access the bash shell from the Anaconda Prompt using the posix package
 >
-> * Open the Anaconda Prompt program (from the Windows start menu)
+> * Open the Anaconda Prompt program (via the Windows start menu)
 > * Type `conda install posix` (this only needs to be done once)
 > * Type `bash` to run the Bash Shell
 >
-> *Option 2:* Update your Anaconda path so that `conda` is available using Git Bash
+> **Option 2:** Update your Anaconda path so that `conda` is available using Git Bash
 >
-> * Open the Anaconda Prompt and enter `where python` to find the path of the Anaconda3 directory (the output should show a path similar to `C:\Users\Username\Anaconda3\python.exe`)
+> * Open the Anaconda Prompt program (via the Windows start menu) and enter `where python` to find the path of the Anaconda3 directory (the output should show a path similar to `C:\Users\Username\Anaconda3\python.exe`)
 > * Convert that path for use in the next step by doing the following:
 >    * Replace all instances of `\` with `/`
 >    * Replace `C:` with `/c`
 >    * Replace `python.exe` with `Scripts/activate`
 >    * e.g. if you got `C:\Users\Username\Anaconda3\python.exe` from the previous step, you will use `/c/Users/Username/Anaconda3/Scripts/activate` for the next step
 > * Go back to the terminal and run `echo  "source [Anaconda path]" >> ~/.profile && source ~/.profile`, replacing `[Anaconda path]` with the path you generated in the previous step
+>
+> Once conda is available at the bash shell,
+> the required python packages can be installed in a new conda environment
+> called `pyaos-lesson` by executing the following commands:
+> ~~~
+> $ conda config --add channels conda-forge
+> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean
+> ~~~
+> {: .language-bash}
+>
+> You can activate this new environment as follows:
+> ~~~
+> $ conda activate pyaos-lesson
+> ~~~
+> {: .language-bash}
+>
+> (Or `source activate pyaos-lesson` if that doesn't work.)
+>
+> Type `conda deactivate` to exit that environment.
 {: .solution}
 
 ## Software check
@@ -108,8 +128,7 @@ To check that everything is installed correctly, follow the instructions below.
 
 * *Linux*: Open the Terminal program via the applications menu. The default shell is usually Bash. If you aren't sure what yours is, type `echo $SHELL`. If the shell listed is not bash, type `bash` and press Enter to access Bash.
 * *Mac*: Open the Applications Folder, and in Utilities select Terminal.
-* *Windows (standard setup)*: Open the Git Bash program via the Windows start menu.
-* *Windows (alternative setup)*: Open the Anaconda Prompt program via the Windows start menu. Type `conda install posix` (this only needs to be done once). Type `bash` to run the Bash Shell.
+* *Windows (default setup)*: Open the Git Bash program via the Windows start menu.
 
 **Git**
 
@@ -118,7 +137,6 @@ To check that everything is installed correctly, follow the instructions below.
 **Anaconda**
 
 * At the Bash Shell, type `python --version`. You should see the version of your Python program listed, with a reference to Anaconda (i.e. the default Python program on your laptop needs to be the Anaconda installation of Python).
-* In the Bash Shell, type `conda --version`. You should see the version of your conda program listed.
 
 
 
