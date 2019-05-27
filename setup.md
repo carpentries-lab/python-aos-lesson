@@ -128,7 +128,7 @@ To check that everything is installed correctly, follow the instructions below.
 
 * *Linux*: Open the Terminal program via the applications menu. The default shell is usually Bash. If you aren't sure what yours is, type `echo $SHELL`. If the shell listed is not bash, type `bash` and press Enter to access Bash.
 * *Mac*: Open the Applications Folder, and in Utilities select Terminal.
-* *Windows (default setup)*: Open the Git Bash program via the Windows start menu.
+* *Windows*: Open the Git Bash program via the Windows start menu.
 
 **Git**
 
