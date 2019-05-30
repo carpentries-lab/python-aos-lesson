@@ -5,8 +5,9 @@ title: Setup
 
 ## Data
 
-In preparation for this lesson,
-you will need to download two Python scripts and four netCDF files and place them in a new folder/directory:
+In preparation for these lessons,
+you will need to download the following two Python scripts and four netCDF files
+and place them in a new folder/directory:
 
 1. Make a new folder in your Desktop called `data-carpentry`.
 2. Download [script_template.py][template_script] and [plot_precipitation_climatology.py][precip_script] and move them into that folder.
@@ -20,16 +21,18 @@ you will need to download two Python scripts and four netCDF files and place the
 
 ## Software installation
 
-If your instructor hasn't sent you instructions on how to install the required software,
-follow the [default Carpentries instructions](https://carpentries.github.io/workshop-template/#setup).
-You need to install the bash shell, git, text editor and Python.
+In order to complete the lessons,
+you will need access to the following:
+the bash shell, a text editor, git and Anaconda (which is a Python distribution).
+If you don't already have these installed,
+please follow the [Carpentries software installation instructions](https://carpentries.github.io/workshop-template/#setup).
 
 Depending on time and wifi constraints,
-your instructor may also ask that you install the python packages introduced in the
+your workshop instructor may also ask that you install the python packages introduced in the
 [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html)
 ahead of time.
-Your instructor will specify whether to do this following the default approach
-or conda environments approach (see below for instructions).
+Your instructor will specify whether to do this following the "default" approach
+or "conda environments" approach (see below for instructions).
 
 > ## Installation of python packages: Linux & Mac (default)
 >
