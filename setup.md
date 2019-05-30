@@ -23,9 +23,18 @@ and place them in a new folder/directory:
 
 In order to complete the lessons,
 you will need access to the following:
-the bash shell, a text editor, git and Anaconda (which is a Python distribution).
+
+* The bash shell
+* A text editor
+* Git
+* Anaconda (which is a Python distribution)
+
 If you don't already have these installed,
-please follow the [Carpentries software installation instructions](https://carpentries.github.io/workshop-template/#setup).
+please follow [The Carpentries software installation instructions](https://carpentries.github.io/workshop-template/#setup).
+
+(If you have any trouble,
+The Carpentries maintain a list of common issues as a reference for instructors on the
+[Configuration Problems and Solutions wiki page](https://github.com/carpentries/workshop-template/wiki/Configuration-Problems-and-Solutions).)
 
 Depending on time and wifi constraints,
 your workshop instructor may also ask that you install the python packages introduced in the
