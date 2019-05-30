@@ -30,13 +30,13 @@ you will need access to the following:
 * Anaconda (which is a Python distribution)
 
 If you don't already have these installed,
-please follow [The Carpentries software installation instructions](https://carpentries.github.io/workshop-template/#setup).
+please follow The Carpentries [software installation instructions](https://carpentries.github.io/workshop-template/#setup).
 You do not need to install R, SQL or any of the additional software listed at that site.
 
 > ## Troubeshooting
 >
 > If you have any trouble with software installation,
-> The Carpentries maintain a list of common issues as a reference for instructors on the
+> The Carpentries maintain a list of common issues on their
 > [Configuration Problems and Solutions wiki page](https://github.com/carpentries/workshop-template/wiki/Configuration-Problems-and-Solutions).
 >
 {: .callout}
@@ -45,7 +45,7 @@ Depending on time and wifi constraints,
 your workshop instructor may also ask that you install the python packages introduced in the
 [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html)
 ahead of time.
-They will specify whether to do this following the "default" approach
+They will specify whether to do this following the "default"
 or "conda environments" approach (see below for instructions).
 
 > ## Installation of python packages: Linux & Mac (default)
