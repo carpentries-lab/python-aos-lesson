@@ -227,6 +227,7 @@ $ conda list
 > $ conda env create damienirving/pyaos-lesson
 > $ conda activate pyaos-lesson
 > ~~~
+> {: .language-bash}
 >
 > The ease with which others can recreate your environment (on any operating system)
 > is a huge breakthough for reproducible research.
@@ -283,6 +284,7 @@ plot_precipitation_climatology.py
 In [3]: exit                                                                    
 $ 
 ~~~
+{: .language-bash}
 
 (The IPython interpreter can also be accessed via the Anaconda Navigator
 by running the QtConsole.)
@@ -333,8 +335,7 @@ your notebook first.)
 >
 > > ## Solution
 > > 
-> > The "Software installation" section of the
-> > [Setup menu](https://carpentrieslab.github.io/python-aos-lesson/setup.html)
+> > The [setup menu](https://carpentrieslab.github.io/python-aos-lesson/setup.html)
 > > at the top of the page
 > > contains a series of drop-down boxes explaining how to install the Python libraries
 > > on different operating systems.
@@ -355,7 +356,7 @@ your notebook first.)
 > import matplotlib.pyplot as plt
 > import numpy as np
 > ~~~
-{: .language-python}
+> {: .language-python}
 >
 > (Hint: Hold down the shift and return keys to execute a code cell in a Jupyter Notebook.) 
 >
