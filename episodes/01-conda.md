@@ -5,11 +5,13 @@ exercises: 15
 questions:
 - "What are the main Python libraries used in atmosphere and ocean science?"
 - "How do I install and manage all the Python libraries that I want to use?"
+- "How do I interact with Python?"
 objectives:
 - "Identify the main Python libraries used in atmosphere and ocean science and the relationships between them."
 - "Explain the advantages of Anaconda over other Python distributions."
 - "Extend the number of packages available via conda using conda-forge."
 - "Create a conda environment with the libraries needed for these lessons."
+- "Open a Jupyter Notebook ready for use in these lessons"
 keypoints:
 - "xarray and iris are the core Python libraries used in the atmosphere and ocean sciences."
 - "Use conda to install and manage your Python environments."
@@ -237,20 +239,124 @@ $ conda list
 > {: .language-bash}
 {: .callout}
 
+## Interacting with Python
 
-> ## Install the libraries required for this lesson
+Now that we know which Python libraries we want to use and how to install them,
+we need to decide how we want to interact with Python.
+
+The most simple way to use Python is to type code directly into the interpreter.
+This can be accessed from the bash shell:
+
+~~~
+$ python
+Python 3.7.1 (default, Dec 14 2018, 13:28:58) 
+[Clang 4.0.1 (tags/RELEASE_401/final)] :: Anaconda, Inc. on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> print("hello world")
+hello world
+>>> exit()
+$
+~~~
+{: .language-bash}
+
+The `>>>` prompt indicates that you are now talking to the Python interpreter.
+
+A more powerful alternative to the default Python interpreter is IPython (Interactive Python).
+The [online documentation](https://ipython.readthedocs.io/en/stable/)
+outlines all the special features that come with IPython,
+but as an example, it lets you execute bash shell commands
+without having to exit the IPython interpreter:
+
+~~~
+$ ipython
+Python 3.7.1 (default, Dec 14 2018, 13:28:58) 
+Type 'copyright', 'credits' or 'license' for more information
+IPython 7.2.0 -- An enhanced Interactive Python. Type '?' for help.
+
+In [1]: print("hello world")                                                    
+hello world
+
+In [2]: ls                                                                      
+data/                              script_template.py
+plot_precipitation_climatology.py
+
+In [3]: exit                                                                    
+$ 
+~~~
+
+(The IPython interpreter can also be accessed via the Anaconda Navigator
+by running the QtConsole.)
+
+While entering commands to the Python or IPython interpreter line-by-line
+is great for quickly testing something, 
+it's clearly impractical for developing longer bodies of code 
+and/or interactively exploring data.
+As such, Python users tend to do most of their code development and data exploration
+using either an Integrated Development Environment (IDE) or Jupyter Notebook:
+
+* Two of the most common IDEs are [Spyder](https://www.spyder-ide.org/)
+and [PyCharm](https://www.jetbrains.com/pycharm/)
+(the former comes with Anaconda)
+and will look very familiar to anyone
+who has used MATLAB or R-Studio.
+* [Jupyter Notebooks](https://jupyter.org/) run in your web browser
+and allow users to create and share documents that contain live code,
+equations, visualizations and narrative text.
+
+We are going to use the Jupyter Notebook to explore our precipitation data
+(and the plotting functionality of xarray) in the next few lessons.
+A notebook can be launched from the Anaconda Navigator (not shown)
+or the bash shell:
+~~~
+$ jupyter notebook &
+~~~
+{: .language-bash}
+
+(The `&` allows you to come back and use the bash shell without closing
+your notebook first.)
+
+> ## JupyterLab
+>
+> The Jupyter team have recently launched
+> [JupyterLab](https://blog.jupyter.org/jupyterlab-is-ready-for-users-5a6f039b8906)
+> which combines the Jupyter Notebook with many of the features common to an IDE.
+>
+{: .callout}
+
+> ## Install the Python libraries required for this lesson
 >
 > Go ahead and install jupyter, xarray, cartopy and cmocean using either the Anaconda Navigator,
 > Bash Shell or Anaconda Prompt (Windows). 
 > 
-> (You may like to create a separate `pyaos-lesson` environment,
+> (You may like to create a separate `pyaos-lesson` conda environment,
 > but this is not necessary to complete the lessons.)
 >
 > > ## Solution
-> > ~~~
-> > $ conda config --add channels conda-forge
-> > $ conda install jupyter xarray netCDF4 cartopy cmocean
-> > ~~~
-> > {: .language-bash}
+> > 
+> > The "Software installation" section of the
+> > [Setup menu](https://carpentrieslab.github.io/python-aos-lesson/setup.html)
+> > at the top of the page
+> > contains a series of drop-down boxes explaining how to install the Python libraries
+> > on different operating systems.
+> > Use the "default" instructions unless you want to create the separate
+> > `pyaos-lesson` conda environment.
+> > 
 > {: .solution}
+{: .challenge}
+
+> ## Launch a Jupyer Notebook
+>
+> In preparation for the next lesson,
+> open a new Jupyter Notebook (from either the bash shell or Anaconda Navigator) 
+> and import xarray, catropy, matplotlib and numpy using the following Python command:
+> ~~~
+> import xarray as xr
+> import cartopy.crs as ccrs
+> import matplotlib.pyplot as plt
+> import numpy as np
+> ~~~
+{: .language-python}
+>
+> (Hint: Hold down the shift and return keys to execute a code cell in a Jupyter Notebook.) 
+>
 {: .challenge}
