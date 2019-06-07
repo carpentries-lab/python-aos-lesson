@@ -348,15 +348,20 @@ your notebook first.)
 > ## Launch a Jupyer Notebook
 >
 > In preparation for the next lesson,
-> open a new Jupyter Notebook (using either the bash shell or Anaconda Navigator).
-> You should launch it from the `data-carpentry` directory
-> that you created specifically for these lessons.
+> open a new Jupyter Notebook by
+> entering `jupyter notebook &` at the bash shell
+> or by clicking the Jupyter Notebook launch button in the Anaconda Navigator.
 > 
+> The Jupyter interface will open in a new tab of your default web browser.
+> Use that interface to navigate to the `data-carpentry` directory
+> that you created specifically for these lessons
+> and then click to create a new Python 3 notebook: 
+>
 > ![Launch Jupyter notebook](../fig/01-launch-notebook.png)
 >
-> Once you've opened your notebook,
+> Once your notebook is open,
 > import xarray, catropy, matplotlib and numpy
-> using the following Python command:
+> using the following Python commands:
 > ~~~
 > import xarray as xr
 > import cartopy.crs as ccrs
