@@ -209,12 +209,12 @@ plt.show()
 > >     Args:
 > >       darray (xarray.DataArray): Precipitation data
 > >    
-> >    """
+> >     """
 > >    
-> >    darray.data = darray.data * 86400
-> >    darray.attrs['units'] = 'mm/day'
+> >     darray.data = darray.data * 86400
+> >     darray.attrs['units'] = 'mm/day'
 > >    
-> >    return darray
+> >     return darray
 > >
 > >
 > > def create_plot(clim, model_name, season, gridlines=False):
