@@ -4,7 +4,7 @@ title: PyAOS stack
 ---
 
 It would be an understatement to say that Python has exploded onto the data science scene in recent years.
-PyCon and SciPy conferences are held somewhere in the world every few months now,
+PyCon and SciPy conferences are held somewhere around the world every few months,
 at which loads of new and/or improved data science libraries are showcased to the community 
 (check out [pyvideo.org](pyvideo.org) for conference recordings).
 The ongoing rapid development of new libraries means that data scientists are (hopefully)
@@ -19,7 +19,7 @@ The focus is on libraries that are widely used and that have good (and likely lo
 
 ## Core
 
-The dashed box in the diagram represents the core of the stack, so let’s start this tour there.
+The dashed box in the diagram represents the core of the stack, so let’s start our tour there.
 The default library for dealing with numerical arrays in Python is [NumPy](http://www.numpy.org/).
 It has a bunch of built in functions for reading and writing common data formats like .csv,
 but if your data is stored in netCDF format then the default library for getting data
@@ -35,7 +35,7 @@ the [SciPy](https://www.scipy.org/scipylib/index.html) library is the default.
 If you’re dealing with a particularly large dataset,
 you may get memory errors (and/or slow performance)
 when trying to read and process your data.
-[Dask[(https://dask.org/) works with the existing Python ecosystem (i.e. NumPy, SciPy etc)
+[Dask](https://dask.org/) works with the existing Python ecosystem (i.e. NumPy, SciPy etc)
 to scale your analysis to multi-core machines and/or distributed clusters
 (i.e. parallel processing).
 
@@ -117,7 +117,7 @@ The VCDAT application also now runs as a JupyterLab extension, which is an excit
 > ## How to choose
 >
 > In terms of choosing between xarray and Iris,
-> some people like the slightly more atmosphere/ocean-centric experience offered by Iris,
+> some people like the slightly more AOS-centric experience offered by Iris,
 > while others don’t like the restrictions that places on their work
 > and prefer the generic xarray experience
 > (e.g. to use Iris your netCDF data files have to be CF compliant or close to it).

@@ -30,7 +30,8 @@ to make the types of analysis we do faster and more efficient.
 To learn more about the PyAOS "stack" shown in the diagram below
 (i.e. the collection of libraries that are typically used for
 data analysis and visualisation in the atmosphere and ocean sciences),
-check out [this post](https://drclimate.wordpress.com/2016/10/04/the-weatherclimate-python-stack/).
+check out [PyAOS stack](https://carpentrieslab.github.io/python-aos-lesson/stack/index.html)
+page in the extras tab of the menu above.
 
 ![PyAOS stack](../fig/01-pyaos-stack.png) 
 
