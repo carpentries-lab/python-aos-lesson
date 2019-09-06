@@ -17,3 +17,5 @@ The lesson materials have been used in the following workshops and university co
 * Changing Global Environments, 3rd year undergraduate subject, University of Wollongong, Semester 2, 2018
 * [Data Carpentry workshop at the Australian Bureau of Meteorology](https://damienirving.github.io/2019-05-23-bom/), May 2019
 * [Data Carpentry workshop at the 2019 AMOS Conference](https://damienirving.github.io/2019-06-10-amos/), June 2019
+* [Data Carpentry workshop at the 2020 AMOS Conference](https://damienirving.github.io/2020-02-09-amos/), February 2020
+
