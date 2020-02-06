@@ -115,7 +115,7 @@ or "conda environments" approach (see below for instructions).
 >    * Replace `C:` with `/c`
 >    * Replace `python.exe` with `Scripts/activate`
 >    * e.g. if you got `C:\Users\Username\Anaconda3\python.exe` from the previous step, you will use `/c/Users/Username/Anaconda3/Scripts/activate` for the next step
-> * Go back to the terminal and run `echo  "source [Anaconda path]" >> ~/.profile && source ~/.profile`, replacing `[Anaconda path]` with the path you generated in the previous step
+> * Go back to Git Bash and run `echo  "source [Anaconda path]" >> ~/.profile && source ~/.profile`, replacing `[Anaconda path]` with the path you generated in the previous step
 >
 > Once conda is available at the bash shell,
 > the required python packages can be installed in a new conda environment
