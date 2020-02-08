@@ -229,22 +229,6 @@ and to setup all the plot characteristics.
 Recognising this burden,
 the xarray developers have built on top of `matplotlib.pyplot` to make the visualisation
 of xarray DataArrays much easier.
-
-
-> ## Magics
->
-> IPython (and hence the Jupyter notebook) come with a whole bunch of built in
-> [magic commands](http://ipython.readthedocs.io/en/stable/interactive/magics.html).
-> Use the built in `%matplotlib inline` magic command to make plots appear
-> in the notebook rather than in a separate window.
->
-{: .callout}
-
-~~~
-%matplotlib inline
-~~~
-{: .language-python}
-
 ~~~
 fig = plt.figure(figsize=[12,5])
 
@@ -306,7 +290,7 @@ plt.show()
 > Copy and paste the final slab of code above into your own Jupyter notebook.
 >
 > The viridis color palette doesn't seem quite right for rainfall.
-> Change it to the [cmocean](http://matplotlib.org/cmocean/) palette
+> Change it to the "haline" [cmocean](http://matplotlib.org/cmocean/) palette
 > used for ocean salinity data.
 >
 > > ## Solution
