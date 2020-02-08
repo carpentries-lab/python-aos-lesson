@@ -130,60 +130,6 @@ Branch master set up to track remote branch master from origin.
 ~~~
 {: .output}
 
-> ## Proxy
->
-> If the network you are connected to uses a proxy, there is a chance that your
-> last command failed with "Could not resolve hostname" as the error message. To
-> solve this issue, you need to tell Git about the proxy:
->
-> ~~~
-> $ git config --global http.proxy http://user:password@proxy.url
-> $ git config --global https.proxy http://user:password@proxy.url
-> ~~~
-> {: .language-bash}
->
-> When you connect to another network that doesn't use a proxy, you will need to
-> tell Git to disable the proxy using:
->
-> ~~~
-> $ git config --global --unset http.proxy
-> $ git config --global --unset https.proxy
-> ~~~
-> {: .language-bash}
-{: .callout}
-
-> ## Password Managers
->
-> If your operating system has a password manager configured, `git push` will
-> try to use it when it needs your username and password.  For example, this
-> is the default behavior for Git Bash on Windows. If you want to type your
-> username and password at the terminal instead of using a password manager,
-> type:
->
-> ~~~
-> $ unset SSH_ASKPASS
-> ~~~
-> {: .language-bash}
->
-> in the terminal, before you run `git push`.  Despite the name, [git uses
-> `SSH_ASKPASS` for all credential
-> entry](https://git-scm.com/docs/gitcredentials#_requesting_credentials), so
-> you may want to unset `SSH_ASKPASS` whether you are using git via SSH or
-> https.
->
-> You may also want to add `unset SSH_ASKPASS` at the end of your `~/.bashrc`
-> to make git default to using the terminal for usernames and passwords.
-{: .callout}
-
-> ## The '-u' Flag
->
-> You may see a `-u` option used with `git push` in some documentation.  This
-> option is synonymous with the `--set-upstream-to` option for the `git branch`
-> command, and is used to associate the current branch with a remote branch so
-> that the `git pull` command can be used without any arguments. To do this,
-> simply use `git push -u origin master` once the remote has been set up.
-{: .callout}
-
 We can pull changes from the remote repository to the local one as well:
 
 ~~~
