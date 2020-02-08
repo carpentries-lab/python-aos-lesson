@@ -135,6 +135,7 @@ We can now use this function to create exactly the same plot as before:
 plot_pr_climatology('data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc', 'JJA')
 plt.show()
 ~~~
+{: .language-python}
 
 ![Precipitation climatology](../fig/03-functions-access-jja.svg)
 
