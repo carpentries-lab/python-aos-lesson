@@ -12,7 +12,8 @@ keypoints:
 - "Vectorised operations can be used to avoid looping over array elements."
 ---
 
-A requirement that we haven't yet addressed is the option to apply a land or ocean mask.
+A useful addition to our `plot_precipitation_climatology.py` script
+would be the option to apply a land or ocean mask.
 To do this, we need to use the land area fraction file.
 
 ~~~
@@ -92,7 +93,9 @@ high level languages like Python and Matlab are built for usability
 This particular array is so small that the looping isn't noticably slow,
 but in general looping over every data point in an array should be avoided.
 
-Fortunately, there are lots of numpy functions that allow you to get around this problem
+Fortunately, there are lots of numpy functions
+(which are written in C under the hood)
+that allow you to get around this problem
 by applying a particular operation to an entire array at once
 (which is known as a vectorised operation).
 The `np.where` function, for instance,
