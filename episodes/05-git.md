@@ -378,18 +378,18 @@ before actually committing anything. This allows us to commit our
 changes in stages and capture changes in logical portions rather than
 only large batches.
 For example,
-suppose we're adding a few citations to our supervisor's work
-to our thesis.
-We might want to commit those additions,
-and the corresponding addition to the bibliography,
-but *not* commit the work we're doing on the conclusion
+suppose we're writing our thesis using LaTeX
+(the plain text `.tex` files can be tracked using Git)
+and we add a few citations
+to the introduction chapter.
+We might want to commit those additions to our `introduction.tex` file
+but *not* commit the work we're doing on the `conclusion.tex` file
 (which we haven't finished yet).
 
 To allow for this,
 Git has a special *staging area*
 where it keeps track of things that have been added to
-the current [changeset]({{ page.root }}/reference/#changeset)
-but not yet committed.
+the current changeset but not yet committed.
 
 > ## Staging Area
 >
