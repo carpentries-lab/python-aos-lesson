@@ -308,15 +308,23 @@ equations, visualizations and narrative text.
 
 We are going to use the Jupyter Notebook to explore our precipitation data
 (and the plotting functionality of xarray) in the next few lessons.
-A notebook can be launched from the Anaconda Navigator (not shown)
-or the bash shell:
+A notebook can be launched from our `data-carpentry` directory
+using the Bash Shell:
+
 ~~~
+$ cd ~/Desktop/data-carpentry
 $ jupyter notebook &
 ~~~
 {: .language-bash}
 
 (The `&` allows you to come back and use the bash shell without closing
 your notebook first.)
+
+Alternatively, you can launch Jupyter Notebook from the Anaconda Navigator
+and navigate to the `data-carpentry` directory before creating a new
+Python 3 notebook:
+
+![Launch Jupyter notebook](../fig/01-launch-notebook.png)
 
 > ## JupyterLab
 >
@@ -349,14 +357,15 @@ your notebook first.)
 > ## Launch a Jupyer Notebook
 >
 > In preparation for the next lesson,
-> open a new Jupyter Notebook by
-> entering `jupyter notebook &` at the bash shell
+> open a new Jupyter Notebook **in your `data-carpentry` directory**
+> by entering `jupyter notebook &` at the Bash Shell
 > or by clicking the Jupyter Notebook launch button in the Anaconda Navigator.
 > 
-> The Jupyter interface will open in a new tab of your default web browser.
+> If you use the Navigator, 
+> the Jupyter interface will open in a new tab of your default web browser.
 > Use that interface to navigate to the `data-carpentry` directory
 > that you created specifically for these lessons
-> and then click to create a new Python 3 notebook: 
+> before clicking to create a new Python 3 notebook: 
 >
 > ![Launch Jupyter notebook](../fig/01-launch-notebook.png)
 >
