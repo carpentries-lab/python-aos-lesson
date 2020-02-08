@@ -16,15 +16,13 @@ keypoints:
 
 As a first step towards making a visual comparison of the
 CSIRO-Mk3-6-0 and ACCESS1-3 historical precipitation climatology,
-we are going to create a quick plot of the ACCESS1-3 data. 
+we are going to create a quick plot of the ACCESS1-3 data.
 ~~~
 access_pr_file = 'data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
 ~~~
 {: .language-python}
 
-We are going to use the [xarray](http://xarray.pydata.org/en/stable/) library,
-which has been specifically written with the analysis of
-multi-dimensional geographic data arrays in mind.
+We will need a number of the libraries introduced in the previous lesson.
 ~~~
 import xarray as xr
 import cartopy.crs as ccrs
@@ -34,10 +32,10 @@ import numpy as np
 {: .language-python}
 
 Since geographic data files can often be very large,
-when you first open a data file in xarray it simply loads the metadata
+when we first open our data file in xarray it simply loads the metadata
 associated with the file (this is known as "lazy loading").
-You can then view summary information about the contents of the file
-before deciding whether you'd like to load some or all of the data into memory. 
+We can then view summary information about the contents of the file
+before deciding whether we'd like to load some or all of the data into memory. 
 
 ~~~
 dset = xr.open_dataset(access_pr_file)
