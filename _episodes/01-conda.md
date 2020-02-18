@@ -30,8 +30,8 @@ to make the types of analysis we do faster and more efficient.
 To learn more about the PyAOS "stack" shown in the diagram below
 (i.e. the collection of libraries that are typically used for
 data analysis and visualisation in the atmosphere and ocean sciences),
-check out [PyAOS stack](https://carpentrieslab.github.io/python-aos-lesson/stack/index.html)
-page in the extras tab of the menu above.
+check out the [overview of the PyAOS stack](https://pyaos.github.io/stack/)
+at the PyAOS community site.
 
 ![PyAOS stack](../fig/01-pyaos-stack.png) 
 
@@ -46,20 +46,19 @@ but until recently pip only worked for libraries written in pure Python.
 This was a major limitation for the data science community,
 because many scientific Python libraries have C and/or Fortran dependencies.
 To spare people the pain of installing these dependencies,
-distributions like [Anaconda](https://www.anaconda.com/distribution/)
-and [Canopy](https://www.enthought.com/product/canopy/) have been released,
-which come with the most popular data science libraries and their dependencies pre-installed.
-These distributions also come with a package manager for installing libraries that weren’t pre-installed.
+a number of scientific Python “distributions” have been released over the years.
+These come with the most popular data science libraries and their dependencies pre-installed,
+and some also come with a package manager to assist with installing
+additional libraries that weren’t pre-installed.
 This tutorial focuses on [conda](https://conda.io/docs/),
-which is the package manager associated with Anaconda
-(as we’ll see, it has some advantages over the Canopy package manager).
-
+which is the package manager associated with the very popular 
+[Anaconda](https://www.anaconda.com/distribution/) distribution.
 
 ## Introducing conda
 
 According to the [latest documentation](https://docs.anaconda.com/anaconda/#anaconda-navigator-or-conda),
-Anaconda comes with over 150 of the most widely used data science libraries (and their dependencies) pre-installed.
-In addition, there are over 250 libraries available via the `conda install` command,
+Anaconda comes with over 250 of the most widely used data science libraries (and their dependencies) pre-installed.
+In addition, there are several thousand libraries available via the `conda install` command,
 which can be executed using the Bash Shell or Anaconda Prompt (Windows only).
 It is also possible to install packages using the Anaconda Navigator graphical user interface.
 
@@ -87,13 +86,13 @@ OR using Anaconda Navigator:
 
 ## Advanced conda
 
-This is all great, but up until now Anaconda gives us nothing that Canopy doesn't.
-The real advantage of Anaconda is the [Anaconda Cloud](https://anaconda.org) website,
+For a relatively small/niche field of research like atmosphere and ocean science,
+one of the most important features that Anaconda provides is the
+[Anaconda Cloud](https://anaconda.org) website,
 where the community can contribute conda installation packages.
-This is critical for the atmosphere and ocean science community,
-because many of our libraries are discipline specific,
-which means they'll never make it into the top 400 or so data science libraries
-supported by Anaconda and Canopy.
+This is critical because many of our libraries have a small user base,
+which means they'll never make it into the top few thousand data science libraries
+supported by Anaconda.
 
 You can search Anaconda Cloud to find the command needed to install the package.
 For instance, here is the search result for the iris package:
@@ -101,10 +100,12 @@ For instance, here is the search result for the iris package:
 ![Iris search on Anaconda Cloud](../fig/01-iris-search.png)
 
 As you can see, there are often multiple versions of the same package up on Anaconda Cloud.
-To try and address this duplication problem, [conda-forge](https://conda-forge.github.io/) has been launched,
-which aims to be a central repository that contains just a single (working) version of each package on Anaconda Cloud.
-You can therefore expand the selection of packages available via `conda install` beyond the chosen 400
-by adding the conda-forge channel:
+To try and address this duplication problem,
+[conda-forge](https://conda-forge.github.io/) has been launched,
+which aims to be a central repository that contains just a single (working) version
+of each package on Anaconda Cloud.
+You can therefore expand the selection of packages available via `conda install`
+beyond the chosen few thousand by adding the conda-forge channel:
 ~~~
 $ conda config --add channels conda-forge
 ~~~
