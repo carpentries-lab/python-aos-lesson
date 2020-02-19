@@ -33,7 +33,7 @@ data analysis and visualisation in the atmosphere and ocean sciences),
 check out the [overview of the PyAOS stack](https://pyaos.github.io/stack/)
 at the PyAOS community site.
 
-![PyAOS stack](../fig/01-pyaos-stack.png) 
+![PyAOS stack](../fig/01-pyaos-stack.svg) 
 
 
 ## Python distributions for data science
