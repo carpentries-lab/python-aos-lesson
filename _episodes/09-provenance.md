@@ -42,14 +42,7 @@ Fri Dec 01 08:01:43 2017: cdo seldate,2001-01-01,2005-12-31 /g/data/ua6/DRSv2/CM
 
 Fortunately, there is a Python package called [cmdline-provenance](http://cmdline-provenance.readthedocs.io/en/latest/)
 that creates NCO/CDO-style records of what was executed at the command line.
-We can install that package using the following Bash Shell / Anaconda Prompt command:
-
-~~~
-$ pip install cmdline-provenance
-~~~   
-{: .language-bash}
-
-and use it to generate a new command line record:
+We can use it to generate a new command line record:
 
 ~~~
 import cmdline_provenance as cmdprov
