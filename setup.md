@@ -66,7 +66,7 @@ or "conda environments" approach (see below for instructions).
 > **Step 1:** Add the `conda-forge` channel. 
 > ![Anaconda Navigator add conda-forge](fig/01-navigator-conda-forge.png)
 >
-> **Step 2:** Install the `jupyter`, `xarray`, `netCDF4`, `cartopy` and `cmocean`
+> **Step 2:** Install the `jupyter`, `xarray`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
 > packages one-by-one (click "apply" to install once selected)
 > ![Anaconda Navigator install xarray](fig/01-navigator-xarray.png)
 {: .solution}
@@ -77,7 +77,7 @@ or "conda environments" approach (see below for instructions).
 > called `pyaos-lesson` by executing the following commands at the bash shell:
 > ~~~
 > $ conda config --add channels conda-forge
-> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean
+> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
 > ~~~
 > {: .language-bash}
 >
@@ -122,7 +122,7 @@ or "conda environments" approach (see below for instructions).
 > called `pyaos-lesson` by executing the following commands:
 > ~~~
 > $ conda config --add channels conda-forge
-> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean
+> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
 > ~~~
 > {: .language-bash}
 >

@@ -126,19 +126,21 @@ but all the same tasks could be performed with iris.
 We'll also install
 [netCDF4](http://unidata.github.io/netcdf4-python/) (xarray requires this to read netCDF files),
 [cartopy](http://scitools.org.uk/cartopy/) (to help with geographic plot projections),
-[cmocean](http://matplotlib.org/cmocean/) (for nice color palettes)
+[cmocean](http://matplotlib.org/cmocean/) (for nice color palettes),
+[cmdline_provenance](https://cmdline-provenance.readthedocs.io/en/latest/)
+(to keep track of our data processing steps)
 and [jupyter](https://jupyter.org/) (so we can use the jupyter notebook).  
 
 We could install these libraries from Anaconda Navigator (not shown)
 or using the Bash Shell or Anaconda Prompt (Windows):
 ~~~
-$ conda install jupyter xarray netCDF4 cartopy cmocean
+$ conda install jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
 ~~~
 {: .language-bash}
 
 If we then list all the libraries that we've got installed,
-we can see that jupyter, xarray, netCDF4, cartopy and cmocean (and their dependencies)
-are now there:
+we can see that jupyter, xarray, netCDF4, cartopy, cmocean, cmdline_provenance
+and their dependencies are now there:
 ~~~
 $ conda list
 ~~~
@@ -201,7 +203,6 @@ $ conda list
 >   - cartopy=0.16.0=py36h81b52dc_1
 >   - certifi=2018.4.16=py36_0
 >   - cftime=1.0.1=py36h7eb728f_0
->   - cmocean=1.2=py_0
 >   - ...
 > ~~~
 > {: .output}
