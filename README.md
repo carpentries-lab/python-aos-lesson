@@ -1,10 +1,10 @@
 [![DOI](http://jose.theoj.org/papers/10.21105/jose.00037/status.svg)](https://doi.org/10.21105/jose.00037)
 [![DOI](https://zenodo.org/badge/117483226.svg)](https://zenodo.org/badge/latestdoi/117483226)
 
-# python-aos-lesson
+# Python for Atmosphere and Ocean Scientists
 
-The repository contains the lesson materials for a single day workshop
-on using python (and git) in the atmosphere and ocean sciences:
+The repository contains the [Data Carpentry](https://datacarpentry.org/) lesson materials
+for a single day workshop on using python (and git) in the atmosphere and ocean sciences:
 [https://carpentrieslab.github.io/python-aos-lesson/](https://carpentrieslab.github.io/python-aos-lesson/)
 
 The lesson materials were written by [Damien Irving](https://damienirving.github.io/) based on experiences
