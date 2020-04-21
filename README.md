@@ -4,10 +4,10 @@
 # python-aos-lesson
 
 The repository contains the lesson materials for a single day workshop
-on using python (and git) in the atmosphere and ocean sciences:  
+on using python (and git) in the atmosphere and ocean sciences:
 [https://carpentrieslab.github.io/python-aos-lesson/](https://carpentrieslab.github.io/python-aos-lesson/)
 
-The lesson materials were written by [Damien Irving](https://twitter.com/DrClimate) based on experiences
+The lesson materials were written by [Damien Irving](https://damienirving.github.io/) based on experiences
 from teaching generic Software Carpentry workshops at the annual conference of the
 Australian Meteorological and Oceanographic Society (AMOS) from 2014-2017.
 
@@ -18,4 +18,3 @@ The lesson materials have been used in the following workshops and university co
 * [Data Carpentry workshop at the Australian Bureau of Meteorology](https://damienirving.github.io/2019-05-23-bom/), May 2019
 * [Data Carpentry workshop at the 2019 AMOS Conference](https://damienirving.github.io/2019-06-10-amos/), June 2019
 * [Data Carpentry workshop at the 2020 AMOS Conference](https://damienirving.github.io/2020-02-09-amos/), February 2020
-
