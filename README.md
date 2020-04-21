@@ -18,3 +18,8 @@ The lesson materials have been used in the following workshops and university co
 * [Data Carpentry workshop at the Australian Bureau of Meteorology](https://damienirving.github.io/2019-05-23-bom/), May 2019
 * [Data Carpentry workshop at the 2019 AMOS Conference](https://damienirving.github.io/2019-06-10-amos/), June 2019
 * [Data Carpentry workshop at the 2020 AMOS Conference](https://damienirving.github.io/2020-02-09-amos/), February 2020
+
+An overview of the development of the lesson materials and plans for the future
+was delivered during the Python Symposium at the 2020 Annual Meeting of the
+American Meteorological Society
+(see [video recording](https://ams.confex.com/ams/2020Annual/videogateway.cgi/id/521844?recordingid=521844)).
