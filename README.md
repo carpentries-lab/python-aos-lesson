@@ -40,7 +40,7 @@ the goal is to grow the PyAOS instructor community:
 * [Holger Wolff](https://climateextremes.org.au/member-profile/?memberID=93) (ARC Centre of Excellence for Climate Extremes, Monash University) 
 * [Kathy Pegion](https://www.kathypegion.com/) (Department of Atmospheric Oceanic and Earth Sciences, George Mason University)
 * [Elizabeth Dobbins](https://uaf.edu/cfos/people/research-staff-and-post-docs/detail/elizabeth-dobbins.php) (College of Fisheries and Ocean Sciences, University of Alaska Fairbanks)
-* Alma Carolina Castillo Trujillo (Scripps Institution of Oceanography, UC San Diego)
+* [Alma Castillo](https://scripps.ucsd.edu/profiles/a4castillotrujillo) (Scripps Institution of Oceanography, UC San Diego)
 
 If you work or study in the atmosphere and ocean sciences and would be interested in getting involved,
 please reach out by creating an issue in this repository.
