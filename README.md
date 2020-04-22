@@ -36,7 +36,7 @@ dozens of workshops around the world.
 Now that an initial set of PyAOS lesson materials has been developed, tested and published,
 the goal is to grow the PyAOS instructor community:
 * [Damien Irving](https://damienirving.github.io/) (Climate Change Research Centre, University of New South Wales)
-* Sarah Murphy (Washington State University)
+* [Sarah Murphy](https://sarahymurphy.github.io/) (Washington State University)
 * [Holger Wolff](https://climateextremes.org.au/member-profile/?memberID=93) (ARC Centre of Excellence for Climate Extremes, Monash University) 
 * [Kathy Pegion](https://www.kathypegion.com/) (Department of Atmospheric Oceanic and Earth Sciences, George Mason University)
 * [Elizabeth Dobbins](https://uaf.edu/cfos/people/research-staff-and-post-docs/detail/elizabeth-dobbins.php) (College of Fisheries and Ocean Sciences, University of Alaska Fairbanks)
