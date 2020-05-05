@@ -23,3 +23,24 @@ An overview of the development of the lesson materials and plans for the future
 was delivered during the Python Symposium at the 2020 Annual Meeting of the
 American Meteorological Society
 (see [video recording](https://ams.confex.com/ams/2020Annual/videogateway.cgi/id/521844?recordingid=521844)).
+
+## Instructor community
+
+Over the past few years,
+research disciplines such as ecology and genomics have established large communities
+of qualified [Carpentries instructors](https://carpentries.org/become-instructor/).
+These communities collaboratively contribute to the ongoing maintenance and development
+of the Data Carpentry ecology and genomics lesson materials and have delivered
+dozens of workshops around the world.
+
+Now that an initial set of PyAOS lesson materials has been developed, tested and published,
+the goal is to grow the PyAOS instructor community:
+* [Damien Irving](https://damienirving.github.io/) (Climate Change Research Centre, University of New South Wales)
+* [Sarah Murphy](https://sarahymurphy.github.io/) (Washington State University)
+* [Holger Wolff](https://climateextremes.org.au/member-profile/?memberID=93) (ARC Centre of Excellence for Climate Extremes, Monash University) 
+* [Kathy Pegion](https://www.kathypegion.com/) (Department of Atmospheric Oceanic and Earth Sciences, George Mason University)
+* [Elizabeth Dobbins](https://uaf.edu/cfos/people/research-staff-and-post-docs/detail/elizabeth-dobbins.php) (College of Fisheries and Ocean Sciences, University of Alaska Fairbanks)
+* [Alma Castillo](https://scripps.ucsd.edu/profiles/a4castillotrujillo) (Scripps Institution of Oceanography, UC San Diego)
+
+If you work or study in the atmosphere and ocean sciences and would be interested in getting involved,
+please reach out by creating an issue in this repository.
