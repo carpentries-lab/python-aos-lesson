@@ -80,7 +80,7 @@ In brief:
     1.  Create a new branch in your desktop copy of this repository for each significant change.
     2.  Commit the change in that branch.
     3.  Push that branch to your fork of this repository on GitHub.
-    4.  Submit a pull request from that branch to the [master repository][repo].
+    4.  Submit a pull request from that branch to this repository.
     5.  If you receive feedback,
         make changes on your desktop and push to your branch on GitHub:
         the pull request will update automatically.
