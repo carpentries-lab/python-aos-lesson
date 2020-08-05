@@ -45,23 +45,55 @@ Depending on time and wifi constraints,
 your workshop instructor may also ask that you install the python packages introduced in the
 [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html)
 ahead of time.
-They will specify whether to do this following the "default"
-or "conda environments" approach (see below for instructions).
+You can do this via the command line or by using the Anaconda Navigator:
 
-> ## Installation of python packages: Linux & Mac (default)
+> ## Installation of python packages: via the command line
 >
-> The required python packages can be installed at the bash shell as follows:
+> (Windows users may need to open the Anaconda Prompt program
+> and run `conda init bash` to make conda available at the Bash Shell.)
+>
+> The first step is to add the conda-forge channel:
 > ~~~
 > $ conda config --add channels conda-forge
-> $ conda install jupyter xarray netCDF4 cartopy cmocean
 > ~~~
 > {: .language-bash}
+>
+> You can then install the packages in the base conda environment
+> (recommended if you're new to using Anaconda):
+> ~~~
+> $ conda install jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
+> ~~~
+> {: .language-bash}
+>
+> Or you can create a new environment called `pyaos-lesson`
+> and install the packages there:
+> ~~~
+> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
+> ~~~
+> {: .language-bash}
+>
+> You can activate this new environment as follows:
+> ~~~
+> $ conda activate pyaos-lesson
+> ~~~
+> {: .language-bash}
+>
+> (Or `source activate pyaos-lesson` if that doesn't work.)
+>
+> Type `conda deactivate` to exit that environment.
 {: .solution}
 
-> ## Installation of python packages: Windows (default)
+> ## Installation of python packages: via the Anaconda Navigator
 >
-> Python packages can be added to your base environment via the Anaconda Navigator
-> (which can be found at the Windows start menu):
+> Once you've opened the Anaconda Navigator program
+> (which can be found at the Windows start menu),
+> head to the "Environments" tab.
+> 
+> You can install the packages into the "base" environment
+> (recommended if you're new to Anaconda)
+> or create a new environment called `pyaos-lesson`
+> by clicking the "create" button at the bottom of the environment
+> list before doing the following:
 >
 > **Step 1:** Add the `conda-forge` channel. 
 > ![Anaconda Navigator add conda-forge](fig/01-navigator-conda-forge.png)
@@ -69,72 +101,6 @@ or "conda environments" approach (see below for instructions).
 > **Step 2:** Install the `jupyter`, `xarray`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
 > packages one-by-one (click "apply" to install once selected)
 > ![Anaconda Navigator install xarray](fig/01-navigator-xarray.png)
-{: .solution}
-
-> ## Installation of python packages: Linux & Mac (using conda environments)
->
-> The required python packages can be installed in a new conda environment
-> called `pyaos-lesson` by executing the following commands at the bash shell:
-> ~~~
-> $ conda config --add channels conda-forge
-> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
-> ~~~
-> {: .language-bash}
->
-> You can activate this new environment as follows:
-> ~~~
-> $ conda activate pyaos-lesson
-> ~~~
-> {: .language-bash}
->
-> (Or `source activate pyaos-lesson` if that doesn't work.)
->
-> Type `conda deactivate` to exit that environment.
-{: .solution}
-
-> ## Installation of python packages: Windows (using conda environments and bash shell)
->
-> The `conda` command is not automatically available using Git Bash.
-> This means that Windows users cannot create and activate a conda environment from the bash shell,
-> which is an option in the [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html).
-> While this is not a big issue (the first lesson can be completed without creating a new environment),
-> Windows users who would like to be able create and activate conda environments from the bash shell
-> can do so by following one of these two options:
->
-> **Option 1:** Access the bash shell from the Anaconda Prompt using the posix package
->
-> * Open the Anaconda Prompt program (via the Windows start menu)
-> * Type `conda install posix` (this only needs to be done once)
-> * Type `bash` to run the Bash Shell
->
-> **Option 2:** Update your Anaconda path so that `conda` is available using Git Bash
->
-> * Open the Anaconda Prompt program (via the Windows start menu) and enter `where python` to find the path of the Anaconda3 directory (the output should show a path similar to `C:\Users\Username\Anaconda3\python.exe`)
-> * Convert that path for use in the next step by doing the following:
->    * Replace all instances of `\` with `/`
->    * Replace `C:` with `/c`
->    * Replace `python.exe` with `Scripts/activate`
->    * e.g. if you got `C:\Users\Username\Anaconda3\python.exe` from the previous step, you will use `/c/Users/Username/Anaconda3/Scripts/activate` for the next step
-> * Go back to Git Bash and run `echo  "source [Anaconda path]" >> ~/.profile && source ~/.profile`, replacing `[Anaconda path]` with the path you generated in the previous step
->
-> Once conda is available at the bash shell,
-> the required python packages can be installed in a new conda environment
-> called `pyaos-lesson` by executing the following commands:
-> ~~~
-> $ conda config --add channels conda-forge
-> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
-> ~~~
-> {: .language-bash}
->
-> You can activate this new environment as follows:
-> ~~~
-> $ conda activate pyaos-lesson
-> ~~~
-> {: .language-bash}
->
-> (Or `source activate pyaos-lesson` if that doesn't work.)
->
-> Type `conda deactivate` to exit that environment.
 {: .solution}
 
 ## Software check
