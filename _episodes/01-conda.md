@@ -62,6 +62,14 @@ In addition, there are several thousand libraries available via the `conda insta
 which can be executed using the Bash Shell or Anaconda Prompt (Windows only).
 It is also possible to install packages using the Anaconda Navigator graphical user interface.
 
+> ## conda in the shell on windows
+>
+> If you're on a Windows machine and the `conda` command isn't available at the Bash Shell,
+> you'll need to open the Anaconda Prompt program (via the Windows start menu)
+> and run the command `conda init bash` (this only needs to be done once).
+> After that, your Bash Shell will be configured to use `conda` going forward.
+{: .callout}
+
 For instance, the popular `xarray` library could be installed using the following command,
 ~~~
 $ conda install xarray
