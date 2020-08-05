@@ -67,7 +67,7 @@ It is also possible to install packages using the Anaconda Navigator graphical u
 > If you're on a Windows machine and the `conda` command isn't available at the Bash Shell,
 > you'll need to open the Anaconda Prompt program (via the Windows start menu)
 > and run the command `conda init bash` (this only needs to be done once).
-> After that, your Bash Shell will be configured to use `conda` going forward.
+> After that, your Bash Shell will be configured to use `conda` going forward.  
 {: .callout}
 
 For instance, the popular `xarray` library could be installed using the following command,
