@@ -172,7 +172,7 @@ $ conda list
 > of the Anaconda Navigator or via the following Bash Shell / Anaconda Prompt commands:
 >
 > ~~~
-> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean
+> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
 > $ conda activate pyaos-lesson
 > ~~~
 > {: .language-bash}
