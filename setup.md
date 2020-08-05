@@ -65,7 +65,7 @@ You can do this via the command line or by using the Anaconda Navigator:
 > ~~~
 > {: .language-bash}
 >
-> Or you can create a new environment called `pyaos-lesson`
+> OR you can create a new environment called `pyaos-lesson`
 > and install the packages there:
 > ~~~
 > $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
@@ -91,7 +91,7 @@ You can do this via the command line or by using the Anaconda Navigator:
 > 
 > You can install the packages into the "base" environment
 > (recommended if you're new to Anaconda)
-> or create a new environment called `pyaos-lesson`
+> OR create a new environment called `pyaos-lesson`
 > by clicking the "create" button at the bottom of the environment
 > list before doing the following:
 >
