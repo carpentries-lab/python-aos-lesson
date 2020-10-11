@@ -368,10 +368,8 @@ Python 3 notebook:
 > > 
 > > The [setup menu](https://carpentrieslab.github.io/python-aos-lesson/setup.html)
 > > at the top of the page
-> > contains a series of drop-down boxes explaining how to install the Python libraries
-> > on different operating systems.
-> > Use the "default" instructions unless you want to create the separate
-> > `pyaos-lesson` conda environment.
+> > contains drop-down boxes explaining how to install the Python libraries
+> > using the Bash Shell or Anaconda Navigator.
 > > 
 > {: .solution}
 {: .challenge}
