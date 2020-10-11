@@ -52,21 +52,25 @@ You can do this via the command line or by using the Anaconda Navigator:
 > (Windows users may need to open the Anaconda Prompt program
 > and run `conda init bash` to make conda available at the Bash Shell.)
 >
-> The first step is to add the conda-forge channel:
+> #### Step 1
+> 
+> Add the conda-forge channel:
 > ~~~
 > $ conda config --add channels conda-forge
 > ~~~
 > {: .language-bash}
 >
-> You can then install the packages in the base conda environment
-> (recommended if you're new to using Anaconda):
+> #### Option 1 for Step 2 (recommended if you're new to using Anaconda)
+>
+> Install the packages in the base conda environment:
 > ~~~
 > $ conda install jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
 > ~~~
 > {: .language-bash}
 >
-> OR you can create a new environment called `pyaos-lesson`
-> and install the packages there:
+> #### Option 2 for Step 2
+>
+> Create a new environment called `pyaos-lesson` and install the packages there:
 > ~~~
 > $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
 > ~~~
@@ -95,10 +99,14 @@ You can do this via the command line or by using the Anaconda Navigator:
 > by clicking the "create" button at the bottom of the environment
 > list before doing the following:
 >
-> **Step 1:** Add the `conda-forge` channel. 
+> #### Step 1 
+>
+> Add the `conda-forge` channel. 
 > ![Anaconda Navigator add conda-forge](fig/01-navigator-conda-forge.png)
 >
-> **Step 2:** Install the `jupyter`, `xarray`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
+> #### Step 2 
+>
+> Install the `jupyter`, `xarray`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
 > packages one-by-one (click "apply" to install once selected)
 > ![Anaconda Navigator install xarray](fig/01-navigator-xarray.png)
 {: .solution}
