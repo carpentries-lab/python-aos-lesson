@@ -71,7 +71,7 @@ It is also possible to install packages using the Anaconda Navigator graphical u
 >  
 {: .callout}
 
-For instance, the popular `xarray` library could be installed using the following command,
+For instance, the popular xarray library could be installed using the following command,
 ~~~
 $ conda install xarray
 ~~~
@@ -135,15 +135,17 @@ but all the same tasks could be performed with iris.
 We'll also install
 [netCDF4](http://unidata.github.io/netcdf4-python/) (xarray requires this to read netCDF files),
 [cartopy](http://scitools.org.uk/cartopy/) (to help with geographic plot projections),
-[cmocean](http://matplotlib.org/cmocean/) (for nice color palettes),
+[cmocean](http://matplotlib.org/cmocean/) (for nice color palettes) and
 [cmdline_provenance](https://cmdline-provenance.readthedocs.io/en/latest/)
-(to keep track of our data processing steps)
-and [jupyter](https://jupyter.org/) (so we can use the jupyter notebook).  
+(to keep track of our data processing steps).
+We don't need to worry about installing [jupyter](https://jupyter.org/)
+(we will be using the jupyter notebook) because it already comes
+pre-installed with Anaconda.
 
 We could install these libraries from Anaconda Navigator (not shown)
 or using the Bash Shell or Anaconda Prompt (Windows):
 ~~~
-$ conda install jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
+$ conda install xarray netCDF4 cartopy cmocean cmdline_provenance
 ~~~
 {: .language-bash}
 
@@ -178,6 +180,11 @@ $ conda list
 > {: .language-bash}
 >
 > (it's `conda deactivate` to exit)
+>
+> Notice that in this case we had to include jupyter in the list of packages to install.
+> When you create a brand new conda environment,
+> it doesn't automatically come with the pre-installed packages
+> that are in the base environment. 
 >
 > You can have lots of different environments,
 >
@@ -347,11 +354,13 @@ Python 3 notebook:
 
 > ## Install the Python libraries required for this lesson
 >
-> Go ahead and install jupyter, xarray, cartopy and cmocean
-> using either the Anaconda Navigator or Bash Shell. 
+> Go ahead and install the xarray, netCDF4, cartopy, cmocean and cmdline_provenance
+> packages using either the Anaconda Navigator or Bash Shell. 
 > 
 > (You may like to create a separate `pyaos-lesson` conda environment,
-> but this is not necessary to complete the lessons.)
+> but this is not necessary to complete the lessons.
+> Remember that if you create a new environment rather than using the base environment,
+> you'll need to install jupyter too.)
 >
 > > ## Solution
 > > 
