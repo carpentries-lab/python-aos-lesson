@@ -64,7 +64,7 @@ You can do this via the command line or by using the Anaconda Navigator:
 >
 > Install the packages in the base conda environment:
 > ~~~
-> $ conda install jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
+> $ conda install xarray netCDF4 cartopy cmocean cmdline_provenance
 > ~~~
 > {: .language-bash}
 >
@@ -106,8 +106,10 @@ You can do this via the command line or by using the Anaconda Navigator:
 >
 > **Step 2** 
 >
-> Install the `jupyter`, `xarray`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
-> packages one-by-one (click "apply" to install once selected)
+> Install the `xarray`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
+> packages one-by-one (click "apply" to install once selected).
+> If you've created a new environment,
+> you'll need to install `jupyter` too.
 > ![Anaconda Navigator install xarray](fig/01-navigator-xarray.png)
 {: .solution}
 
