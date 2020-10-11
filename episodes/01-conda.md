@@ -347,8 +347,8 @@ Python 3 notebook:
 
 > ## Install the Python libraries required for this lesson
 >
-> Go ahead and install jupyter, xarray, cartopy and cmocean using either the Anaconda Navigator,
-> Bash Shell or Anaconda Prompt (Windows). 
+> Go ahead and install jupyter, xarray, cartopy and cmocean
+> using either the Anaconda Navigator or Bash Shell. 
 > 
 > (You may like to create a separate `pyaos-lesson` conda environment,
 > but this is not necessary to complete the lessons.)
