@@ -15,10 +15,10 @@ keypoints:
 ---
 
 As a first step towards making a visual comparison of the
-CSIRO-Mk3-6-0 and ACCESS1-3 historical precipitation climatology,
-we are going to create a quick plot of the ACCESS1-3 data.
+ACCESS-CM2 and ACCESS-ESM1-5 historical precipitation climatology,
+we are going to create a quick plot of the ACCESS-CM2 data.
 ~~~
-access_pr_file = 'data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
+accesscm2_pr_file = 'data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc'
 ~~~
 {: .language-python}
 
@@ -35,62 +35,78 @@ Since geographic data files can often be very large,
 when we first open our data file in xarray it simply loads the metadata
 associated with the file (this is known as "lazy loading").
 We can then view summary information about the contents of the file
-before deciding whether we'd like to load some or all of the data into memory. 
+before deciding whether we'd like to load some or all of the data into memory.
 
 ~~~
-dset = xr.open_dataset(access_pr_file)
+dset = xr.open_dataset(accesscm2_pr_file)
 print(dset)
 ~~~
 {: .language-python}
 
 ~~~
 <xarray.Dataset>
-Dimensions:    (bnds: 2, lat: 145, lon: 192, time: 60)
+Dimensions:    (bnds: 2, lat: 144, lon: 192, time: 60)
 Coordinates:
-  * time       (time) datetime64[ns] 2001-01-16T12:00:00 2001-02-15 ...
-  * lat        (lat) float64 -90.0 -88.75 -87.5 -86.25 -85.0 -83.75 -82.5 ...
-  * lon        (lon) float64 0.0 1.875 3.75 5.625 7.5 9.375 11.25 13.12 15.0 ...
+  * time       (time) datetime64[ns] 2010-01-16T12:00:00 ... 2014-12-16T12:00:00
+  * lon        (lon) float64 0.9375 2.812 4.688 6.562 ... 355.3 357.2 359.1
+  * lat        (lat) float64 -89.38 -88.12 -86.88 -85.62 ... 86.88 88.12 89.38
 Dimensions without coordinates: bnds
 Data variables:
-    pr         (time, lat, lon) float32 ...
-    time_bnds  (time, bnds) float64 ...
-    lat_bnds   (lat, bnds) float64 ...
+    time_bnds  (time, bnds) datetime64[ns] ...
     lon_bnds   (lon, bnds) float64 ...
+    lat_bnds   (lat, bnds) float64 ...
+    pr         (time, lat, lon) float32 ...
 Attributes:
-    CDI:                    Climate Data Interface version 1.7.1 (http://mpim...
-    CDO:                    Climate Data Operators version 1.7.1 (http://mpim...
-    NCO:                    4.7.0
-    associated_files:       baseURL: http://cmip-pcmdi.llnl.gov/CMIP5/dataLoc...
-    branch_time:            90945.0
-    cmor_version:           2.8.0
-    comment:                at surface; includes both liquid and solid phases...
-    contact:                The ACCESS wiki: http://wiki.csiro.au/confluence/...
-    creation_date:          2012-02-08T06:45:54Z
-    experiment:             historical
-    experiment_id:          historical
-    forcing:                GHG, Oz, SA, Sl, Vl, BC, OC, (GHG = CO2, N2O, CH4...
-    frequency:              mon
-    history:                Tue Sep 18 11:36:11 2018: /anaconda3/envs/ocean/b...
-    initialization_method:  1
-    institute_id:           CSIRO-BOM
+    CDI:                    Climate Data Interface version 1.9.8 (https://mpi...
+    source:                 ACCESS-CM2 (2019): \naerosol: UKCA-GLOMAP-mode\na...
     institution:            CSIRO (Commonwealth Scientific and Industrial Res...
-    model_id:               ACCESS1.3
-    modeling_realm:         atmos
-    parent_experiment:      pre-industrial control
+    Conventions:            CF-1.7 CMIP-6.2
+    activity_id:            CMIP
+    branch_method:          standard
+    branch_time_in_child:   0.0
+    branch_time_in_parent:  0.0
+    creation_date:          2019-11-08T08:26:37Z
+    data_specs_version:     01.00.30
+    experiment:             all-forcing simulation of the recent past
+    experiment_id:          historical
+    external_variables:     areacella
+    forcing_index:          1
+    frequency:              mon
+    further_info_url:       https://furtherinfo.es-doc.org/CMIP6.CSIRO-ARCCSS...
+    grid:                   native atmosphere N96 grid (144x192 latxlon)
+    grid_label:             gn
+    initialization_index:   1
+    institution_id:         CSIRO-ARCCSS
+    mip_era:                CMIP6
+    nominal_resolution:     250 km
+    notes:                  Exp: CM2-historical; Local ID: bj594; Variable: p...
+    parent_activity_id:     CMIP
     parent_experiment_id:   piControl
-    parent_experiment_rip:  r1i1p1
-    physics_version:        1
-    product:                output
-    project_id:             CMIP5
-    realization:            1
-    references:             See http://wiki.csiro.au/confluence/display/ACCES...
-    source:                 ACCESS1-3 2011. Atmosphere: AGCM v1.0 (N96 grid-p...
-    table_id:               Table Amon (27 April 2011) 9c851218e3842df9a62ef3...
-    title:                  ACCESS1-3 model output prepared for CMIP5 historical
-    tracking_id:            26bfc8da-78ff-4b10-9e13-24492c09bb59
-    version_number:         v20120413
-    Conventions:            CF-1.5
-~~~
+    parent_mip_era:         CMIP6
+    parent_source_id:       ACCESS-CM2
+    parent_time_units:      days since 0950-01-01
+    parent_variant_label:   r1i1p1f1
+    physics_index:          1
+    product:                model-output
+    realization_index:      1
+    realm:                  atmos
+    run_variant:            forcing: GHG, Oz, SA, Sl, Vl, BC, OC, (GHG = CO2,...
+    source_id:              ACCESS-CM2
+    source_type:            AOGCM
+    sub_experiment:         none
+    sub_experiment_id:      none
+    table_id:               Amon
+    table_info:             Creation Date:(30 April 2019) MD5:e14f55f257cceaf...
+    title:                  ACCESS-CM2 output prepared for CMIP6
+    variable_id:            pr
+    variant_label:          r1i1p1f1
+    version:                v20191108
+    cmor_version:           3.4.0
+    tracking_id:            hdl:21.14100/b4dd0f13-6073-4d10-b4e6-7d7a4401e37d
+    license:                CMIP6 model data produced by CSIRO is licensed un...
+    CDO:                    Climate Data Operators version 1.9.8 (https://mpi...
+    history:                Tue Jan 12 14:50:25 2021: ncatted -O -a history,p...
+    NCO:                    netCDF Operators version 4.9.2 (Homepage = http:/...~~~
 {: .output}
 
 We can see that our `dset` object is an `xarray.Dataset`,
@@ -105,17 +121,19 @@ print(dset['pr'])
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'pr' (time: 60, lat: 145, lon: 192)>
-[1670400 values with dtype=float32]
+<xarray.DataArray 'pr' (time: 60, lat: 144, lon: 192)>
+[1658880 values with dtype=float32]
 Coordinates:
-  * time     (time) datetime64[ns] 2001-01-16T12:00:00 2001-02-15 ...
-  * lat      (lat) float64 -90.0 -88.75 -87.5 -86.25 -85.0 -83.75 -82.5 ...
-  * lon      (lon) float64 0.0 1.875 3.75 5.625 7.5 9.375 11.25 13.12 15.0 ...
+  * time     (time) datetime64[ns] 2010-01-16T12:00:00 ... 2014-12-16T12:00:00
+  * lon      (lon) float64 0.9375 2.812 4.688 6.562 ... 353.4 355.3 357.2 359.1
+  * lat      (lat) float64 -89.38 -88.12 -86.88 -85.62 ... 86.88 88.12 89.38
 Attributes:
     standard_name:  precipitation_flux
     long_name:      Precipitation
     units:          kg m-2 s-1
-    cell_methods:   time: mean
+    comment:        includes both liquid and solid phases
+    cell_methods:   area: time: mean
+    cell_measures:  area: areacella
 ~~~
 {: .output}
 
@@ -133,28 +151,30 @@ print(clim)
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'pr' (lat: 145, lon: 192)>
-array([[2.542048e-06, 2.542048e-06, 2.542048e-06, ..., 2.541606e-06,
-        2.541606e-06, 2.541606e-06],
-       [2.511442e-06, 2.492513e-06, 2.472960e-06, ..., 2.570118e-06,
-        2.550404e-06, 2.531296e-06],
-       [2.396512e-06, 2.365124e-06, 2.330266e-06, ..., 2.472362e-06,
-        2.455286e-06, 2.427222e-06],
+<xarray.DataArray 'pr' (lat: 144, lon: 192)>
+array([[1.8461452e-06, 1.9054805e-06, 1.9228980e-06, ..., 1.9869783e-06,
+        2.0026005e-06, 1.9683730e-06],
+       [1.9064508e-06, 1.9021350e-06, 1.8931637e-06, ..., 1.9433096e-06,
+        1.9182237e-06, 1.9072245e-06],
+       [2.1003202e-06, 2.0477617e-06, 2.0348527e-06, ..., 2.2391034e-06,
+        2.1970161e-06, 2.1641599e-06],
        ...,
-       [8.877672e-06, 8.903967e-06, 8.938327e-06, ..., 8.819357e-06,
-        8.859161e-06, 8.873179e-06],
-       [8.748589e-06, 8.739819e-06, 8.723918e-06, ..., 8.797057e-06,
-        8.776324e-06, 8.789103e-06],
-       [7.988647e-06, 7.988647e-06, 7.988647e-06, ..., 7.988647e-06,
-        7.988647e-06, 7.988647e-06]], dtype=float32)
+       [7.5109556e-06, 7.4777777e-06, 7.4689174e-06, ..., 7.3359679e-06,
+        7.3987890e-06, 7.3978440e-06],
+       [7.1837171e-06, 7.1722038e-06, 7.1926393e-06, ..., 7.1552149e-06,
+        7.1576678e-06, 7.1592167e-06],
+       [7.0353467e-06, 7.0403985e-06, 7.0326828e-06, ..., 7.0392648e-06,
+        7.0387587e-06, 7.0304386e-06]], dtype=float32)
 Coordinates:
-  * lon      (lon) float64 0.0 1.875 3.75 5.625 7.5 9.375 11.25 13.12 15.0 ...
-  * lat      (lat) float64 -90.0 -88.75 -87.5 -86.25 -85.0 -83.75 -82.5 ...
+  * lon      (lon) float64 0.9375 2.812 4.688 6.562 ... 353.4 355.3 357.2 359.1
+  * lat      (lat) float64 -89.38 -88.12 -86.88 -85.62 ... 86.88 88.12 89.38
 Attributes:
     standard_name:  precipitation_flux
     long_name:      Precipitation
     units:          kg m-2 s-1
-    cell_methods:   time: mean
+    comment:        includes both liquid and solid phases
+    cell_methods:   area: time: mean
+    cell_measures:  area: areacella
 ~~~
 {: output}
 
@@ -204,22 +224,30 @@ print(clim)
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'pr' (lat: 145, lon: 192)>
-array([[0.219633, 0.219633, 0.219633, ..., 0.219595, 0.219595, 0.219595],
-       [0.216989, 0.215353, 0.213664, ..., 0.222058, 0.220355, 0.218704],
-       [0.207059, 0.204347, 0.201335, ..., 0.213612, 0.212137, 0.209712],
+<xarray.DataArray 'pr' (lat: 144, lon: 192)>
+array([[0.15950695, 0.16463352, 0.16613839, ..., 0.17167493, 0.17302468,
+        0.17006743],
+       [0.16471735, 0.16434446, 0.16356934, ..., 0.16790195, 0.16573453,
+        0.1647842 ],
+       [0.18146767, 0.17692661, 0.17581128, ..., 0.19345854, 0.18982219,
+        0.18698342],
        ...,
-       [0.767031, 0.769303, 0.772271, ..., 0.761992, 0.765432, 0.766643],
-       [0.755878, 0.75512 , 0.753746, ..., 0.760066, 0.758274, 0.759379],
-       [0.690219, 0.690219, 0.690219, ..., 0.690219, 0.690219, 0.690219]])
+       [0.64894656, 0.64607999, 0.64531446, ..., 0.63382763, 0.63925537,
+        0.63917372],
+       [0.62067316, 0.61967841, 0.62144403, ..., 0.61821057, 0.6184225 ,
+        0.61855632],
+       [0.60785395, 0.60829043, 0.60762379, ..., 0.60819248, 0.60814875,
+        0.6074299 ]])
 Coordinates:
-  * lon      (lon) float64 0.0 1.875 3.75 5.625 7.5 9.375 11.25 13.12 15.0 ...
-  * lat      (lat) float64 -90.0 -88.75 -87.5 -86.25 -85.0 -83.75 -82.5 ...
+  * lon      (lon) float64 0.9375 2.812 4.688 6.562 ... 353.4 355.3 357.2 359.1
+  * lat      (lat) float64 -89.38 -88.12 -86.88 -85.62 ... 86.88 88.12 89.38
 Attributes:
     standard_name:  precipitation_flux
     long_name:      Precipitation
     units:          mm/day
-    cell_methods:   time: mean
+    comment:        includes both liquid and solid phases
+    cell_methods:   area: time: mean
+    cell_measures:  area: areacella
 ~~~
 {: .output}
 
@@ -245,7 +273,7 @@ plt.show()
 ~~~
 {: .language-python}
 
-![Precipitation climatology](../fig/02-visualisation-viridis.svg)
+![Precipitation climatology](../fig/02-visualisation-viridis.png)
 
 The default colorbar used by matplotlib is `viridis`.
 It used to be `jet`,
@@ -283,7 +311,7 @@ plt.show()
 ~~~
 {: .language-python}
 
-![Precipitation climatology](../fig/02-visualisation-viridis_r.svg)
+![Precipitation climatology](../fig/02-visualisation-viridis_r.png)
 
 > ## Color palette
 >
@@ -338,5 +366,3 @@ plt.show()
 > > {: .language-python}
 > {: .solution}
 {: .challenge}
-
-
