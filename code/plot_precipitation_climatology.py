@@ -57,7 +57,7 @@ def main(inargs):
     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
     clim = convert_pr_units(clim)
 
-    create_plot(clim, dset.attrs['model_id'], inargs.season)
+    create_plot(clim, dset.attrs['source_id'], inargs.season)
     plt.savefig(inargs.output_file, dpi=200)
 
 
