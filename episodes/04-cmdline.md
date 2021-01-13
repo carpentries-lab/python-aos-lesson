@@ -34,8 +34,7 @@ if __name__ == '__main__':
 
 The reason we need these two lines of code
 is that running a Python script in bash is very similar to importing that file in Python. 
-The biggest difference is that we don’t expect anything to happen when we import a file, 
-whereas when running a script we expect to see some output
+The biggest difference is that we don’t expect anything to happen when we import a file, whereas when running a script we expect to see some output
 (e.g. an output file, figure and/or some text printed to the screen).
 
 The `__name__` variable exists to handle these two situations.
@@ -46,8 +45,7 @@ The convention is to call the function that produces the output `main()`,
 but you can call it whatever you like.
 
 The next thing you'll need is a library to parse the command line for input arguments.
-The most widely used option is 
-[argparse](https://docs.python.org/3/library/argparse.html).
+The most widely used option is [argparse](https://docs.python.org/3/library/argparse.html).
 
 Putting those together,
 here's a template for what most python command line programs look like:
@@ -201,7 +199,7 @@ def main(inargs):
     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
     clim = convert_pr_units(clim)
 
-    create_plot(clim, dset.attrs['model_id'], inargs.season)
+    create_plot(clim, dset.attrs['source_id'], inargs.season)
     plt.savefig(inargs.output_file, dpi=200)
 
 
@@ -219,19 +217,18 @@ if __name__ == '__main__':
 ~~~
 {: .language-python}
 
-... and then run it at the command line: 
+... and then run it at the command line:
 
 ~~~
-$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc MAM pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-MAM-clim.png
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc MAM pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412-MAM-clim.png
 ~~~
 {: .language-bash}
-
 
 > ## Choices
 >
 > For this series of challenges,
-> you are required to make improvements to the `plot_precipitation_climatology.py` script 
-> that you downloaded earlier from the setup tab at the top of the page. 
+> you are required to make improvements to the `plot_precipitation_climatology.py` script
+> that you downloaded earlier from the setup tab at the top of the page.
 >  
 > For the first improvement,
 > edit the line of code that defines the season command line argument
@@ -272,7 +269,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > >
 > >    ... 
 > >
-> >    create_plot(clim, dset.attrs['model_id'], inargs.season, gridlines=inargs.gridlines)
+> >    create_plot(clim, dset.attrs['source_id'], inargs.season, gridlines=inargs.gridlines)
 > >
 > > ...
 > >
@@ -327,7 +324,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 > >
 > >     ... 
 > >
-> >     create_plot(clim, dset.attrs['model_id'], inargs.season,
+> >     create_plot(clim, dset.attrs['source_id'], inargs.season,
 > >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
 > >
 > > ...
@@ -421,7 +418,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i
 >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >     clim = convert_pr_units(clim)
 > 
->     create_plot(clim, dset.attrs['model_id'], inargs.season,
+>     create_plot(clim, dset.attrs['source_id'], inargs.season,
 >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
 >     plt.savefig(inargs.output_file, dpi=200)
 >
