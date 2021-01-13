@@ -80,7 +80,7 @@ in the context of the `plot_precipitation_climatology.py` script,
 let's try the following at the command line:
 
 ~~~
-$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc JJA pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc Land
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc JJA pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc Land
 ~~~
 {: .language-bash}
 
@@ -88,7 +88,7 @@ If we view the resulting image,
 we can see that the ocean has been masked,
 even though we specified the land at the command line.
 
-![Ocean masked rainfall plot](../fig/08-defensive-ocean-mask.svg)
+![Ocean masked rainfall plot](../fig/08-defensive-ocean-mask.png)
 
 When confronted with perplexing code behaviour like this,
 it can be useful to insert a tracer into your scripts using the Python debugger:
@@ -123,7 +123,7 @@ def apply_mask(darray, sftlf_file, realm):
 When we run the script,
 it will stop at the tracer and allow us to interrogate the code:
 ~~~
-$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc JJA pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc Land
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc JJA pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc Land
 ~~~
 {: .language-bash}
 
@@ -202,7 +202,7 @@ def apply_mask(darray, sftlf_file, realm):
 
 test to make sure it's working,
 ~~~
-$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc JJA pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc Land
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc JJA pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc Land
 ~~~
 {: .language-bash}
 
@@ -226,7 +226,6 @@ $ git push origin master
 ~~~
 {: .language-bash}
 
-
 > ## Testing and continuous integration
 >
 > An assertion checks that something is true at a particular point in the program.
@@ -237,7 +236,6 @@ $ git push origin master
 > that is well worth a read. 
 >
 {: .callout}
-
 
 > ## Add your own assertions
 >
@@ -372,7 +370,7 @@ $ git push origin master
 >         sftlf_file, realm = inargs.mask
 >         clim = apply_mask(clim, sftlf_file, realm)
 >
->     create_plot(clim, dset.attrs['model_id'], inargs.season,
+>     create_plot(clim, dset.attrs['source_id'], inargs.season,
 >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
 >     plt.savefig(inargs.output_file, dpi=200)
 >
