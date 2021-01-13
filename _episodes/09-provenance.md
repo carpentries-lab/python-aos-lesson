@@ -26,17 +26,17 @@ into the history attribute of the output netCDF file.
 ~~~
 import xarray as xr
 
-csiro_pr_file = 'data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc'
-dset = xr.open_dataset(csiro_pr_file)
+esm_pr_file = 'data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc'
+dset = xr.open_dataset(esm_pr_file)
 
 print(dset.attrs['history'])
 ~~~
 {: .language-python}
 
 ~~~
-Fri Dec  8 10:05:56 2017: ncatted -O -a history,pr,d,, pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc
-Fri Dec 01 08:01:43 2017: cdo seldate,2001-01-01,2005-12-31 /g/data/ua6/DRSv2/CMIP5/CSIRO-Mk3-6-0/historical/mon/atmos/r1i1p1/pr/latest/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_185001-200512.nc pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc
-2011-07-27T02:26:04Z CMOR rewrote data to comply with CF standards and CMIP5 requirements.
+Tue Jan 12 14:50:35 2021: ncatted -O -a history,pr,d,, pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc
+Tue Jan 12 14:48:10 2021: cdo seldate,2010-01-01,2014-12-31 /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/Amon/pr/gn/latest/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_185001-201412.nc pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc
+2019-11-15T04:32:57Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.7 CMIP-6.2 and CF standards.
 ~~~
 {: .output}
 
@@ -193,7 +193,7 @@ print(new_record)
 >         sftlf_file, realm = inargs.mask
 >         clim = apply_mask(clim, sftlf_file, realm)
 >
->     create_plot(clim, dset.attrs['model_id'], inargs.season,
+>     create_plot(clim, dset.attrs['source_id'], inargs.season,
 >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
 >     plt.savefig(inargs.output_file, dpi=200)
 >
