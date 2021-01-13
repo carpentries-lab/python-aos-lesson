@@ -20,7 +20,7 @@ keypoints:
 ---
 
 In the previous lesson
-we created a plot of the ACCESS1-3 historical precipitation climatology
+we created a plot of the ACCESS-CM2 historical precipitation climatology
 using the following commands:
 
 ~~~
@@ -30,7 +30,7 @@ import cartopy.crs as ccrs
 import numpy as np
 import cmocean
 
-access_pr_file = 'data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
+access_pr_file = 'data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc'
 
 dset = xr.open_dataset(access_pr_file)
 
@@ -49,21 +49,21 @@ clim.sel(season='JJA').plot.contourf(ax=ax,
                                      cmap=cmocean.cm.haline_r)
 ax.coastlines()
 
-title = '%s precipitation climatology (JJA)' %(dset.attrs['model_id'])
+title = '%s precipitation climatology (JJA)' %(dset.attrs['source_id'])
 plt.title(title)
 
 plt.show()
 ~~~
 {: .language-python}
 
-![Precipitation climatology](../fig/03-functions-access-jja.svg)
+![Precipitation climatology](../fig/03-functions-accesscm2-jja.png)
 
 If we wanted to create a similar plot for a different model and/or different month,
 we could cut and paste the code and edit accordingly.
 The problem with that (common) approach is that it increases the chances of a making a mistake.
 If we manually updated the season to 'DJF' for the `clim.sel(season=` command
 but forgot to update it when calling `plt.title`, for instance,
-we'd have a mismatch between the data and title. 
+we'd have a mismatch between the data and title.
 
 The cut and paste approach is also much more time consuming.
 If we think of a better way to create this plot in future
@@ -104,7 +104,7 @@ def plot_pr_climatology(pr_file, season, gridlines=False):
     if gridlines:
         plt.gca().gridlines()
     
-    title = '%s precipitation climatology (%s)' %(dset.attrs['model_id'], season)
+    title = '%s precipitation climatology (%s)' %(dset.attrs['source_id'], season)
     plt.title(title)
 ~~~
 {: .language-python}
@@ -132,22 +132,22 @@ plot_pr_climatology(pr_file, season, gridlines=False)
 We can now use this function to create exactly the same plot as before:
 
 ~~~
-plot_pr_climatology('data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc', 'JJA')
+plot_pr_climatology('data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc', 'JJA')
 plt.show()
 ~~~
 {: .language-python}
 
-![Precipitation climatology](../fig/03-functions-access-jja.svg)
+![Precipitation climatology](../fig/03-functions-accesscm2-jja.png)
 
 Plot a different model and season:
 
 ~~~
-plot_pr_climatology('data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc', 'DJF')
+plot_pr_climatology('data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc', 'DJF')
 plt.show()
 ~~~
 {: .language-python}
 
-![Precipitation climatology](../fig/03-functions-csiro-djf.svg)
+![Precipitation climatology](../fig/03-functions-accessesm-djf.png)
 
 Or use the optional `gridlines` input argument
 to change the default behaviour of the function
@@ -155,14 +155,13 @@ to change the default behaviour of the function
 that the user will only want to change occasionally):
 
 ~~~
-plot_pr_climatology('data/pr_Amon_CSIRO-Mk3-6-0_historical_r1i1p1_200101-200512.nc',
+plot_pr_climatology('data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc',
                     'DJF', gridlines=True)
 plt.show()
 ~~~
 {: .language-python}
 
-![Precipitation climatology](../fig/03-functions-csiro-djf-gridlines.svg)
-
+![Precipitation climatology](../fig/03-functions-accessesm-djf-gridlines.png)
 
 > ## Short functions
 >
@@ -193,7 +192,7 @@ plt.show()
 >     dset = xr.open_dataset(pr_file)
 >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >     clim = convert_pr_units(clim)
->     create_plot(clim, dset.attrs['model_id'], season, gridlines=gridlines)
+>     create_plot(clim, dset.attrs['source_id'], season, gridlines=gridlines)
 >     plt.show()
 > ~~~
 > {: .language-python}
@@ -256,13 +255,12 @@ plt.show()
 > >     dset = xr.open_dataset(pr_file)
 > >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 > >     clim = convert_pr_units(clim)
-> >     create_plot(clim, dset.attrs['model_id'], season, gridlines=gridlines)
+> >     create_plot(clim, dset.attrs['source_id'], season, gridlines=gridlines)
 > >     plt.show()
 > > ~~~
 > > {: .language-python}
 > {: .solution}
-{: .challenge} 
-
+{: .challenge}
 > ## Writing your own modules
 >
 > We've used functions to avoid code duplication in this particular notebook/script,
@@ -284,6 +282,6 @@ plt.show()
 > ~~~
 > {: .language-python}
 >
-> No copy and paste required! 
+> No copy and paste required!
 >
 {: .callout}
