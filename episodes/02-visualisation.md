@@ -106,7 +106,8 @@ Attributes:
     license:                CMIP6 model data produced by CSIRO is licensed un...
     CDO:                    Climate Data Operators version 1.9.8 (https://mpi...
     history:                Tue Jan 12 14:50:25 2021: ncatted -O -a history,p...
-    NCO:                    netCDF Operators version 4.9.2 (Homepage = http:/...~~~
+    NCO:                    netCDF Operators version 4.9.2 (Homepage = http:/...
+~~~
 {: .output}
 
 We can see that our `dset` object is an `xarray.Dataset`,
@@ -142,7 +143,7 @@ We can actually use either the `dset['pr']` or `dset.pr` syntax to access the pr
 
 To calculate the precipitation climatology,
 we can make use of the fact that xarray DataArrays have built in functionality
-for averaging over their dimensions. 
+for averaging over their dimensions.
 
 ~~~
 clim = dset['pr'].mean('time', keep_attrs=True)
@@ -190,7 +191,6 @@ Attributes:
 > to break the task down into chunks and distribute it to multiple cores if needed.
 >
 {: .callout}
-
 
 Now that we've calculated the climatology, 
 we want to convert the units from kg m-2 s-1
