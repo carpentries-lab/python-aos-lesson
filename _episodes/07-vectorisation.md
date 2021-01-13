@@ -20,7 +20,7 @@ To do this, we need to use the land area fraction file.
 import numpy as np
 import xarray as xr
 
-access_sftlf_file = 'data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc'
+access_sftlf_file = 'data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc'
 
 dset = xr.open_dataset(access_sftlf_file)
 sftlf = dset['sftlf']
@@ -29,7 +29,7 @@ print(sftlf)
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'sftlf' (lat: 145, lon: 192)>
+<xarray.DataArray 'sftlf' (lat: 144, lon: 192)>
 array([[100., 100., 100., ..., 100., 100., 100.],
        [100., 100., 100., ..., 100., 100., 100.],
        [100., 100., 100., ..., 100., 100., 100.],
@@ -38,15 +38,17 @@ array([[100., 100., 100., ..., 100., 100., 100.],
        [  0.,   0.,   0., ...,   0.,   0.,   0.],
        [  0.,   0.,   0., ...,   0.,   0.,   0.]], dtype=float32)
 Coordinates:
-  * lat      (lat) float64 -90.0 -88.75 -87.5 -86.25 -85.0 -83.75 -82.5 ...
-  * lon      (lon) float64 0.0 1.875 3.75 5.625 7.5 9.375 11.25 13.12 15.0 ...
+  * lat      (lat) float64 -89.38 -88.12 -86.88 -85.62 ... 86.88 88.12 89.38
+  * lon      (lon) float64 0.9375 2.812 4.688 6.562 ... 353.4 355.3 357.2 359.1
 Attributes:
-    standard_name:     land_area_fraction
-    long_name:         Land Area Fraction
-    units:             %
-    original_units:    1
-    cell_measures:     area: areacella
-    associated_files:  baseURL: http://cmip-pcmdi.llnl.gov/CMIP5/dataLocation...
+    standard_name:   land_area_fraction
+    long_name:       Percentage of the grid  cell occupied by land (including...
+    comment:         Percentage of horizontal area occupied by land.
+    units:           %
+    original_units:  1
+    history:         2019-11-09T02:47:20Z altered by CMOR: Converted units fr...
+    cell_methods:    area: mean
+    cell_measures:   area: areacella
 ~~~
 {: .output}
 
@@ -74,7 +76,7 @@ it is a land point (and thus needs to be set to `np.nan`).
 (For this example, we are going to define land as any grid point that is more than 50% land.)
 
 ~~~
-dset = xr.open_dataset('data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc')
+dset = xr.open_dataset('data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc')
 clim = dset['pr'].mean('time', keep_attrs=True)
 
 nlats, nlons = clim.data.shape
@@ -112,26 +114,32 @@ print(clim_ocean)
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'pr' (lat: 145, lon: 192)>
-array([[         nan,          nan,          nan, ...,          nan,
-                 nan,          nan],
-       [         nan,          nan,          nan, ...,          nan,
-                 nan,          nan],
-       [         nan,          nan,          nan, ...,          nan,
-                 nan,          nan],
+<xarray.DataArray 'pr' (lat: 144, lon: 192)>
+array([[          nan,           nan,           nan, ...,           nan,
+                  nan,           nan],
+       [          nan,           nan,           nan, ...,           nan,
+                  nan,           nan],
+       [          nan,           nan,           nan, ...,           nan,
+                  nan,           nan],
        ...,
-       [8.877672e-06, 8.903967e-06, 8.938327e-06, ..., 8.819357e-06,
-        8.859161e-06, 8.873179e-06],
-       [8.748589e-06, 8.739819e-06, 8.723918e-06, ..., 8.797057e-06,
-        8.776324e-06, 8.789103e-06],
-       [7.988647e-06, 7.988647e-06, 7.988647e-06, ..., 7.988647e-06,
-        7.988647e-06, 7.988647e-06]], dtype=float32)
+       [7.5109556e-06, 7.4777777e-06, 7.4689174e-06, ..., 7.3359679e-06,
+        7.3987890e-06, 7.3978440e-06],
+       [7.1837171e-06, 7.1722038e-06, 7.1926393e-06, ..., 7.1552149e-06,
+        7.1576678e-06, 7.1592167e-06],
+       [7.0353467e-06, 7.0403985e-06, 7.0326828e-06, ..., 7.0392648e-06,
+        7.0387587e-06, 7.0304386e-06]], dtype=float32)
 Coordinates:
-  * lon      (lon) float64 0.0 1.875 3.75 5.625 7.5 9.375 11.25 13.12 15.0 ...
-  * lat      (lat) float64 -90.0 -88.75 -87.5 -86.25 -85.0 -83.75 -82.5 ...
+  * lon      (lon) float64 0.9375 2.812 4.688 6.562 ... 353.4 355.3 357.2 359.1
+  * lat      (lat) float64 -89.38 -88.12 -86.88 -85.62 ... 86.88 88.12 89.38
+Attributes:
+    standard_name:  precipitation_flux
+    long_name:      Precipitation
+    units:          kg m-2 s-1
+    comment:        includes both liquid and solid phases
+    cell_methods:   area: time: mean
+    cell_measures:  area: areacella
 ~~~
 {: .output}
-
 
 > ## Mask option
 >
@@ -148,10 +156,10 @@ Coordinates:
 > This should involve defining a new function called `apply_mask()`,
 > in order to keep `main()` short and readable.
 >
-> Test to see if your mask worked by plotting the ACCESS1-3 climatology for JJA:
+> Test to see if your mask worked by plotting the ACCESS-CM2 climatology for JJA:
 >
 > ~~~
-> $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc JJA pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS1-3_historical_r0i0p0.nc ocean
+> $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc JJA pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc ocean
 > ~~~
 > {: .language-bash}
 >
@@ -310,7 +318,7 @@ Coordinates:
 >         sftlf_file, realm = inargs.mask
 >         clim = apply_mask(clim, sftlf_file, realm)
 >
->     create_plot(clim, dset.attrs['model_id'], inargs.season,
+>     create_plot(clim, dset.attrs['source_id'], inargs.season,
 >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
 >     plt.savefig(inargs.output_file, dpi=200)
 >
