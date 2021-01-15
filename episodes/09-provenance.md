@@ -26,8 +26,8 @@ into the history attribute of the output netCDF file.
 ~~~
 import xarray as xr
 
-esm_pr_file = 'data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc'
-dset = xr.open_dataset(esm_pr_file)
+accessesm15_pr_file = 'data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc'
+dset = xr.open_dataset(accessesm15_pr_file)
 
 print(dset.attrs['history'])
 ~~~
