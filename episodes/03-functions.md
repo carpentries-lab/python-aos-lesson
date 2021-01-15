@@ -30,9 +30,9 @@ import cartopy.crs as ccrs
 import numpy as np
 import cmocean
 
-access_pr_file = 'data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc'
+accesscm2_pr_file = 'data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc'
 
-dset = xr.open_dataset(access_pr_file)
+dset = xr.open_dataset(accesscm2_pr_file)
 
 clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 
