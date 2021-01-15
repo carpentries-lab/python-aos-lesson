@@ -144,247 +144,200 @@ print(dset['tos'])
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'pr' (time: 60, lat: 144, lon: 192)>
-[1658880 values with dtype=float32]
+<xarray.DataArray 'tos' (time: 60265, j: 300, i: 360)>
+dask.array<concatenate, shape=(60265, 300, 360), dtype=float32, chunksize=(3653, 300, 360), chunktype=numpy.ndarray>
 Coordinates:
-  * time     (time) datetime64[ns] 2010-01-16T12:00:00 ... 2014-12-16T12:00:00
-  * lon      (lon) float64 0.9375 2.812 4.688 6.562 ... 353.4 355.3 357.2 359.1
-  * lat      (lat) float64 -89.38 -88.12 -86.88 -85.62 ... 86.88 88.12 89.38
+    longitude  (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
+    latitude   (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
+  * i          (i) int32 0 1 2 3 4 5 6 7 8 ... 352 353 354 355 356 357 358 359
+  * j          (j) int32 0 1 2 3 4 5 6 7 8 ... 292 293 294 295 296 297 298 299
+  * time       (time) datetime64[ns] 1850-01-01T12:00:00 ... 2014-12-31T12:00:00
 Attributes:
-    standard_name:  precipitation_flux
-    long_name:      Precipitation
-    units:          kg m-2 s-1
-    comment:        includes both liquid and solid phases
-    cell_methods:   area: time: mean
-    cell_measures:  area: areacella
+    standard_name:  sea_surface_temperature
+    long_name:      Sea Surface Temperature
+    comment:        Temperature of upper boundary of the liquid ocean, includ...
+    units:          degC
+    cell_methods:   area: mean where sea time: mean
+    cell_measures:  area: areacello
+    history:        2019-11-08T18:23:54Z altered by CMOR: replaced missing va...
+    _ChunkSizes:    [  1 300 360]
 ~~~
 {: .output}
 
-We can actually use either the `dset['pr']` or `dset.pr` syntax to access the precipitation
-`xarray.DataArray`.
+Notice that we now have an attribute `_ChunkSizes` listed. This has shape `[1 300 360]`, while the `dask.array` itself has shape (60265, 300, 360), and chunksize (3653, 300, 360). 
+This means that the underlying data is structured to be most efficiently accessed for the whole lat/lon range at each time step, but dask will load up 3653 of these "slices" at once, for a combined dataset size of 60265 timesteps.
 
-To calculate the precipitation climatology,
-we can make use of the fact that xarray DataArrays have built in functionality
-for averaging over their dimensions.
+So far we have not loaded any data, only metadata. Operating on this data is likely to be slow! But let's try making a sea surface temperature climatology, similar to the precipitation climatology we made in the Visualisation episode.
 
 ~~~
-clim = dset['pr'].mean('time', keep_attrs=True)
+clim = dset['tos'].mean('time', keep_attrs=True)
 print(clim)
 ~~~
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'pr' (lat: 144, lon: 192)>
-array([[1.8461452e-06, 1.9054805e-06, 1.9228980e-06, ..., 1.9869783e-06,
-        2.0026005e-06, 1.9683730e-06],
-       [1.9064508e-06, 1.9021350e-06, 1.8931637e-06, ..., 1.9433096e-06,
-        1.9182237e-06, 1.9072245e-06],
-       [2.1003202e-06, 2.0477617e-06, 2.0348527e-06, ..., 2.2391034e-06,
-        2.1970161e-06, 2.1641599e-06],
-       ...,
-       [7.5109556e-06, 7.4777777e-06, 7.4689174e-06, ..., 7.3359679e-06,
-        7.3987890e-06, 7.3978440e-06],
-       [7.1837171e-06, 7.1722038e-06, 7.1926393e-06, ..., 7.1552149e-06,
-        7.1576678e-06, 7.1592167e-06],
-       [7.0353467e-06, 7.0403985e-06, 7.0326828e-06, ..., 7.0392648e-06,
-        7.0387587e-06, 7.0304386e-06]], dtype=float32)
+<xarray.DataArray 'tos' (j: 300, i: 360)>
+dask.array<mean_agg-aggregate, shape=(300, 360), dtype=float32, chunksize=(300, 360), chunktype=numpy.ndarray>
 Coordinates:
-  * lon      (lon) float64 0.9375 2.812 4.688 6.562 ... 353.4 355.3 357.2 359.1
-  * lat      (lat) float64 -89.38 -88.12 -86.88 -85.62 ... 86.88 88.12 89.38
+    longitude  (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
+    latitude   (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
+  * i          (i) int32 0 1 2 3 4 5 6 7 8 ... 352 353 354 355 356 357 358 359
+  * j          (j) int32 0 1 2 3 4 5 6 7 8 ... 292 293 294 295 296 297 298 299
 Attributes:
-    standard_name:  precipitation_flux
-    long_name:      Precipitation
-    units:          kg m-2 s-1
-    comment:        includes both liquid and solid phases
-    cell_methods:   area: time: mean
-    cell_measures:  area: areacella
+    standard_name:  sea_surface_temperature
+    long_name:      Sea Surface Temperature
+    comment:        Temperature of upper boundary of the liquid ocean, includ...
+    units:          degC
+    cell_methods:   area: mean where sea time: mean
+    cell_measures:  area: areacello
+    history:        2019-11-08T18:23:54Z altered by CMOR: replaced missing va...
+    _ChunkSizes:    [  1 300 360]
 ~~~
 {: output}
 
-> ## Dask
->
-> Rather than read the entire three dimensional (time, lat, lon)
-> data array into memory and then calculate the climatology,
-> xarray lazy loading has allowed us to only load the
-> two dimensional (lat, lon) climatology.
-> If the original 3D data array was much larger than the one we are analysing here
-> (i.e. so large that we'd get a memory error if we attempted to calculate the climatology)
-> xarray can make use of a library called [Dask](http://xarray.pydata.org/en/stable/dask.html)
-> to break the task down into chunks and distribute it to multiple cores if needed.
->
+But wait! That was very fast! Why is that?
+(**hint**, consider lazy loading and xarray operations, what have we done in the above step?)
+
+We can investigate how chunks affect how quickly we can actually read the data. To move from metadata objects to actual data, we use the `.load()` or `.compute()` calls to dask.
+
+> ## Changing chunks
+> If we decide to change chunking to improve performance, note we
+> can control the size of dask chunks used, but they *must* align
+> with the netCDF file chunks or we will certainly make performance worse!
 {: .callout}
 
-Now that we've calculated the climatology, 
-we want to convert the units from kg m-2 s-1
-to something that we are a little more familiar with like mm day-1.
+> ## Investigating chunks
+>
+> Time how long it takes to load the ocean temperature data for `'2014-01-01T12:00:00`
+> and then time how long it takes to load the data at `i=136` and `j=100` (-0.1662N, 180.5E).
+> How much difference in time is there when using these different
+> (time slice vs time series) access methods?
+> **Hint:** Use the `%%time` magic to get a single timing, or `%%timeit`
+> to get an average time -
+> but note that an initial load will be much slower than subsequent calls!
+>
+> > ## Solution
+> > ~~~
+> > import time
+> > 
+> > %%time
+> > dset.tos.sel(time='2014-01-01T12:00:00').load()
+> > 
+> > %%time
+> > dset.tos.sel(i=100,j=136).load()
+> > ~~~
+> > We see that the first call (all lat/lon at a single time step)
+> > is orders of magnitude faster than extracting all time steps at
+> > a single point location with the current dataset chunking
+> > (for me it was ~1 sec vs ~5 min using a single core).
+> > {: .language-python}
+> {: .solution}
+{: .challenge}
 
-To do this, consider that
-1 kg of rain water spread over 1 m2 of surface is 1 mm in thickness
-and that there are 86400 seconds in one day.
-Therefore, 1 kg m-2 s-1 = 86400 mm day-1.
-
-The data associated with our xarray DataArray is simply a numpy array,
-
+Now let's look at that climatology, what type of data is it?
 ~~~
 type(clim.data)
 ~~~
 {: .language-python}
-
 ~~~
-numpy.ndarray
+dask.array.core.Array
 ~~~
 {: .output}
 
-so we can go ahead and multiply that array by 86400 and update the units attribute accordingly:
+Let's start a `dask` "client" to allow the next calculation to be handled in parallel.
 
 ~~~
-clim.data = clim.data * 86400
-clim.attrs['units'] = 'mm/day' 
+from dask.distributed import Client
+client = Client()
+print(client)
+~~~
+{: .language-python}
+This starts a parallel cluster client, and gives us a `bokeh` port to view the dask dashboard.
 
+This is where it all gets messy. We are relying both on local parallel compute, and also streaming data from a remote server which has a size limit on individual requests. We can scale to more interesting levels if working on the local filesystem at NCI. For the remainder of this task we may need to switch to a simpler precipitation dataset. e.g.
+
+Try the `tos` data:
+~~~
+%%time
+clim.compute()
+~~~
+{: .language=python}
+
+If the previous climatology calculation fails with a NetCDF error and you don't have access to jupyter notebooks at NCI (instead specify the actual path to data, e.g. `/g/data/fs38/publications/CMIP6/`), try this:
+
+~~~
+cat = TDSCatalog("http://dapds00.nci.org.au/thredds/catalog/fs38/publications/CMIP6/ScenarioMIP/CSIRO-ARCCSS/ACCESS-CM2/ssp585/r1i1p1f1/day/pr/gn/latest/catalog.xml")
+print("\n".join(cat.datasets.keys()))
+
+filelist=list(cat.datasets.keys())
+DAProot='https://esgf.nci.org.au/thredds/dodsC/master/CMIP6/ScenarioMIP/CSIRO-ARCCSS/ACCESS-CM2/ssp585/r1i1p1f1/day/pr/gn/v20191108/'
+path = [ DAProot+f for f in filelist ]
+
+dset2 = xr.open_mfdataset(path, combine='by_coords',chunks={'time':'100MB'}) #Limit chunk size to be less than a THREDDS request limit
+
+clim = dset2['pr'].mean('time', keep_attrs=True)
 print(clim)
 ~~~
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'pr' (lat: 144, lon: 192)>
-array([[0.15950695, 0.16463352, 0.16613839, ..., 0.17167493, 0.17302468,
-        0.17006743],
-       [0.16471735, 0.16434446, 0.16356934, ..., 0.16790195, 0.16573453,
-        0.1647842 ],
-       [0.18146767, 0.17692661, 0.17581128, ..., 0.19345854, 0.18982219,
-        0.18698342],
-       ...,
-       [0.64894656, 0.64607999, 0.64531446, ..., 0.63382763, 0.63925537,
-        0.63917372],
-       [0.62067316, 0.61967841, 0.62144403, ..., 0.61821057, 0.6184225 ,
-        0.61855632],
-       [0.60785395, 0.60829043, 0.60762379, ..., 0.60819248, 0.60814875,
-        0.6074299 ]])
-Coordinates:
-  * lon      (lon) float64 0.9375 2.812 4.688 6.562 ... 353.4 355.3 357.2 359.1
-  * lat      (lat) float64 -89.38 -88.12 -86.88 -85.62 ... 86.88 88.12 89.38
-Attributes:
-    standard_name:  precipitation_flux
-    long_name:      Precipitation
-    units:          mm/day
-    comment:        includes both liquid and solid phases
-    cell_methods:   area: time: mean
-    cell_measures:  area: areacella
+%%time
+clim.compute()
+~~~
+~~~
+CPU times: user 3.79 s, sys: 801 ms, total: 4.59 s
+Wall time: 40.1 s
+
+xarray.DataArray
+'pr'
+
+    lat: 144lon: 192
+
+    array([[2.4257924e-06, 2.4922954e-06, 2.5074639e-06, ..., 2.5419881e-06,
+            2.5584206e-06, 2.5209411e-06],
+           [2.4357266e-06, 2.3995908e-06, 2.3777325e-06, ..., 2.4783983e-06,
+            2.4712863e-06, 2.4676210e-06],
+           [2.5555057e-06, 2.4873918e-06, 2.4325188e-06, ..., 2.7541412e-06,
+            2.6866162e-06, 2.6368391e-06],
+           ...,
+           [1.0240185e-05, 1.0276052e-05, 1.0309918e-05, ..., 1.0122936e-05,
+            1.0167766e-05, 1.0204100e-05],
+           [9.9295821e-06, 9.9560648e-06, 9.9702647e-06, ..., 9.8695555e-06,
+            9.8934788e-06, 9.9096997e-06],
+           [9.5022224e-06, 9.5112646e-06, 9.5121368e-06, ..., 9.5095284e-06,
+            9.5050536e-06, 9.5094583e-06]], dtype=float32)
+
+    Coordinates:
+        lat
+        (lat)
+        float64
+        -89.38 -88.12 ... 88.12 89.38
+        lon
+        (lon)
+        float64
+        0.9375 2.812 4.688 ... 357.2 359.1
+    Attributes:
+
+    standard_name :
+        precipitation_flux
+    long_name :
+        Precipitation
+    comment :
+        includes both liquid and solid phases
+    units :
+        kg m-2 s-1
+    cell_methods :
+        area: time: mean
+    cell_measures :
+        area: areacella
+    history :
+        2019-11-08T10:45:49Z altered by CMOR: replaced missing value flag (-1.07374e+09) with standard missing value (1e+20).
+    _ChunkSizes :
+        [  1 144 192]
 ~~~
 {: .output}
 
-We could now go ahead and plot our climatology using matplotlib,
-but it would take many lines of code to extract all the latitude and longitude information
-and to setup all the plot characteristics.
-Recognising this burden,
-the xarray developers have built on top of `matplotlib.pyplot` to make the visualisation
-of xarray DataArrays much easier.
-~~~
-fig = plt.figure(figsize=[12,5])
+*The above timing was from a VDI node. Run on my local laptop it took 15minutes!*
+We can now plot our climatology as we did in the Visualisation episode.
 
-ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-
-clim.plot.contourf(ax=ax,
-                   levels=np.arange(0, 13.5, 1.5),
-                   extend='max',
-                   transform=ccrs.PlateCarree(),
-                   cbar_kwargs={'label': clim.units})
-ax.coastlines()
-
-plt.show()
-~~~
-{: .language-python}
-
-![Precipitation climatology](../fig/02-visualisation-viridis.png)
-
-The default colorbar used by matplotlib is `viridis`.
-It used to be `jet`,
-but that was changed a couple of years ago in response to the 
-[#endtherainbow](https://www.climate-lab-book.ac.uk/2014/end-of-the-rainbow/) campaign.
-
-Putting all the code together
-(and reversing viridis so that wet is purple and dry is yellow)...
-
-~~~
-import xarray as xr
-import matplotlib.pyplot as plt
-import cartopy.crs as ccrs
-import numpy as np
-
-access_pr_file = 'data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc'
-
-dset = xr.open_dataset(access_pr_file)
-
-clim = dset['pr'].mean('time', keep_attrs=True)
-
-clim.data = clim.data * 86400
-clim.attrs['units'] = 'mm/day'
-
-fig = plt.figure(figsize=[12,5])
-ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-clim.plot.contourf(ax=ax,
-                   levels=np.arange(0, 13.5, 1.5),
-                   extend='max',
-                   transform=ccrs.PlateCarree(),
-                   cbar_kwargs={'label': clim.units},
-                   cmap='viridis_r')
-ax.coastlines()
-plt.show()
-~~~
-{: .language-python}
-
-![Precipitation climatology](../fig/02-visualisation-viridis_r.png)
-
-> ## Color palette
->
-> Copy and paste the final slab of code above into your own Jupyter notebook.
->
-> The viridis color palette doesn't seem quite right for rainfall.
-> Change it to the "haline" [cmocean](http://matplotlib.org/cmocean/) palette
-> used for ocean salinity data.
->
-> > ## Solution
-> > ~~~
-> > import cmocean
-> >
-> > ...
-> > clim.plot.contourf(ax=ax,
-                       ...
-                       cmap=cmocean.cm.haline_r)
-> > ~~~
-> > {: .language-python}
-> {: .solution}
-{: .challenge} 
-
-> ## Season selection
->
-> Rather than plot the annual climatology,
-> edit the code so that it plots the June-August (JJA) season.
->
-> (Hint: the [groupby]() functionality can be used to
-> group all the data into seasons prior to averaging over the time axis) 
->
-> > ## Solution
-> > ~~~
-> > clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True) 
-> > 
-> > clim.sel(season='JJA').plot.contourf(ax=ax,
-> > ~~~
-> > {: .language-python}
-> {: .solution}
-{: .challenge}
-
-> ## Add a title
->
-> Add a title to the plot which gives the name of the model
-> (taken from the `dset` attributes)
-> followed by the words "precipitation climatology (JJA)"
->
-> > ## Solution
-> > ~~~
-> > title = '%s precipitation climatology (JJA)' %(dset.attrs['model_id'])
-> > plt.title(title)
-> > ~~~
-> > {: .language-python}
-> {: .solution}
-{: .challenge}
+While `dask` gives us the capacity to better handle big data, it is still better to "take the compute to the data" whenever possible, as such, working with CMIP data will always be most effective when working on a local high performance filesystem with the data available alongside your Python notebook.
