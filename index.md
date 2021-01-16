@@ -18,7 +18,7 @@ that aren’t so easy to glean from a quick Google search.
 
 The skills covered in the lessons are taught in the context of a typical data analysis task:
 creating a command line program that plots the precipitation climatology for any given month,
-so that two different CMIP5 models (ACCESS1-3 and CSIRO-Mk3-6-0) can be compared visually.
+so that two different CMIP6 models (ACCESS-CM2 and ACCESS-ESM1-5) can be compared visually.
 
 
 > ## raster vs vector data
