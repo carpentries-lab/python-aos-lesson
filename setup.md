@@ -31,7 +31,7 @@ you will need access to the following:
 
 If you don't already have these installed,
 please follow The Carpentries [software installation instructions](https://carpentries.github.io/workshop-template/#setup).
-You do not need to install R, SQL or any of the additional software listed at that site.
+(You do not need to install R, which is also listed at that site.)
 
 > ## Troubeshooting
 >
@@ -41,8 +41,7 @@ You do not need to install R, SQL or any of the additional software listed at th
 >
 {: .callout}
 
-Depending on time and wifi constraints,
-your workshop instructor may also ask that you install the python packages introduced in the
+Your workshop instructor may also ask that you install the python packages introduced in the
 [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html)
 ahead of time.
 You can do this via the command line or by using the Anaconda Navigator:
@@ -90,7 +89,7 @@ You can do this via the command line or by using the Anaconda Navigator:
 > ## Installation of python packages: via the Anaconda Navigator
 >
 > Once you've opened the Anaconda Navigator program
-> (which can be found at the Windows start menu),
+> (which can be found at the start menu on Windows),
 > head to the "Environments" tab.
 > 
 > You can install the packages into the "base" environment
