@@ -360,7 +360,7 @@ plt.show()
 >
 > > ## Solution
 > > ~~~
-> > title = '%s precipitation climatology (JJA)' %(dset.attrs['model_id'])
+> > title = '%s precipitation climatology (JJA)' %(dset.attrs['source_id'])
 > > plt.title(title)
 > > ~~~
 > > {: .language-python}

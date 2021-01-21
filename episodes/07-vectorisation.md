@@ -20,9 +20,9 @@ To do this, we need to use the land area fraction file.
 import numpy as np
 import xarray as xr
 
-access_sftlf_file = 'data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc'
+accesscm2_sftlf_file = 'data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc'
 
-dset = xr.open_dataset(access_sftlf_file)
+dset = xr.open_dataset(accesscm2_sftlf_file)
 sftlf = dset['sftlf']
 print(sftlf)
 ~~~
