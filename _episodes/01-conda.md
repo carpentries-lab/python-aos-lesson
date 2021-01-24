@@ -1,5 +1,5 @@
 ---
-title: "Software installation using conda"
+title: "Package management"
 teaching: 15
 exercises: 15
 questions:
