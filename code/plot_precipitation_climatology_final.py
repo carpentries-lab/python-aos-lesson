@@ -90,7 +90,7 @@ def main(inargs):
         sftlf_file, realm = inargs.mask
         clim = apply_mask(clim, sftlf_file, realm)
 
-    create_plot(clim, dset.attrs['model_id'], inargs.season,
+    create_plot(clim, dset.attrs['source_id'], inargs.season,
                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
     plt.savefig(inargs.output_file, dpi=200)
 
