@@ -1,5 +1,5 @@
 ---
-title: "Visualising CMIP data"
+title: "Data processing and visualisation"
 teaching: 20
 exercises: 40
 questions:
