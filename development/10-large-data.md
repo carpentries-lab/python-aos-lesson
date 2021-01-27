@@ -1,5 +1,5 @@
 ---
-title: "Using dask to handle larger data"
+title: "Large data"
 teaching: 30
 exercises: 30
 questions:
@@ -7,337 +7,422 @@ questions:
 objectives:
 - "Import the dask library and start a client with parallel workers."
 - "Inspect netCDF chunking."
-- "Calculate and plot an ocean temperature climatology."
+- "Calculate and plot the maximum daily precipitation for a high resolution model."
 keypoints:
 - "Libraries such as dask and xarray can make loading, processing and visualising netCDF data much easier."
-- "Dask can massively speed up processing through parallelism but care may be needed particularly with data chunking."
+- "Dask can speed up processing through parallelism but care may be needed particularly with data chunking."
 ---
 
-When working with climate data, it is common to find we want to analyse more data than can fit in memory at one time, or that calculations take a long time. We may be able to parallelise our operations with the `dask` library, which is built on `xarray` and enables calculations to make use of multiple "cores" in our computer.
+So far we've been working with small,
+individual data files that can be comfortably read into memory on a modern laptop.
+What if we wanted to process a larger dataset
+that consists of many files and/or much larger file sizes?
+For instance,
+let's say the next step in our global precipitation analysis
+is to plot the daily maximum precipitation over the 1850-2014 period
+for the high resolution CNRM-CM6-1-HR model.
 
-> ## Additional libraries
+> ## Data download
 >
-> For this section we'll also need to install the `dask` and
-> `siphon` libraries into our conda environment.
-> There may be many dependencies.
+> Instructors teaching this lesson can download the CNRM-CM6-1-HR
+> daily precipitation data from the ESGF.
+> See the instructor notes for details.
 >
-{: .callout}
+> It is a very large download (45 GB),
+> so learners are not expected to download the data.
+> (None of the exercises at the end of the lesson require downloading the data.)
+>
+{: .challenge}
 
-> ## Data used
-> If teaching this lesson in a classroom, a copy of the dataset
-> should be on hand on external media in case of wifi limitations.
-> For remote teaching, please note the data being used is quite
-> large, if network issues arise, the participant should instead use
-> the smaller provided `pr` data files and utilise `%%time` magic
-> to investigate speed-up.
-{: .callout}
-
-Let's take a look at a dataset with many files, for example daily ocean surface temperature data.
-
-`OPeNDAP` is a protocol to remotely access netCDF data over a network as though it were a local file. OPeNDAP is provided commonly by "THREDDS" or "TDS" servers. We can use OPeNDAP to query CMIP6 data remotely where it is hosted (in this case, the NCI Earth Ssytem Grid node in Canberra). In python, we use the `siphon` library to query THREDDS catalogues to find available files.
+At the Unix shell,
+we can inspect the dataset and see that the daily maximum precipitation data 
+for the 1850-2014 period has been broken up into 25-year chunks and
+spread across seven netCDF files,
+most of which are 6.7 GB in size.
 
 ~~~
-from siphon.catalog import TDSCatalog
+$ ls -lh data/pr*.nc
+~~~
+{: .language-bash}
 
-cat = TDSCatalog("http://dapds00.nci.org.au/thredds/catalog/fs38/publications/CMIP6/CMIP/CSIRO-ARCCSS/ACCESS-CM2/historical/r1i1p1f1/Oday/tos/gn/latest/catalog.xml")
-print("\n".join(cat.datasets.keys()))
+~~~
+-rw-r-----  1 irving  staff   6.7G 26 Jan 12:09 pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_18500101-18741231.nc
+-rw-r-----  1 irving  staff   6.7G 26 Jan 13:14 pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_18750101-18991231.nc
+-rw-r-----  1 irving  staff   6.7G 26 Jan 14:17 pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19000101-19241231.nc
+-rw-r-----  1 irving  staff   6.7G 26 Jan 15:20 pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19250101-19491231.nc
+-rw-r-----  1 irving  staff   6.7G 26 Jan 16:24 pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19500101-19741231.nc
+-rw-r-----  1 irving  staff   6.7G 26 Jan 17:27 pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19750101-19991231.nc
+-rw-r-----  1 irving  staff   4.0G 26 Jan 18:05 pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_20000101-20141231.nc
+~~~
+{: .output}
 
-filelist=list(cat.datasets.keys())
-DAProot='https://esgf.nci.org.au/thredds/dodsC/master/CMIP6/CMIP/CSIRO-ARCCSS/ACCESS-CM2/historical/r1i1p1f1/Oday/tos/gn/v20191108/'
-path = [ DAProot+f for f in filelist ]
+In order to work with these files,
+we can use `xarray` to open a "multifile" dataset as though it were a single file.
+Our first step is to open a new Jupyter notebook and
+import a library with a rather unfortunate name.
+
+~~~
+import glob
 ~~~
 {: .language-python}
 
-We can use `xarray` to open a "multifile" dataset as though it were a single file. We'll load a few libraries we might need here.
+The `glob` library contains a single function, also called `glob`,
+that finds files whose names match a pattern.
+We provide those patterns as strings:
+the character `*` matches zero or more characters,
+while `?` matches any one character,
+just like at the Unix shell. 
+
+~~~
+pr_files = glob.glob('data/pr*.nc')
+pr_files.sort()
+print(pr_files)
+~~~
+{: .language-python}
+
+~~~
+['/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_18500101-18741231.nc',
+ '/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_18750101-18991231.nc',
+ '/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19000101-19241231.nc',
+ '/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19250101-19491231.nc',
+ '/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19500101-19741231.nc',
+ '/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19750101-19991231.nc',
+ '/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_20000101-20141231.nc']
+
+Recall that when we first open data in `xarray`
+it simply ("lazily") loads the metadata associated with the data
+and shows summary information about the contents of the dataset
+(i.e. it doesn't read the actual data into memory).
+This may take a little time for a large multifile dataset.
+
 ~~~
 import xarray as xr
-import cartopy.crs as ccrs
-import matplotlib.pyplot as plt
-import numpy as np
-~~~
-{: .language-python}
 
-Recall that when we first open data in xarray it simply ("lazily") loads the metadata associated with the data and shows summary information about the contents of the dataset.
-**This may take a little time for a large multifile dataset!**
+dset = xr.open_mfdataset(pr_files, chunks={'time': '500MB'})
 
-~~~
-dset = xr.open_mfdataset(path, combine='by_coords')
 print(dset)
 ~~~
 {: .language-python}
 
 ~~~
 <xarray.Dataset>
-Dimensions:             (bnds: 2, i: 360, j: 300, time: 60265, vertices: 4)
+Dimensions:      (axis_nbounds: 2, lat: 360, lon: 720, time: 60265)
 Coordinates:
-    longitude           (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
-    latitude            (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
-  * i                   (i) int32 0 1 2 3 4 5 6 ... 353 354 355 356 357 358 359
-  * j                   (j) int32 0 1 2 3 4 5 6 ... 293 294 295 296 297 298 299
-  * time                (time) datetime64[ns] 1850-01-01T12:00:00 ... 2014-12-31T12:00:00
-Dimensions without coordinates: bnds, vertices
+  * lat          (lat) float64 -89.62 -89.12 -88.62 -88.13 ... 88.62 89.12 89.62
+  * lon          (lon) float64 0.0 0.5 1.0 1.5 2.0 ... 358.0 358.5 359.0 359.5
+  * time         (time) datetime64[ns] 1850-01-01T12:00:00 ... 2014-12-31T12:...
+Dimensions without coordinates: axis_nbounds
 Data variables:
-    time_bnds           (time, bnds) datetime64[ns] dask.array<chunksize=(3652, 2), meta=np.ndarray>
-    vertices_latitude   (time, j, i, vertices) float64 dask.array<chunksize=(3652, 300, 360, 4), meta=np.ndarray>
-    vertices_longitude  (time, j, i, vertices) float64 dask.array<chunksize=(3652, 300, 360, 4), meta=np.ndarray>
-    tos                 (time, j, i) float32 dask.array<chunksize=(3652, 300, 360), meta=np.ndarray>
+    time_bounds  (time, axis_nbounds) datetime64[ns] dask.array<chunksize=(9131, 2), meta=np.ndarray>
+    pr           (time, lat, lon) float32 dask.array<chunksize=(397, 360, 720), meta=np.ndarray>
 Attributes:
-    Conventions:                     CF-1.7 CMIP-6.2
-    activity_id:                     CMIP
-    branch_method:                   standard
-    branch_time_in_child:            0.0
-    branch_time_in_parent:           0.0
-    creation_date:                   2019-11-08T18:23:57Z
-    data_specs_version:              01.00.30
-    experiment:                      all-forcing simulation of the recent past
-    experiment_id:                   historical
-    external_variables:              areacello
-    forcing_index:                   1
-    frequency:                       day
-    further_info_url:                https://furtherinfo.es-doc.org/CMIP6.CSI...
-    grid:                            native atmosphere N96 grid (144x192 latx...
-    grid_label:                      gn
-    history:                         2019-11-08T18:23:57Z ; CMOR rewrote data...
-    initialization_index:            1
-    institution:                     CSIRO (Commonwealth Scientific and Indus...
-    institution_id:                  CSIRO-ARCCSS
-    mip_era:                         CMIP6
-    nominal_resolution:              250 km
-    notes:                           Exp: CM2-historical; Local ID: bj594; Va...
-    parent_activity_id:              CMIP
-    parent_experiment_id:            piControl
-    parent_mip_era:                  CMIP6
-    parent_source_id:                ACCESS-CM2
-    parent_time_units:               days since 0950-01-01
-    parent_variant_label:            r1i1p1f1
-    physics_index:                   1
-    product:                         model-output
-    realization_index:               1
-    realm:                           ocean
-    run_variant:                     forcing: GHG, Oz, SA, Sl, Vl, BC, OC, (G...
-    source:                          ACCESS-CM2 (2019): \naerosol: UKCA-GLOMA...
-    source_id:                       ACCESS-CM2
-    source_type:                     AOGCM
-    sub_experiment:                  none
-    sub_experiment_id:               none
-    table_id:                        Oday
-    table_info:                      Creation Date:(30 April 2019) MD5:e14f55...
-    title:                           ACCESS-CM2 output prepared for CMIP6
-    variable_id:                     tos
-    variant_label:                   r1i1p1f1
-    version:                         v20191108
-    cmor_version:                    3.4.0
-    _NCProperties:                   version=2,netcdf=4.6.2,hdf5=1.10.5
-    tracking_id:                     hdl:21.14100/45e464ff-5f78-4b7b-8924-f3b...
-    license:                         CMIP6 model data produced by CSIRO is li...
-    DODS_EXTRA.Unlimited_Dimension:  time
+    Conventions:            CF-1.7 CMIP-6.2
+    creation_date:          2019-05-23T12:33:53Z
+    description:            CMIP6 historical
+    title:                  CNRM-CM6-1-HR model output prepared for CMIP6 and...
+    activity_id:            CMIP
+    contact:                contact.cmip@meteo.fr
+    data_specs_version:     01.00.21
+    dr2xml_version:         1.16
+    experiment_id:          historical
+    experiment:             all-forcing simulation of the recent past
+    external_variables:     areacella
+    forcing_index:          2
+    frequency:              day
+    further_info_url:       https://furtherinfo.es-doc.org/CMIP6.CNRM-CERFACS...
+    grid:                   data regridded to a 359 gaussian grid (360x720 la...
+    grid_label:             gr
+    nominal_resolution:     50 km
+    initialization_index:   1
+    institution_id:         CNRM-CERFACS
+    institution:            CNRM (Centre National de Recherches Meteorologiqu...
+    license:                CMIP6 model data produced by CNRM-CERFACS is lice...
+    mip_era:                CMIP6
+    parent_experiment_id:   p i C o n t r o l
+    parent_mip_era:         CMIP6
+    parent_activity_id:     C M I P
+    parent_source_id:       CNRM-CM6-1-HR
+    parent_time_units:      days since 1850-01-01 00:00:00
+    parent_variant_label:   r1i1p1f2
+    branch_method:          standard
+    branch_time_in_parent:  0.0
+    branch_time_in_child:   0.0
+    physics_index:          1
+    product:                model-output
+    realization_index:      1
+    realm:                  atmos
+    references:             http://www.umr-cnrm.fr/cmip6/references
+    source:                 CNRM-CM6-1-HR (2017):  aerosol: prescribed monthl...
+    source_id:              CNRM-CM6-1-HR
+    source_type:            AOGCM
+    sub_experiment_id:      none
+    sub_experiment:         none
+    table_id:               day
+    variable_id:            pr
+    variant_label:          r1i1p1f2
+    EXPID:                  CNRM-CM6-1-HR_historical_r1i1p1f2
+    CMIP6_CV_version:       cv=6.2.3.0-7-g2019642
+    dr2xml_md5sum:          45d4369d889ddfb8149d771d8625e9ec
+    xios_commit:            1442-shuffle
+    nemo_gelato_commit:     84a9e3f161dade7_8250e198106a168
+    arpege_minor_version:   6.3.3
+    history:                none
+    tracking_id:            hdl:21.14100/223fa794-73fe-4bb5-9209-8ff910f7dc40
 ~~~
 {: .output}
 
-We can see that our `dset` object is an `xarray.Dataset`, but notice now that each variable has type `dask.array`, meaning that xarray is aware of the netCDF "chunks" (how the data is packed in the files), and we'll be able to parallelise across these if we need/want to.
+We can see that our `dset` object is an `xarray.Dataset`,
+but notice now that each variable has type `dask.array`
+with a `chunksize` attribute.
+Dask will access the data chunk-by-chunk (rather than all at once),
+which is fortunate because at 45GB the full size of our dataset
+is much larger than the available RAM on our laptop (17GB in this example). 
+Dask can also distribute chunks across multiple cores if we ask it to
+(i.e. parallel processing).
 
-In this case, we are interested in the ocean surface temperature (`tos`) variable contained within that xarray Dataset:
+So how big should our chunks be?
+As a general rule they need to be small enough to fit comfortably in memory
+(because multiple chunks can be in memory at once),
+but large enough to avoid the time cost associated with asking Dask to
+manage/schedule lots of little chunks.
+The [Dask documentation](https://docs.dask.org/en/latest/array-chunks.html)
+suggests that chunk sizes between 10MB-1GB are common,
+so we've set the chunk size to 500MB in this example.
+Since our netCDF files are chunked by time,
+we've specified that the 500MB Dask chunks should also be along that axis.
+Performance will suffer dramatically if your Dask chunks
+aren't aligned with the netCDF chunks.
+
+We can have the Jupyter notebook display the size and shape of our chunks,
+just to make sure they are indeed 500MB.
 
 ~~~
-print(dset['tos'])
+dset['pr'].data
 ~~~
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'tos' (time: 60265, j: 300, i: 360)>
-dask.array<concatenate, shape=(60265, 300, 360), dtype=float32, chunksize=(3653, 300, 360), chunktype=numpy.ndarray>
+	      Array                 Chunk
+Bytes 	  62.48 GB 	            499.74 MB
+Shape 	  (60265, 360, 720) 	(482, 360, 720)
+Count 	  307 Tasks 	        150 Chunks
+Type      float32               numpy.ndarray
+~~~
+
+Now that we understand the chunking information contained in the metadata,
+let's go ahead and calculate the daily maximum precipitation.
+
+~~~
+pr_max = dset['pr'].max('time', keep_attrs=True)
+print(pr_max)
+~~~
+{: .language-python}
+
+~~~
+<xarray.DataArray 'pr' (lat: 360, lon: 720)>
+dask.array<nanmax-aggregate, shape=(360, 720), dtype=float32, chunksize=(360, 720), chunktype=numpy.ndarray>
 Coordinates:
-    longitude  (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
-    latitude   (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
-  * i          (i) int32 0 1 2 3 4 5 6 7 8 ... 352 353 354 355 356 357 358 359
-  * j          (j) int32 0 1 2 3 4 5 6 7 8 ... 292 293 294 295 296 297 298 299
-  * time       (time) datetime64[ns] 1850-01-01T12:00:00 ... 2014-12-31T12:00:00
+  * lat      (lat) float64 -89.62 -89.12 -88.62 -88.13 ... 88.62 89.12 89.62
+  * lon      (lon) float64 0.0 0.5 1.0 1.5 2.0 ... 357.5 358.0 358.5 359.0 359.5
 Attributes:
-    standard_name:  sea_surface_temperature
-    long_name:      Sea Surface Temperature
-    comment:        Temperature of upper boundary of the liquid ocean, includ...
-    units:          degC
-    cell_methods:   area: mean where sea time: mean
-    cell_measures:  area: areacello
-    history:        2019-11-08T18:23:54Z altered by CMOR: replaced missing va...
-    _ChunkSizes:    [  1 300 360]
+    long_name:           Precipitation
+    units:               kg m-2 s-1
+    online_operation:    average
+    cell_methods:        area: time: mean
+    interval_operation:  900 s
+    interval_write:      1 d
+    standard_name:       precipitation_flux
+    description:         at surface; includes both liquid and solid phases fr...
+    history:             none
+    cell_measures:       area: areacella
 ~~~
 {: .output}
 
-Notice that we now have an attribute `_ChunkSizes` listed. This has shape `[1 300 360]`, while the `dask.array` itself has shape (60265, 300, 360), and chunksize (3653, 300, 360). 
-This means that the underlying data is structured to be most efficiently accessed for the whole lat/lon range at each time step, but dask will load up 3653 of these "slices" at once, for a combined dataset size of 60265 timesteps.
+It seems like the calculation happened instataneously,
+but it's actually just another "lazy" feature of `xarray`.
+It's showing us what the output of the calculation would look like (i.e. a 360 by 720 array),
+but `xarray` won't actually do the computation
+until the data is actually needed (e.g. to create a plot or write to a netCDF file). 
 
-So far we have not loaded any data, only metadata. Operating on this data is likely to be slow! But let's try making a sea surface temperature climatology, similar to the precipitation climatology we made in the Visualisation episode.
+To force `xarray` to do the computation
+we can use `.compute()` with the `%%time` Jupyter notebook command
+to record how long it takes:
 
 ~~~
-clim = dset['tos'].mean('time', keep_attrs=True)
-print(clim)
+%%time
+pr_max.compute()
 ~~~
 {: .language-python}
 
 ~~~
-<xarray.DataArray 'tos' (j: 300, i: 360)>
-dask.array<mean_agg-aggregate, shape=(300, 360), dtype=float32, chunksize=(300, 360), chunktype=numpy.ndarray>
-Coordinates:
-    longitude  (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
-    latitude   (j, i) float64 dask.array<chunksize=(300, 360), meta=np.ndarray>
-  * i          (i) int32 0 1 2 3 4 5 6 7 8 ... 352 353 354 355 356 357 358 359
-  * j          (j) int32 0 1 2 3 4 5 6 7 8 ... 292 293 294 295 296 297 298 299
-Attributes:
-    standard_name:  sea_surface_temperature
-    long_name:      Sea Surface Temperature
-    comment:        Temperature of upper boundary of the liquid ocean, includ...
-    units:          degC
-    cell_methods:   area: mean where sea time: mean
-    cell_measures:  area: areacello
-    history:        2019-11-08T18:23:54Z altered by CMOR: replaced missing va...
-    _ChunkSizes:    [  1 300 360]
-~~~
-{: output}
-
-But wait! That was very fast! Why is that?
-(**hint**, consider lazy loading and xarray operations, what have we done in the above step?)
-
-We can investigate how chunks affect how quickly we can actually read the data. To move from metadata objects to actual data, we use the `.load()` or `.compute()` calls to dask.
-
-> ## Changing chunks
-> If we decide to change chunking to improve performance, note we
-> can control the size of dask chunks used, but they *must* align
-> with the netCDF file chunks or we will certainly make performance worse!
-{: .callout}
-
-> ## Investigating chunks
->
-> Time how long it takes to load the ocean temperature data for `'2014-01-01T12:00:00`
-> and then time how long it takes to load the data at `i=136` and `j=100` (-0.1662N, 180.5E).
-> How much difference in time is there when using these different
-> (time slice vs time series) access methods?
-> **Hint:** Use the `%%time` magic to get a single timing, or `%%timeit`
-> to get an average time -
-> but note that an initial load will be much slower than subsequent calls!
->
-> > ## Solution
-> > ~~~
-> > import time
-> > 
-> > %%time
-> > dset.tos.sel(time='2014-01-01T12:00:00').load()
-> > 
-> > %%time
-> > dset.tos.sel(i=100,j=136).load()
-> > ~~~
-> > We see that the first call (all lat/lon at a single time step)
-> > is orders of magnitude faster than extracting all time steps at
-> > a single point location with the current dataset chunking
-> > (for me it was ~1 sec vs ~5 min using a single core).
-> > {: .language-python}
-> {: .solution}
-{: .challenge}
-
-Now let's look at that climatology, what type of data is it?
-~~~
-type(clim.data)
-~~~
-{: .language-python}
-~~~
-dask.array.core.Array
+CPU times: user 4min 1s, sys: 54.2 s, total: 4min 55s
+Wall time: 3min 44s
 ~~~
 {: .output}
 
-Let's start a `dask` "client" to allow the next calculation to be handled in parallel.
+By processing the data chunk-by-chunk,
+we've avoided the memory error we would have generated
+had we tried to handle the whole dataset at once.
+A completion time of 3 minutes and 44 seconds isn't too bad,
+but that was only using one core.
+We can try and speed things up by using a `dask` "client" 
+to run the calculation in parallel across multiple cores:
 
 ~~~
 from dask.distributed import Client
+
 client = Client()
-print(client)
-~~~
-{: .language-python}
-This starts a parallel cluster client, and gives us a `bokeh` port to view the dask dashboard.
 
-This is where it all gets messy. We are relying both on local parallel compute, and also streaming data from a remote server which has a size limit on individual requests. We can scale to more interesting levels if working on the local filesystem at NCI. For the remainder of this task we may need to switch to a simpler precipitation dataset. e.g.
-
-Try the `tos` data:
-~~~
-%%time
-clim.compute()
-~~~
-{: .language=python}
-
-If the previous climatology calculation fails with a NetCDF error and you don't have access to jupyter notebooks at NCI (instead specify the actual path to data, e.g. `/g/data/fs38/publications/CMIP6/`), try this:
-
-~~~
-cat = TDSCatalog("http://dapds00.nci.org.au/thredds/catalog/fs38/publications/CMIP6/ScenarioMIP/CSIRO-ARCCSS/ACCESS-CM2/ssp585/r1i1p1f1/day/pr/gn/latest/catalog.xml")
-print("\n".join(cat.datasets.keys()))
-
-filelist=list(cat.datasets.keys())
-DAProot='https://esgf.nci.org.au/thredds/dodsC/master/CMIP6/ScenarioMIP/CSIRO-ARCCSS/ACCESS-CM2/ssp585/r1i1p1f1/day/pr/gn/v20191108/'
-path = [ DAProot+f for f in filelist ]
-
-dset2 = xr.open_mfdataset(path, combine='by_coords',chunks={'time':'100MB'}) #Limit chunk size to be less than a THREDDS request limit
-
-clim = dset2['pr'].mean('time', keep_attrs=True)
-print(clim)
+client
 ~~~
 {: .language-python}
 
 ~~~
-%%time
-clim.compute()
-~~~
-~~~
-CPU times: user 3.79 s, sys: 801 ms, total: 4.59 s
-Wall time: 40.1 s
-
-xarray.DataArray
-'pr'
-
-    lat: 144lon: 192
-
-    array([[2.4257924e-06, 2.4922954e-06, 2.5074639e-06, ..., 2.5419881e-06,
-            2.5584206e-06, 2.5209411e-06],
-           [2.4357266e-06, 2.3995908e-06, 2.3777325e-06, ..., 2.4783983e-06,
-            2.4712863e-06, 2.4676210e-06],
-           [2.5555057e-06, 2.4873918e-06, 2.4325188e-06, ..., 2.7541412e-06,
-            2.6866162e-06, 2.6368391e-06],
-           ...,
-           [1.0240185e-05, 1.0276052e-05, 1.0309918e-05, ..., 1.0122936e-05,
-            1.0167766e-05, 1.0204100e-05],
-           [9.9295821e-06, 9.9560648e-06, 9.9702647e-06, ..., 9.8695555e-06,
-            9.8934788e-06, 9.9096997e-06],
-           [9.5022224e-06, 9.5112646e-06, 9.5121368e-06, ..., 9.5095284e-06,
-            9.5050536e-06, 9.5094583e-06]], dtype=float32)
-
-    Coordinates:
-        lat
-        (lat)
-        float64
-        -89.38 -88.12 ... 88.12 89.38
-        lon
-        (lon)
-        float64
-        0.9375 2.812 4.688 ... 357.2 359.1
-    Attributes:
-
-    standard_name :
-        precipitation_flux
-    long_name :
-        Precipitation
-    comment :
-        includes both liquid and solid phases
-    units :
-        kg m-2 s-1
-    cell_methods :
-        area: time: mean
-    cell_measures :
-        area: areacella
-    history :
-        2019-11-08T10:45:49Z altered by CMOR: replaced missing value flag (-1.07374e+09) with standard missing value (1e+20).
-    _ChunkSizes :
-        [  1 144 192]
+Client                                    Cluster
+Scheduler: tcp://127.0.0.1:59152          Workers: 4
+Dashboard: http://127.0.0.1:8787/status   Cores: 4
+                                          Memory: 17.18 GB
 ~~~
 {: .output}
 
-*The above timing was from a VDI node. Run on my local laptop it took 15minutes!*
-We can now plot our climatology as we did in the Visualisation episode.
+(Click on the dashboard link to watch what's happening on each core.)
 
-While `dask` gives us the capacity to better handle big data, it is still better to "take the compute to the data" whenever possible, as such, working with CMIP data will always be most effective when working on a local high performance filesystem with the data available alongside your Python notebook.
+~~~
+%%time
+pr_max.compute()
+~~~
+{: .language-python}
+
+~~~
+CPU times: user 10.2 s, sys: 1.12 s, total: 11.3 s
+Wall time: 2min 33s
+~~~
+{: .output}
+
+By distributing the calculation across all four cores
+the processing time has dropped to 2 minutes and 33 seconds.
+It's faster than but not a quarter of the original 3 minutes and 44 seconds,
+because there's a time cost associated with
+setting up and coordinating jobs across all the cores.
+
+> ## Parallel isn't always best
+>
+> For smaller or very complex data processing tasks,
+> the time associated with setting up and coordinating jobs across multiple cores
+> can mean it takes longer to run in parallel than on just one core.
+>
+{: .callout}
+
+> ## Direction matters
+>
+> Calculating the daily maximum at each spatial (lat, lon) point
+> requires taking information (i.e. the daily precipitation values)
+> from each of the 150 chunks (because the the chunking was done along the time axis).
+> Calculations like this that go across chunks are much slower than those along chunks.
+> For instance, calculating the global maximum preipitation at each time step is very fast: 
+> 
+> ~~~
+> %%time
+> spatial_max = dset['pr'].max(['j', 'i'], keep_attrs=True)
+> ~~~
+> {: .python}
+>
+> ~~~
+> CPU times: user 3.79 ms, sys: 1.39 ms, total: 5.18 ms
+> Wall time: 8.83 ms
+> ~~~
+> {: .output}
+>
+> While it's worth being aware of the speed difference
+> between along and across chunk calculations,
+> unfortunately we can't do much about it.
+> The netCDF files are chunked by time,
+> and changing the dask chunking to be inconsistent with the netCDF chunking
+> (i.e. along a spatial axis) would make things even slower.
+>
+{: .callout}
+
+Now that we've computed the daily maximum precipitation,
+we can go ahead and plot it:
+
+~~~
+import matplotlib.pyplot as plt
+import cartopy.crs as ccrs
+import numpy as np
+import cmocean
+
+pr_max.data = pr_max.data * 86400
+pr_max.attrs['units'] = 'mm/day'
+
+fig = plt.figure(figsize=[12,5])
+ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
+pr_max.plot.contourf(ax=ax,
+                     levels=np.arange(0, 450, 50),
+                     extend='max',
+                     transform=ccrs.PlateCarree(),
+                     cbar_kwargs={'label': pr_max.units},
+                     cmap=cmocean.cm.haline_r)
+ax.coastlines()
+
+title = 'Daily maximum precipitation, 1850-2014 (%s)' %(dset.attrs['source_id'])
+plt.title(title)
+
+plt.show()
+~~~
+{: .language-python}
+
+![Daily maximum precipitation](../fig/10-pr_max.png)
+
+> ## Dask aware functions
+>
+> TODO: Point to information about writing your own Dask aware functions.
+>
+{: .callout} 
+
+> ## Alternatives to Dask
+> 
+> While `dask` can be a good option for working with large data,
+> it's not always the best choice.
+> For instance,
+> in this lesson we've talked about the time cost associated with
+> setting up and coordinating jobs across multiple cores,
+> and the fact that it can take quite a bit of time and effort
+> to make a function `dask` aware. 
+>
+> What other options/tactics do you have when working with a large, multi-file dataset? 
+> What are the pros and cons of these options?
+> 
+> > ## Solutions
+> > 
+> > Other options include writing a loop to process each netCDF file one at a time
+> > or a series of sub-regions one at a time.
+> > 
+> > By breaking the data processing down like this you might avoid the
+> > need to make your function/s `dask` aware.
+> > If the loop only involves tens (as opposed to hundreds) files/regions,
+> > the loop might also not be too slow.
+> > However, using `dask` is neater and more scalable,
+> > because the code you write looks essentially exactly the same regardless
+> > of whether you're running the code on a powerful supercomputer or a personal laptop.
+> > What's more, `dask` will adjust itself to perform optimally on either computer.
+> > 
+> {: .solution}
+{: .challenge}
+
+> ## Find out what you're working with
+>
+> Setup a `dask` client in your Jupyter notebook.
+> How many cores do you have available and how much memory? 
+> 
+> > ## Solution
+> >
+> > Run the following two commands in your notebook to setup the client
+> > and then type `client` to view the display of information:
+> > ~~~
+> > from dask.distributed import Client
+> > client = Client()
+> > client
+> > ~~~
+> > {: .language-python}
+> {: .solution}
+{: .challenge}
