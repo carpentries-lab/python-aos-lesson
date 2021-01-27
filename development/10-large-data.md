@@ -88,6 +88,8 @@ print(pr_files)
  '/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19500101-19741231.nc',
  '/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_19750101-19991231.nc',
  '/Users/irving/Desktop/data-carpentry/data/pr_day_CNRM-CM6-1-HR_historical_r1i1p1f2_gr_20000101-20141231.nc']
+~~~
+{: .output}
 
 Recall that when we first open data in `xarray`
 it simply ("lazily") loads the metadata associated with the data
@@ -208,6 +210,7 @@ Shape 	  (60265, 360, 720) 	(482, 360, 720)
 Count 	  307 Tasks 	        150 Chunks
 Type      float32               numpy.ndarray
 ~~~
+{: .output}
 
 Now that we understand the chunking information contained in the metadata,
 let's go ahead and calculate the daily maximum precipitation.
