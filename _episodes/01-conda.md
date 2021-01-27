@@ -71,7 +71,7 @@ It is also possible to install packages using the Anaconda Navigator graphical u
 >  
 {: .callout}
 
-For instance, the popular xarray library could be installed using the following command,
+For instance, the popular `xarray` library could be installed using the following command,
 ~~~
 $ conda install xarray
 ~~~
@@ -104,7 +104,7 @@ which means they'll never make it into the top few thousand data science librari
 supported by Anaconda.
 
 You can search Anaconda Cloud to find the command needed to install the package.
-For instance, here is the search result for the iris package:
+For instance, here is the search result for the `iris` package:
 
 ![Iris search on Anaconda Cloud](../fig/01-iris-search.png)
 
@@ -130,13 +130,14 @@ because mixing packages from multiple channels can cause headaches like binary i
 
 ## Software installation for these lessons
 
-For these particular lessons we will use xarray,
-but all the same tasks could be performed with iris.
+For these particular lessons we will use `xarray`,
+but all the same tasks could be performed with `iris`.
 We'll also install
-[netCDF4](http://unidata.github.io/netcdf4-python/) (xarray requires this to read netCDF files),
-[cartopy](http://scitools.org.uk/cartopy/) (to help with geographic plot projections),
-[cmocean](http://matplotlib.org/cmocean/) (for nice color palettes) and
-[cmdline_provenance](https://cmdline-provenance.readthedocs.io/en/latest/)
+[`dask`](https://dask.org/) (`xarray` uses this for parallel processing),
+[`netCDF4`](http://unidata.github.io/netcdf4-python/) (`xarray` requires this to read netCDF files),
+[`cartopy`](http://scitools.org.uk/cartopy/) (to help with geographic plot projections),
+[`cmocean`](http://matplotlib.org/cmocean/) (for nice color palettes) and
+[`cmdline_provenance`](https://cmdline-provenance.readthedocs.io/en/latest/)
 (to keep track of our data processing steps).
 We don't need to worry about installing [jupyter](https://jupyter.org/)
 (we will be using the jupyter notebook) because it already comes
@@ -145,12 +146,12 @@ pre-installed with Anaconda.
 We could install these libraries from Anaconda Navigator (not shown)
 or using the Bash Shell or Anaconda Prompt (Windows):
 ~~~
-$ conda install xarray netCDF4 cartopy cmocean cmdline_provenance
+$ conda install xarray dask netCDF4 cartopy cmocean cmdline_provenance
 ~~~
 {: .language-bash}
 
 If we then list all the libraries that we've got installed,
-we can see that jupyter, xarray, netCDF4, cartopy, cmocean, cmdline_provenance
+we can see that `jupyter`, `dask`, `xarray`, `netCDF4`, `cartopy`, `cmocean`, `cmdline_provenance`
 and their dependencies are now there:
 ~~~
 $ conda list
@@ -174,7 +175,7 @@ $ conda list
 > of the Anaconda Navigator or via the following Bash Shell / Anaconda Prompt commands:
 >
 > ~~~
-> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
+> $ conda create -n pyaos-lesson jupyter xarray dask netCDF4 cartopy cmocean cmdline_provenance
 > $ conda activate pyaos-lesson
 > ~~~
 > {: .language-bash}
@@ -354,7 +355,7 @@ Python 3 notebook:
 
 > ## Install the Python libraries required for this lesson
 >
-> Go ahead and install the xarray, netCDF4, cartopy, cmocean and cmdline_provenance
+> Go ahead and install the `xarray`, `dask`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
 > packages using either the Anaconda Navigator or Bash Shell. 
 > 
 > Remember that you'll need to add the conda-forge channel first.
@@ -390,7 +391,7 @@ Python 3 notebook:
 > ![Launch Jupyter notebook](../fig/01-launch-notebook.png)
 >
 > Once your notebook is open,
-> import xarray, catropy, matplotlib and numpy
+> import `xarray`, `catropy`, `matplotlib` and `numpy`
 > using the following Python commands:
 > ~~~
 > import xarray as xr
