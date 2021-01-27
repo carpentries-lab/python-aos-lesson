@@ -5,8 +5,8 @@ exercises: 30
 questions:
 - "How do I work with multiple CMIP files that won't fit in memory?"
 objectives:
-- "Import the dask library and start a client with parallel workers."
 - "Inspect netCDF chunking."
+- "Import the dask library and start a client with parallel workers."
 - "Calculate and plot the maximum daily precipitation for a high resolution model."
 keypoints:
 - "Libraries such as dask and xarray can make loading, processing and visualising netCDF data much easier."
@@ -25,11 +25,10 @@ for the high resolution CNRM-CM6-1-HR model.
 > ## Data download
 >
 > Instructors teaching this lesson can download the CNRM-CM6-1-HR
-> daily precipitation data from the ESGF.
-> See the instructor notes for details.
->
-> It is a very large download (45 GB),
-> so learners are not expected to download the data.
+> daily precipitation data from the Earth System Grid Federation (ESGF).
+> See the [instructor notes](https://carpentrieslab.github.io/python-aos-lesson/guide/index.html) for details.
+> Since it is a very large download (45 GB),
+> learners are not expected to download the data.
 > (None of the exercises at the end of the lesson require downloading the data.)
 >
 {: .challenge}
@@ -376,9 +375,18 @@ plt.show()
 
 ![Daily maximum precipitation](../fig/10-pr-max.png)
 
-> ## Dask aware functions
+> ## Writing your own Dask-aware functions
 >
-> TODO: Point to information about writing your own Dask aware functions.
+> So far leveraging Dask for our large data computations has been relatively simple,
+> because almost all of `xarray`’s built-in operations (like `max`) work on Dask arrays.
+>
+> If we wanted to chunk and parallelise code involving operations
+> that aren’t built into `xarray`
+> (e.g. an interpolation routine from the SciPy library)
+> we'd first need to use the `apply_ufunc` or `map_blocks` function
+> to make those operations "Dask-aware".
+> The [xarray tutorial](https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/06_xarray_and_dask.html#Automatic-parallelization-with-apply_ufunc-and-map_blocks)
+> from SciPy 2020 explains how to do this.
 >
 {: .callout} 
 
@@ -389,8 +397,8 @@ plt.show()
 > For instance,
 > in this lesson we've talked about the time cost associated with
 > setting up and coordinating jobs across multiple cores,
-> and the fact that it can take quite a bit of time and effort
-> to make a function `dask` aware. 
+> and the fact that it can take a bit of time and effort
+> to make a function Dask-aware. 
 >
 > What other options/tactics do you have when working with a large, multi-file dataset? 
 > What are the pros and cons of these options?
@@ -401,20 +409,19 @@ plt.show()
 > > or a series of sub-regions one at a time.
 > > 
 > > By breaking the data processing down like this you might avoid the
-> > need to make your function/s `dask` aware.
+> > need to make your function/s Dask-aware.
 > > If the loop only involves tens (as opposed to hundreds) files/regions,
 > > the loop might also not be too slow.
-> > However, using `dask` is neater and more scalable,
-> > because the code you write looks essentially exactly the same regardless
+> > However, using Dask is neater and more scalable,
+> > because the code you write looks essentially the same regardless
 > > of whether you're running the code on a powerful supercomputer or a personal laptop.
-> > What's more, `dask` will adjust itself to perform optimally on either computer.
 > > 
 > {: .solution}
 {: .challenge}
 
 > ## Find out what you're working with
 >
-> Setup a `dask` client in your Jupyter notebook.
+> Setup a Dask client in your Jupyter notebook.
 > How many cores do you have available and how much memory? 
 > 
 > > ## Solution
@@ -428,4 +435,16 @@ plt.show()
 > > ~~~
 > > {: .language-python}
 > {: .solution}
+{: .challenge}
+
+> ## Applying this to your own work
+>
+> In your own research,
+> are there any data processing tasks that could benefit
+> from chunking and/or parallelisation?
+> If so,
+> how would you implement it?
+> What size would your chunks be and along what axis?
+> Are all the operations involved already Dask-aware?
+> 
 {: .challenge}

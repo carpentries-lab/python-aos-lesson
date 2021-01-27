@@ -23,10 +23,23 @@ At the beginning of the workshop,
 participants are required to download a number of data files
 (instructions at the [setup page](https://carpentrieslab.github.io/python-aos-lesson/setup.html)).
 In the [first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html),
-they are then required to install some python libraries (jupyter, xarray and cmocean).
+they are then required to install some python libraries (`jupyter`, `xarray`, `cmocean`, etc).
 Both these tasks can be problematic at venues with slow wifi,
 so it is often a good idea to ask participants to download the data
 and install the libraries prior to the workshop.
+
+The large data lesson involves the analysis of a 45GB dataset.
+Instructors can download the relevant data files from the
+Earth System Grid Federation (ESGF) following the
+[CMIP6 Guidance for Data Users](https://pcmdi.llnl.gov/CMIP6/Guide/dataUsers.html#3-accessing-model-output).
+(Workshop participants do not need to download this data.)
+Use the following search terms to locate the data at your nearest ESGF node:
+- Source ID: CNRM-CM6-1-HR
+- Experiment ID: historical
+- Variant Label: r1i1p1f2
+- Grid Label: gr
+- Table ID: day
+- Variable: pr
 
 ## Software and code
 
