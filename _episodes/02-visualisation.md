@@ -179,19 +179,6 @@ Attributes:
 ~~~
 {: output}
 
-> ## Dask
->
-> Rather than read the entire three dimensional (time, lat, lon)
-> data array into memory and then calculate the climatology,
-> xarray lazy loading has allowed us to only load the
-> two dimensional (lat, lon) climatology.
-> If the original 3D data array was much larger than the one we are analysing here
-> (i.e. so large that we'd get a memory error if we attempted to calculate the climatology)
-> xarray can make use of a library called [Dask](http://xarray.pydata.org/en/stable/dask.html)
-> to break the task down into chunks and distribute it to multiple cores if needed.
->
-{: .callout}
-
 Now that we've calculated the climatology, 
 we want to convert the units from kg m-2 s-1
 to something that we are a little more familiar with like mm day-1.
