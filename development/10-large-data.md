@@ -192,8 +192,8 @@ suggests that chunk sizes between 10MB-1GB are common,
 so we've set the chunk size to 500MB in this example.
 Since our netCDF files are chunked by time,
 we've specified that the 500MB Dask chunks should also be along that axis.
-Performance will suffer dramatically if your Dask chunks
-aren't aligned with the netCDF chunks.
+Performance would suffer dramatically if our Dask chunks
+weren't aligned with our netCDF chunks.
 
 We can have the Jupyter notebook display the size and shape of our chunks,
 just to make sure they are indeed 500MB.
@@ -204,10 +204,10 @@ dset['pr'].data
 {: .language-python}
 
 ~~~
-	      Array                 Chunk
-Bytes 	  62.48 GB 	            499.74 MB
-Shape 	  (60265, 360, 720) 	(482, 360, 720)
-Count 	  307 Tasks 	        150 Chunks
+          Array                 Chunk
+Bytes     62.48 GB              499.74 MB
+Shape     (60265, 360, 720)     (482, 360, 720)
+Count     307 Tasks             150 Chunks
 Type      float32               numpy.ndarray
 ~~~
 {: .output}
@@ -245,7 +245,7 @@ It seems like the calculation happened instataneously,
 but it's actually just another "lazy" feature of `xarray`.
 It's showing us what the output of the calculation would look like (i.e. a 360 by 720 array),
 but `xarray` won't actually do the computation
-until the data is actually needed (e.g. to create a plot or write to a netCDF file). 
+until the data is needed (e.g. to create a plot or write to a netCDF file). 
 
 To force `xarray` to do the computation
 we can use `.compute()` with the `%%time` Jupyter notebook command
@@ -304,7 +304,7 @@ Wall time: 2min 33s
 
 By distributing the calculation across all four cores
 the processing time has dropped to 2 minutes and 33 seconds.
-It's faster than but not a quarter of the original 3 minutes and 44 seconds,
+It's faster than, but not a quarter of, the original 3 minutes and 44 seconds
 because there's a time cost associated with
 setting up and coordinating jobs across all the cores.
 
@@ -374,7 +374,7 @@ plt.show()
 ~~~
 {: .language-python}
 
-![Daily maximum precipitation](../fig/10-pr_max.png)
+![Daily maximum precipitation](../fig/10-pr-max.png)
 
 > ## Dask aware functions
 >
@@ -395,7 +395,7 @@ plt.show()
 > What other options/tactics do you have when working with a large, multi-file dataset? 
 > What are the pros and cons of these options?
 > 
-> > ## Solutions
+> > ## Solution
 > > 
 > > Other options include writing a loop to process each netCDF file one at a time
 > > or a series of sub-regions one at a time.
