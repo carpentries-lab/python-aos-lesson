@@ -63,7 +63,7 @@ You can do this via the command line or by using the Anaconda Navigator:
 >
 > Install the packages in the base conda environment:
 > ~~~
-> $ conda install xarray netCDF4 cartopy cmocean cmdline_provenance
+> $ conda install xarray dask netCDF4 cartopy cmocean cmdline_provenance
 > ~~~
 > {: .language-bash}
 >
@@ -71,7 +71,7 @@ You can do this via the command line or by using the Anaconda Navigator:
 >
 > Create a new environment called `pyaos-lesson` and install the packages there:
 > ~~~
-> $ conda create -n pyaos-lesson jupyter xarray netCDF4 cartopy cmocean cmdline_provenance
+> $ conda create -n pyaos-lesson jupyter xarray dask netCDF4 cartopy cmocean cmdline_provenance
 > ~~~
 > {: .language-bash}
 >
@@ -105,7 +105,7 @@ You can do this via the command line or by using the Anaconda Navigator:
 >
 > **Step 2** 
 >
-> Install the `xarray`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
+> Install the `xarray`, `dask`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
 > packages one-by-one (click "apply" to install once selected).
 > If you've created a new environment,
 > you'll need to install `jupyter` too.
