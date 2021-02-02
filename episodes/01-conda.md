@@ -355,7 +355,8 @@ Python 3 notebook:
 
 > ## Install the Python libraries required for this lesson
 >
-> Go ahead and install the `xarray`, `dask`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
+> If you haven't already done so,
+> go ahead and install the `xarray`, `dask`, `netCDF4`, `cartopy`, `cmocean` and `cmdline_provenance`
 > packages using either the Anaconda Navigator or Bash Shell. 
 > 
 > Remember that you'll need to add the conda-forge channel first.
