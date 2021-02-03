@@ -199,7 +199,7 @@ plt.show()
 > ~~~
 > {: .language-python}
 >
-> In other words, you'll need to define new ,
+> In other words, you'll need to define new
 > `convert_pr_units` and `create_plot`
 > functions using code from the existing `plot_pr_climatology` function.
 >
