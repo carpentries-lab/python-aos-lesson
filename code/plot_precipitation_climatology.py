@@ -20,12 +20,12 @@ def convert_pr_units(darray):
     return darray
 
 
-def create_plot(clim, model_name, season, gridlines=False):
+def create_plot(clim, model, season, gridlines=False):
     """Plot the precipitation climatology.
     
     Args:
       clim (xarray.DataArray): Precipitation climatology data
-      model_name (str): Name of the climate model
+      model (str): Name of the climate model
       season (str): Season
       
     Kwargs:
@@ -45,7 +45,7 @@ def create_plot(clim, model_name, season, gridlines=False):
     if gridlines:
         plt.gca().gridlines()
     
-    title = '%s precipitation climatology (%s)' %(model_name, season)
+    title = f'{model} precipitation climatology ({season})'
     plt.title(title)
 
 
