@@ -50,15 +50,14 @@ a number of scientific Python “distributions” have been released over the ye
 These come with the most popular data science libraries and their dependencies pre-installed,
 and some also come with a package manager to assist with installing
 additional libraries that weren’t pre-installed.
-This tutorial focuses on [conda](https://conda.io/docs/),
-which is the package manager associated with the very popular 
-[Anaconda](https://www.anaconda.com/distribution/) distribution.
+Today the most popular distribution for data science is [Anaconda](https://www.anaconda.com/distribution/),
+which comes with a package (and environment) manager called [conda](https://conda.io/docs/). 
 
 ## Introducing conda
 
 According to the [latest documentation](https://docs.anaconda.com/anaconda/#anaconda-navigator-or-conda),
 Anaconda comes with over 250 of the most widely used data science libraries (and their dependencies) pre-installed.
-In addition, there are several hundred more libraries available via the `conda install` command,
+In addition, there are several thousand more libraries available via the `conda install` command,
 which can be executed using the Bash Shell or Anaconda Prompt (Windows only).
 It is also possible to install packages using the Anaconda Navigator graphical user interface.
 
