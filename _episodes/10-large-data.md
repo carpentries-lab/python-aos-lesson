@@ -366,7 +366,8 @@ pr_max.plot.contourf(ax=ax,
                      cmap=cmocean.cm.haline_r)
 ax.coastlines()
 
-title = 'Daily maximum precipitation, 1850-2014 (%s)' %(dset.attrs['source_id'])
+model = dset.attrs['source_id']
+title = f'Daily maximum precipitation, 1850-2014 ({model})'
 plt.title(title)
 
 plt.show()

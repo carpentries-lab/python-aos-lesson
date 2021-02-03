@@ -273,12 +273,12 @@ Attributes:
 >     return masked_darray
 >
 >
-> def create_plot(clim, model_name, season, gridlines=False, levels=None):
+> def create_plot(clim, model, season, gridlines=False, levels=None):
 >     """Plot the precipitation climatology.
 >     
 >     Args:
 >       clim (xarray.DataArray): Precipitation climatology data
->       model_name (str): Name of the climate model
+>       model (str): Name of the climate model
 >       season (str): Season
 >      
 >     Kwargs:
@@ -302,7 +302,7 @@ Attributes:
 >     if gridlines:
 >         plt.gca().gridlines()
 >     
->     title = '%s precipitation climatology (%s)' %(model_name, season)
+>     title = f'{model} precipitation climatology ({season})'
 >     plt.title(title)
 >
 >

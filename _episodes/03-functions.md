@@ -49,7 +49,8 @@ clim.sel(season='JJA').plot.contourf(ax=ax,
                                      cmap=cmocean.cm.haline_r)
 ax.coastlines()
 
-title = '%s precipitation climatology (JJA)' %(dset.attrs['source_id'])
+model = dset.attrs['source_id']
+title = f'{model} precipitation climatology (JJA)'
 plt.title(title)
 
 plt.show()
@@ -104,7 +105,8 @@ def plot_pr_climatology(pr_file, season, gridlines=False):
     if gridlines:
         plt.gca().gridlines()
     
-    title = '%s precipitation climatology (%s)' %(dset.attrs['source_id'], season)
+    model = dset.attrs['source_id']
+    title = f'{model} precipitation climatology ({season})'
     plt.title(title)
 ~~~
 {: .language-python}
@@ -217,12 +219,16 @@ plt.show()
 > >     return darray
 > >
 > >
-> > def create_plot(clim, model_name, season, gridlines=False):
+> > def create_plot(clim, model, season, gridlines=False):
 > >     """Plot the precipitation climatology.
 > >    
 > >     Args:
 > >       clim (xarray.DataArray): Precipitation climatology data
-> >       season (str): Season    
+> >       model (str) : Name of the climate model
+> >       season (str): Season 
+> >    
+> >     Kwargs:  
+> >       gridlines (bool): Select whether to plot gridlines    
 > >    
 > >     """
 > >        
@@ -238,7 +244,7 @@ plt.show()
 > >     if gridlines:
 > >         plt.gca().gridlines()
 > >    
-> >     title = '%s precipitation climatology (%s)' %(model_name, season)
+> >     title = f'{model} precipitation climatology ({season})'
 > >     plt.title(title)
 > >
 > >
