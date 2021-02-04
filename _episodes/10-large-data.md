@@ -315,35 +315,6 @@ setting up and coordinating jobs across all the cores.
 >
 {: .callout}
 
-> ## Direction matters
->
-> Calculating the daily maximum at each spatial (lat, lon) point
-> requires taking information (i.e. the daily precipitation values)
-> from each of the 150 chunks (because the the chunking was done along the time axis).
-> Calculations like this that go across chunks are much slower than those along chunks.
-> For instance, calculating the global maximum preipitation at each time step is very fast: 
-> 
-> ~~~
-> %%time
-> spatial_max = dset['pr'].max(['j', 'i'], keep_attrs=True)
-> ~~~
-> {: .python}
->
-> ~~~
-> CPU times: user 3.79 ms, sys: 1.39 ms, total: 5.18 ms
-> Wall time: 8.83 ms
-> ~~~
-> {: .output}
->
-> While it's worth being aware of the speed difference
-> between along and across chunk calculations,
-> unfortunately we can't do much about it.
-> The netCDF files are chunked by time,
-> and changing the dask chunking to be inconsistent with the netCDF chunking
-> (i.e. along a spatial axis) would make things even slower.
->
-{: .callout}
-
 Now that we've computed the daily maximum precipitation,
 we can go ahead and plot it:
 
