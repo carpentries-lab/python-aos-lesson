@@ -295,14 +295,14 @@ $ git push origin master
 >     Args:
 >       darray (xarray.DataArray): Precipitation data
 >    
->    """
+>     """
 >    
->    assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
+>     assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
 >
->    darray.data = darray.data * 86400
->    darray.attrs['units'] = 'mm/day'
+>     darray.data = darray.data * 86400
+>     darray.attrs['units'] = 'mm/day'
 >    
->    return darray
+>     return darray
 >
 >
 > def apply_mask(darray, sftlf_file, realm):
