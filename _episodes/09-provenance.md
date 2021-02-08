@@ -293,8 +293,8 @@ Mon Feb 08 11:40:43 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/pyth
 > and create a plot from that. 
 >
 > If the first script reads as follows,
-> how would you update it so that an updated command log
-> is included in the history attribute of the output file?
+> how would you edit it so that an updated command log
+> is included in the history attribute of the output netCDF file?
 >
 > ~~~
 > import argparse
