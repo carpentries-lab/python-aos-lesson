@@ -15,13 +15,16 @@ that calculates and plots the precipitation climatology for a given season.
 The last step is to capture the provenance of that plot.
 In other words, we need a log of all the data processing steps
 that were taken from the intial download of the data file to the end result
-(i.e. the .png image).
+(i.e. the PNG image).
 
 The simplest way to do this is to follow the lead of the
 [NCO](http://nco.sourceforge.net/)
 and [CDO](https://code.mpimet.mpg.de/projects/cdo) command line tools,
 which insert a record of what was executed at the command line
 into the history attribute of the output netCDF file.
+If fact,
+they were both used in the pre-processing of the data files
+used in these lessons:
 
 ~~~
 import xarray as xr
@@ -45,7 +48,7 @@ that creates NCO/CDO-style records of what was executed at the command line.
 We can use it to add to the command log,
 before inserting the updated log into the metadata associated with our output image file.
 
-To start, let's import the library with the other imports at the top of our
+To start, let's import the `cmdline_provenance` library with the other imports at the top of our
 `plot_precipitation_climatology.py` script,
 
 ~~~
@@ -103,13 +106,13 @@ so let's have the debugger continue to the end of the script:
 ~~~
 {: .language-bash}
 
-Now that we've written the command log to our .png file,
+Now that we've written the command log to our PNG file,
 we need a way to view the metadata of image files.
 There are a number of different programs available to do this,
 but they can often be tricky to install.
 Fortunately,
-conda is used to install programs written in many different languages,
-not just python.
+`conda` is used to install programs written in many different languages,
+not just Python.
 There are [installation recipes](https://anaconda.org/conda-forge/exiftool)
 for a command line program called [`exiftool`](https://exiftool.org/) on anaconda.org,
 so let's go ahead and install that:
@@ -147,7 +150,7 @@ Compression                     : Deflate/Inflate
 Filter                          : Adaptive
 Interlace                       : Noninterlaced
 Software                        : Matplotlib version3.3.3, https://matplotlib.org/
-History                         : Mon Feb 08 09:45:17 2021: /Users/z3526123/opt/anaconda3/envs/pyaos-lesson/bin/python code/plot_precipitation_climatology_temp.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc JJA test.png.Tue Jan 12 14:50:35 2021: ncatted -O -a history,pr,d,, pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc.Tue Jan 12 14:48:10 2021: cdo seldate,2010-01-01,2014-12-31 /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/Amon/pr/gn/latest/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_185001-201412.nc pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc.2019-11-15T04:32:57Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.7 CMIP-6.2 and CF standards. .
+History                         : Mon Feb 08 09:45:17 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/python code/plot_precipitation_climatology.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc SON pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png.Tue Jan 12 14:50:35 2021: ncatted -O -a history,pr,d,, pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc.Tue Jan 12 14:48:10 2021: cdo seldate,2010-01-01,2014-12-31 /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/Amon/pr/gn/latest/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_185001-201412.nc pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc.2019-11-15T04:32:57Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.7 CMIP-6.2 and CF standards. .
 Pixels Per Unit X               : 7874
 Pixels Per Unit Y               : 7874
 Pixel Units                     : meters
@@ -157,7 +160,7 @@ Megapixels                      : 2.4
 {: .output}
 
 We can see that the command log has been successfully added to the image metadata,
-but the new line characters `\n` have disappeared,
+but the newline characters `\n` have disappeared,
 so we might want to edit our python script to replace each `\n` with something different.
 
 ~~~
@@ -166,15 +169,15 @@ new_log = new_log.replace('\n', ' END ')
 {: .language-python}
 
 Another issue is that different image files accept different metadata keys.
-For .png files you can pick whatever keys you like (hence we picked "History"),
+For PNG files you can pick whatever keys you like (hence we picked "History"),
 but other formats only allow specific keys.
 For now we can add an assertion so that the program halts
-if someone tries to generate a format that isn't .png,
+if someone tries to generate a format that isn't PNG,
 and in the exercises we'll add more valid formats to the script.
 
 ~~~
 image_format = inargs.output_file.split('.')[-1])
-assert image_format == 'png', 'Only valid output format is png'
+assert image_format == 'png', 'Only valid output format is .png'
 ~~~
 {: .language-python}
 
@@ -198,14 +201,14 @@ def main(inargs):
                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
     
     image_format = inargs.output_file.split('.')[-1]
-    assert image_format == 'png', 'Only valid image format is png'
+    assert image_format == 'png', 'Only valid image format is .png'
     new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
     new_log = new_log.replace('\n', ' END ')
     plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 ~~~
 {: .language-python}
 
-We can re-generate our plot with these new additions to the script
+We can re-generate our plot with these new additions to the script,
 and then view the history attribute if we ever need to document
 (or just recall) how we created it.
 
@@ -224,18 +227,18 @@ Mon Feb 08 11:40:43 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/pyth
 ~~~
 {: .output}
 
-> ## Handling different file formats
+> ## Handling different image formats
 >
 > The [`plt.savefig` documentation](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.savefig.html)
 > provides information on the metadata keys accepted by
-> .png, .pdf, .eps and .ps image formats.
+> PNG, PDF, EPS and PS image formats.
 >
 > Using that information as a guide,
 > add a new function called `get_log_and_key`
-> to the `plot_precipitation_climatology.py` script
-> that takes the precipitation file name, history attribute,
-> and plot type as arguments and returns the updated command log and
-> the appropriate metadata key for any of those image formats.
+> to the `plot_precipitation_climatology.py` script.
+> It should take the precipitation file name, history attribute,
+> and plot type as arguments and return the updated command log and
+> the appropriate metadata key for PNG, PDF, EPS or PS image formats.
 >
 > When you're done,
 > the final lines of the `main` function should read as follows:  
@@ -280,9 +283,78 @@ Mon Feb 08 11:40:43 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/pyth
 > {: .solution}
 {: .challenge}
 
-> ## Writing metadata to netCDF files
+> ## Writing the command log to netCDF files
 >
-> TODO
+> Instead of calculating the seasonal climatology and creating a plot all in the one script,
+> we could have decided to make it a two step process.
+> The first script in the process could take the original precipitation data file and
+> output a new netCDF file containing the seasonal climatology,
+> and the second script could take the seasonal climatology file
+> and create a plot from that. 
+>
+> If the first script reads as follows,
+> how would you update it so that an updated command log
+> is included in the history attribute of the output file?
+>
+> ~~~
+> import argparse
+> 
+> import numpy as np
+> import xarray as xr
+>
+>
+> def convert_pr_units(darray):
+>     """Convert kg m-2 s-1 to mm day-1.
+>     
+>     Args:
+>       darray (xarray.DataArray): Precipitation data
+>     """
+>     assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
+>     darray.data = darray.data * 86400
+>     darray.attrs['units'] = 'mm/day'
+>   
+>     return darray
+>
+>
+> def main(inargs):
+>     """Run the program."""
+>     in_dset = xr.open_dataset(inargs.pr_file)
+>     clim = in_dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+>     clim = convert_pr_units(clim)
+>     out_dset = clim.to_dataset()
+>     out_dset.attrs = in_dset.attrs
+>     out_dset.to_netcdf(inargs.output_file)
+>    
+>
+> if __name__ == '__main__':
+>     description='Calculate the seasonal precipitation climatology.'
+>     parser = argparse.ArgumentParser(description=description)
+>     parser.add_argument("pr_file", type=str, help="Precipitation data file")
+>     parser.add_argument("output_file", type=str, help="Output file name")
+>     args = parser.parse_args()  
+>     main(args)
+> ~~~
+> {: .language-python}
+>
+> > ## Solution
+> >
+> > The beginning of the script would need to be updated to import
+> > the `cmdline_provenance` library:
+> > ~~~
+> > import cmdline_provenance as cmdprov
+> > ~~~
+> > {: .language-python}
+> > 
+> > The body of the `main` function would then need to be updated
+> > to write the new command log to the history attribute of the output dataset:
+> > ~~~
+> > out_dset.attrs = in_dset.attrs
+> > new_log = cmdprov.new_log(infile_history={inargs.pr_file: in_dset.attrs['history']})
+> > out_dset.attrs['history'] = new_log
+> > out_dset.to_netcdf(inargs.output_file)
+> > ~~~
+> > {: .language-python}
+> {: .solution}
 {: .challenge}
 
 > ## plot_precipitation_climatology.py
