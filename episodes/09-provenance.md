@@ -42,57 +42,247 @@ Tue Jan 12 14:48:10 2021: cdo seldate,2010-01-01,2014-12-31 /g/data/fs38/publica
 
 Fortunately, there is a Python package called [cmdline-provenance](http://cmdline-provenance.readthedocs.io/en/latest/)
 that creates NCO/CDO-style records of what was executed at the command line.
-We can use it to generate a new command line record:
+We can use it to add to the command log,
+before inserting the updated log into the metadata associated with our output image file.
+
+To start, let's import the library with the other imports at the top of our
+`plot_precipitation_climatology.py` script,
 
 ~~~
 import cmdline_provenance as cmdprov
-new_record = cmdprov.new_log()
-print(new_record)
 ~~~
 {: .language-python}
 
+and then make the following updates to the original line of code
+responsible for saving the image to file:
+
 ~~~
-2017-12-08T14:05:34: /Applications/anaconda/envs/pyaos-lesson/bin/python /Applications/anaconda/envs/pyaos-lesson/lib/python3.6/site-packages/ipykernel_launcher.py -f /Users/dirving/Library/Jupyter/runtime/kernel-7183ce41-9fd9-4d30-9e46-a0d16bc9bd5e.json
+new_log = cmdprov.new_log(infile_history={inargs.pr_file, dset.attrs['history']})
+pdb.set_trace()
+plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
+~~~
+{: .language-python}
+
+When we execute `plot_precipitation_climatology.py`,
+`cmdprov.new_log` will create a record of what was entered at the command line.
+The name of the input precipitation file and its history attribute
+have been provided using the `infile_history` argument,
+so that `cmdprov.new_log` can append the history of that file to the new command log.
+The `metadata` argument for `plt.savefig`
+has then been used to save the new command log to the image metadata.
+
+To see this in action,
+we've added a Python debugger tracer to the script:
+
+~~~
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc SON pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png
+~~~ 
+{: .language-bash}
+
+~~~
+> /Users/damien/Desktop/data-carpentry/plot_precipitation_climatology.py(98)main()
+-> plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 ~~~
 {: .output}
 
-(i.e. This is the command that was run to launch the jupyter notebook we're using.)
+~~~
+(Pdb) new_log
+~~~
+{: .language-bash}
 
+~~~
+'Mon Feb 08 09:45:17 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/python plot_precipitation_climatology.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc SON pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png\nTue Jan 12 14:50:35 2021: ncatted -O -a history,pr,d,, pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc\nTue Jan 12 14:48:10 2021: cdo seldate,2010-01-01,2014-12-31 /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/Amon/pr/gn/latest/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_185001-201412.nc pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc\n2019-11-15T04:32:57Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.7 CMIP-6.2 and CF standards. \n'
+~~~
+{: .output}
 
-> ## Generate a log file
+The log has been successfully updated,
+so let's have the debugger continue to the end of the script:
+
+~~~
+(Pdb) c
+~~~
+{: .language-bash}
+
+Now that we've written the command log to our .png file,
+we need a way to view the metadata of image files.
+There are a number of different programs available to do this,
+but they can often be tricky to install.
+Fortunately,
+conda is used to install programs written in many different languages,
+not just python.
+There are [installation recipes](https://anaconda.org/conda-forge/exiftool)
+for a command line program called [`exiftool`](https://exiftool.org/) on anaconda.org,
+so let's go ahead and install that:
+
+~~~
+$ conda install exiftool
+~~~
+{: .language-bash}
+
+Once installed,
+we can use it to view the metadata associated with our image file:
+
+~~~
+$ exiftool pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png
+~~~
+{: .language-bash}
+
+~~~
+ExifTool Version Number         : 12.17
+File Name                       : pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png
+Directory                       : .
+File Size                       : 315 KiB
+File Modification Date/Time     : 2021:02:08 10:16:56+11:00
+File Access Date/Time           : 2021:02:08 10:16:58+11:00
+File Inode Change Date/Time     : 2021:02:08 10:16:56+11:00
+File Permissions                : rw-r--r--
+File Type                       : PNG
+File Type Extension             : png
+MIME Type                       : image/png
+Image Width                     : 2400
+Image Height                    : 1000
+Bit Depth                       : 8
+Color Type                      : RGB with Alpha
+Compression                     : Deflate/Inflate
+Filter                          : Adaptive
+Interlace                       : Noninterlaced
+Software                        : Matplotlib version3.3.3, https://matplotlib.org/
+History                         : Mon Feb 08 09:45:17 2021: /Users/z3526123/opt/anaconda3/envs/pyaos-lesson/bin/python code/plot_precipitation_climatology_temp.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc JJA test.png.Tue Jan 12 14:50:35 2021: ncatted -O -a history,pr,d,, pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc.Tue Jan 12 14:48:10 2021: cdo seldate,2010-01-01,2014-12-31 /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/Amon/pr/gn/latest/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_185001-201412.nc pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc.2019-11-15T04:32:57Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.7 CMIP-6.2 and CF standards. .
+Pixels Per Unit X               : 7874
+Pixels Per Unit Y               : 7874
+Pixel Units                     : meters
+Image Size                      : 2400x1000
+Megapixels                      : 2.4
+~~~
+{: .output}
+
+We can see that the command log has been successfully added to the image metadata,
+but the new line characters `\n` have disappeared,
+so we might want to edit our python script to replace each `\n` with something different.
+
+~~~
+new_log = new_log.replace('\n', ' END ')
+~~~
+{: .language-python}
+
+Another issue is that different image files accept different metadata keys.
+For .png files you can pick whatever keys you like (hence we picked "History"),
+but other formats only allow specific keys.
+For now we can add an assertion so that the program halts
+if someone tries to generate a format that isn't .png,
+and in the exercises we'll add more valid formats to the script.
+
+~~~
+image_format = inargs.output_file.split('.')[-1])
+assert image_format == 'png', 'Only valid output format is png'
+~~~
+{: .language-python}
+
+Putting this altogether,
+here's what the `main` function in `plot_precipitation_climatology.py` looks like:
+
+~~~
+def main(inargs):
+    """Run the program."""
+
+    dset = xr.open_dataset(inargs.pr_file)
+    
+    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = convert_pr_units(clim)
+
+    if inargs.mask:
+        sftlf_file, realm = inargs.mask
+        clim = apply_mask(clim, sftlf_file, realm)
+
+    create_plot(clim, dset.attrs['source_id'], inargs.season,
+                gridlines=inargs.gridlines, levels=inargs.cbar_levels)
+    
+    image_format = inargs.output_file.split('.')[-1]
+    assert image_format == 'png', 'Only valid image format is png'
+    new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
+    new_log = new_log.replace('\n', ' END ')
+    plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
+~~~
+{: .language-python}
+
+We can re-generate our plot with these new additions to the script
+and then view the history attribute if we ever need to document
+(or just recall) how we created it.
+
+~~~
+$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc SON pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png
+~~~ 
+{: .language-bash}
+
+~~~
+$ exiftool pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png | grep '^History*' | cut -d ':' -f2-
+~~~
+{: .language-bash}
+
+~~~
+Mon Feb 08 11:40:43 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/python plot_precipitation_climatology.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc SON pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png END Tue Jan 12 14:50:35 2021: ncatted -O -a history,pr,d,, pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc END Tue Jan 12 14:48:10 2021: cdo seldate,2010-01-01,2014-12-31 /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/Amon/pr/gn/latest/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_185001-201412.nc pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc END 2019-11-15T04:32:57Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.7 CMIP-6.2 and CF standards.  END
+~~~
+{: .output}
+
+> ## Handling different file formats
 >
-> In order to capture the complete provenance of the precipitation plot,
-> add a few lines of code to the end of the `main` function
-> in `plot_precipitation_climatology.py` so that it:
-> 
-> 1. Extracts the history attribute from the input file and combines it with the current command line entry (using the `cmdprov.new_log` function)
-> 2. Outputs a log file containing that information (using `cmdprov.write_log`; the file should have name as the plot, replacing .png with .txt)
+> The [`plt.savefig` documentation](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.savefig.html)
+> provides information on the metadata keys accepted by
+> .png, .pdf, .eps and .ps image formats.
 >
-> (Hint: The documentation for [cmdline-provenance](http://cmdline-provenance.readthedocs.io/en/latest/)
-> explains the process.)
+> Using that information as a guide,
+> add a new function called `get_log_and_key`
+> to the `plot_precipitation_climatology.py` script
+> that takes the precipitation file name, history attribute,
+> and plot type as arguments and returns the updated command log and
+> the appropriate metadata key for any of those image formats.
+>
+> When you're done,
+> the final lines of the `main` function should read as follows:  
+>
+> ~~~
+> log_key, new_log = get_log_and_key(inargs.pr_file,
+>                                    dset.attrs['history'],
+>                                    inargs.output_file.split('.')[-1])
+> plt.savefig(inargs.output_file, metadata={log_key: new_log}, dpi=200)
+> ~~~
+> {: .language-python}
 >
 > > ## Solution
 > >
-> > Make the following additions to `plot_precipitation_climatology.py`
-> > (code omitted from this abbreviated version of the script is denoted `...`):
-> >
+> > The new function could read as follows:
 > > ~~~
-> > ...
-> > import cmdline_provenance as cmdprov
+> > def get_log_and_key(pr_file, history_attr, plot_type):
+> >    """Get key and command line log for image metadata.
+> >   
+> >    Different image formats allow different metadata keys.
+> >   
+> >    Args:
+> >      pr_file (str): Input precipitation file
+> >      history_attr (str): History attribute from pr_file
+> >      plot_type (str): File format for output image
+> >   
+> >    """
+> >    
+> >    valid_keys = {'png': 'History',
+> >                  'pdf': 'Title',
+> >                  'eps': 'Creator',
+> >                  'ps' : 'Creator'}    
 > >
-> > ...
-> >
-> > def main(inargs):
-> >
-> >     ...
-> >
-> >     new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
-> >     fname, extension = inargs.output_file.split('.')
-> >     cmdprov.write_log(fname+'.txt', new_log)
-> >
+> >    assert plot_type in valid_keys.keys(), f"Image format not one of: {*[*valid_keys],}"
+> >    log_key = valid_keys[plot_type]
+> >    new_log = cmdprov.new_log(infile_history={pr_file: history_attr})
+> >    new_log = new_log.replace('\n', ' END ')
+> >    
+> >    return log_key, new_log
 > > ~~~
 > > {: .language-python}
 > {: .solution}
+{: .challenge}
+
+> ## Writing metadata to netCDF files
+>
+> TODO
 {: .challenge}
 
 > ## plot_precipitation_climatology.py
@@ -118,14 +308,14 @@ print(new_record)
 >     Args:
 >       darray (xarray.DataArray): Precipitation data
 >    
->    """
+>     """
 >    
->    assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
+>     assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
 >
->    darray.data = darray.data * 86400
->    darray.attrs['units'] = 'mm/day'
+>     darray.data = darray.data * 86400
+>     darray.attrs['units'] = 'mm/day'
 >    
->    return darray
+>     return darray
 >
 >
 > def apply_mask(darray, sftlf_file, realm):
@@ -181,6 +371,31 @@ print(new_record)
 >     plt.title(title)
 >
 >
+> def get_log_and_key(pr_file, history_attr, plot_type):
+>     """Get key and command line log for image metadata.
+>    
+>     Different image formats allow different metadata keys.
+>    
+>     Args:
+>       pr_file (str): Input precipitation file
+>       history_attr (str): History attribute from pr_file
+>       plot_type (str): File format for output image
+>    
+>     """
+>     
+>     valid_keys = {'png': 'History',
+>                   'pdf': 'Title',
+>                   'eps': 'Creator',
+>                   'ps' : 'Creator'}    
+> 
+>     assert plot_type in valid_keys.keys(), f"Image format not one of: {*[*valid_keys],}"
+>     log_key = valid_keys[plot_type]
+>     new_log = cmdprov.new_log(infile_history={pr_file: history_attr})
+>     new_log = new_log.replace('\n', ' END ')
+>     
+>     return log_key, new_log
+>
+>
 > def main(inargs):
 >     """Run the program."""
 > 
@@ -197,9 +412,10 @@ print(new_record)
 >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
 >     plt.savefig(inargs.output_file, dpi=200)
 >
->     new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
->     fname, extension = inargs.output_file.split('.')
->     cmdprov.write_log(fname+'.txt', new_log)
+>     log_key, new_log = get_log_and_key(inargs.pr_file,
+>                                        dset.attrs['history'],
+>                                        inargs.output_file.split('.')[-1])
+>     plt.savefig(inargs.output_file, metadata={log_key: new_log}, dpi=200)
 >
 >
 > if __name__ == '__main__':
