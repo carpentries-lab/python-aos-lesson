@@ -60,7 +60,7 @@ and then make the following updates to the original line of code
 responsible for saving the image to file:
 
 ~~~
-new_log = cmdprov.new_log(infile_history={inargs.pr_file, dset.attrs['history']})
+new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
 pdb.set_trace()
 plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 ~~~
