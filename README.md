@@ -12,7 +12,7 @@ from teaching generic Software Carpentry workshops at the annual conference of t
 Australian Meteorological and Oceanographic Society (AMOS) from 2014-2017.
 
 The lesson materials have been used in the following workshops and university courses:  
-* [2021 AMS Python Short Course](https://damienirving.github.io/2021-03-02-ams/), March 2021
+* [AMS Python Short Course](https://damienirving.github.io/2021-03-02-ams/), March 2021
 * [Data Carpentry workshop at the 2021 AMOS Conference](https://damienirving.github.io/2021-02-04-amos/), February 2021
 * [Data Carpentry workshop at Woods Hole Oceanographic Institution](https://k-rns.github.io/2020-10-26-WHOI-Data/), October 2020
 * [Data Carpentry workshop at the 2020 AMOS Conference](https://damienirving.github.io/2020-02-09-amos/), February 2020
