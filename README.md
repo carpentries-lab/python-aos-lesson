@@ -3,13 +3,15 @@
 
 # Python for Atmosphere and Ocean Scientists
 
-The repository contains the [Data Carpentry](https://datacarpentry.org/) lesson materials
+This repository contains the [Data Carpentry](https://datacarpentry.org/) lesson materials
 for a single day workshop on using python (and git) in the atmosphere and ocean sciences:
 [https://carpentrieslab.github.io/python-aos-lesson/](https://carpentrieslab.github.io/python-aos-lesson/)
 
-The lesson materials were written by [Damien Irving](https://damienirving.github.io/) based on experiences
-from teaching generic Software Carpentry workshops at the annual conference of the
-Australian Meteorological and Oceanographic Society (AMOS) from 2014-2017.
+The lesson materials were initially written by [Damien Irving](https://damienirving.github.io/)
+based his experience teaching generic Software Carpentry workshops
+at the annual conference of the Australian Meteorological and Oceanographic Society (AMOS) from 2014-2017.
+They are now maintained and updated by the global community of qualified Carpentries
+instructors who work/study in the atmosphere and ocean sciences (see below). 
 
 The lesson materials have been used in the following workshops and university courses:  
 * [AMS Python Short Course](https://damienirving.github.io/2021-03-02-ams/), March 2021
