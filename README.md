@@ -47,6 +47,7 @@ the goal is to grow the PyAOS instructor community:
 * [Elizabeth Dobbins](https://uaf.edu/cfos/people/research-staff-and-post-docs/detail/elizabeth-dobbins.php) (College of Fisheries and Ocean Sciences, University of Alaska Fairbanks)
 * [Alma Castillo](https://scripps.ucsd.edu/profiles/a4castillotrujillo) (Scripps Institution of Oceanography, UC San Diego)
 * [Claire Trenham](https://people.csiro.au/T/C/claire-trenham) (Climate Science Centre, CSIRO)
+* [Romina Mezher](https://inta.gob.ar/personas/mezher.romina) (Instituto Nacional de Tecnología Agropecuaria)
 
 If you work or study in the atmosphere and ocean sciences and would be interested in getting involved,
 please reach out by creating an issue in this repository.
