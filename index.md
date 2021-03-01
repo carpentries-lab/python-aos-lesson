@@ -38,10 +38,12 @@ so that two different CMIP6 models (ACCESS-CM2 and ACCESS-ESM1-5) can be compare
 
 > ## Prerequisites
 >
-> Participants must already be using Python for their data analysis.
+> Participants must have a some familiarity with Python and the Unix shell.
 > They don't need to be highly proficient,
-> but a strong familiarity with Python syntax and basic constructs
-> such as loops, lists and conditionals (i.e. if statements) is required. 
+> but a basic understanding of Python syntax,
+> beginner-level programming constructs (e.g. loops and conditionals)
+> and filesystem navigation using the shell
+> (e.g. the `ls` and `cd` commands) is required. 
 >
 {: .prereq}
 
