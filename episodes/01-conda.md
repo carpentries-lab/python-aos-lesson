@@ -42,8 +42,8 @@ Now that we've identified the Python libraries we might want to use,
 how do we go about installing them?
 
 Our first impulse might be to use the Python package installer (pip), 
-but until recently pip only worked for libraries written in pure Python.
-This was a major limitation for the data science community,
+but it really only works for libraries written in pure Python.
+This is a major limitation for the data science community,
 because many scientific Python libraries have C and/or Fortran dependencies.
 To spare people the pain of installing these dependencies,
 a number of scientific Python “distributions” have been released over the years.
