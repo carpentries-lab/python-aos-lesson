@@ -38,7 +38,7 @@ so that two different CMIP6 models (ACCESS-CM2 and ACCESS-ESM1-5) can be compare
 
 > ## Prerequisites
 >
-> Participants must have a some familiarity with Python and the Unix shell.
+> Participants must have some familiarity with Python and the Unix shell.
 > They don't need to be highly proficient,
 > but a basic understanding of Python syntax,
 > beginner-level programming constructs (e.g. loops and conditionals)
