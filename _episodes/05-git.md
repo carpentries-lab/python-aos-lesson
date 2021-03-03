@@ -187,8 +187,8 @@ $ git commit -m "Initial commit of precip climatology script"
 {: .bash}
 
 ~~~
-[master (root-commit) 32b1b66] Initial commit of precip climatology script
- 1 file changed, 121 insertions(+)
+[master (root-commit) 8e69d70] Initial commit of precip climatology script
+ 1 file changed, 75 insertions(+)
  create mode 100644 plot_precipitation_climatology.py
 ~~~
 {: .output}
@@ -197,7 +197,7 @@ When we run `git commit`,
 Git takes everything we have told it to save by using `git add`
 and stores a copy permanently inside the special `.git` directory.
 This permanent copy is called a commit (or revision)
-and its short identifier is `32b1b66`
+and its short identifier is `8e69d70`
 (Your commit may have another identifier.)
 
 We use the `-m` flag (for "message")
@@ -235,9 +235,9 @@ $ git log
 {: .bash}
 
 ~~~
-commit 32b1b664a647abbbe46a12ce98b25fa2cbbb7c76
+commit 8e69d7086cb7c44a48a096122e5324ad91b8a439
 Author: Damien Irving <my@email.com>
-Date:   Mon Dec 18 14:30:16 2017 +1100
+Date:   Wed Mar 3 15:46:48 2021 +1100
 
     Initial commit of precip climatology script
 ~~~
@@ -274,7 +274,7 @@ $ git status
 On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+  (use "git restore -- <file>..." to discard changes in working directory)
 
 	modified:   plot_precipitation_climatology.py
 
@@ -306,36 +306,25 @@ $ git diff
 
 ~~~
 $ git diff
-diff --git a/plot_precipitation_climatology.py b/plot_precipitation_climatology.
-index 056b433..a0aa9e4 100644
+diff --git a/plot_precipitation_climatology.py b/plot_precipitation_climatology.py
+index 58903f5..6c12b29 100644
 --- a/plot_precipitation_climatology.py
 +++ b/plot_precipitation_climatology.py
-@@ -99,7 +99,7 @@ def main(inargs):
+@@ -62,7 +62,7 @@ def main(inargs):
+ 
  
  if __name__ == '__main__':
- 
 -    description='Plot the precipitation climatology.'
 +    description='Plot the precipitation climatology for a given season.'
      parser = argparse.ArgumentParser(description=description)
      
-     parser.add_argument("pr_file", type=str,
+     parser.add_argument("pr_file", type=str, help="Precipitation data file")
 ~~~
 
-The output is cryptic because
-it is actually a series of commands for tools like editors and `patch`
-telling them how to reconstruct one file given the other.
-If we break it down into pieces:
-
-1.  The first line tells us that Git is producing output similar to the Unix `diff` command
-    comparing the old and new versions of the file.
-2.  The second line tells exactly which versions of the file
-    Git is comparing;
-    `056b433` and `a0aa9e4` are unique computer-generated labels for those versions.
-3.  The third and fourth lines once again show the name of the file being changed.
-4.  The remaining lines are the most interesting, they show us the actual differences
-    and the lines on which they occur.
-    In particular,
-    the `+` marker in the first column shows where we added a line.
+The output is a little cryptic because
+it's actually a series of commands for tools like editors and `patch`
+telling them how to reconstruct one file given the other,
+but the + and - markers clearly show what has been changed.
 
 After reviewing our change, it's time to commit it:
 
@@ -368,7 +357,7 @@ $ git commit -m "Small improvement to help information"
 {: .bash}
 
 ~~~
-[master 444c3c0] Small improvement to help information
+[master 35f22b7] Small improvement to help information
  1 file changed, 1 insertion(+), 1 deletion(-)
 ~~~
 {: .output}
@@ -440,8 +429,8 @@ $ git diff
 {: .bash}
 
 ~~~
-diff --git a/plot_precipitation_climatology.py b/plot_precipitation_climatology.
-index a0aa9e4..29a40fb 100644
+diff --git a/plot_precipitation_climatology.py b/plot_precipitation_climatology.py
+index 6c12b29..c6beb12 100644
 --- a/plot_precipitation_climatology.py
 +++ b/plot_precipitation_climatology.py
 @@ -1,9 +1,10 @@
@@ -452,7 +441,10 @@ index a0aa9e4..29a40fb 100644
  import matplotlib.pyplot as plt
  import numpy as np
  import cmocean
--import argparse 
+-import argparse
+ 
+ 
+ def convert_pr_units(darray):
  ~~~
 {: .output}
 
@@ -465,8 +457,8 @@ $ git commit -m "Ordered imports according to PEP 8"
 {: .bash}
 
 ~~~
-[master f9fb238] Ordered imports according to PEP 8
- 1 file changed, 2 insertions(+), 2 deletions(-)
+[master a6cea2c] Ordered imports according to PEP 8
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 ~~~
 {: .output}
 
@@ -497,21 +489,21 @@ $ git log
 {: .bash}
 
 ~~~
-commit f9fb2388a096a217aa2c9e4695bf786605b946c9
+commit a6cea2cd4facde6adfdde3a08ff9413b45479623 (HEAD -> master)
 Author: Damien Irving <my@email.com>
-Date:   Mon Dec 18 15:43:17 2017 +1100
+Date:   Wed Mar 3 16:01:45 2021 +1100
 
     Ordered imports according to PEP 8
 
-commit 444c3c045dc69a323e40d4a04813b88e4b89e05e
+commit 35f22b74b11ed7993b23f9b4554b03ffc295e823
 Author: Damien Irving <my@email.com>
-Date:   Mon Dec 18 14:59:47 2017 +1100
+Date:   Wed Mar 3 15:55:18 2021 +1100
 
     Small improvement to help information
 
-commit 32b1b664a647abbbe46a12ce98b25fa2cbbb7c76
+commit 8e69d7086cb7c44a48a096122e5324ad91b8a439
 Author: Damien Irving <my@email.com>
-Date:   Mon Dec 18 14:30:16 2017 +1100
+Date:   Wed Mar 3 15:46:48 2021 +1100
 
     Initial commit of precip climatology script
 ~~~
@@ -540,23 +532,23 @@ $ git diff HEAD plot_precipitation_climatology.py
 {: .bash}
 
 ~~~
-diff --git a/plot_precipitation_climatology.py b/plot_precipitation_climatology.
-index 29a40fb..344a34e 100644
+diff --git a/plot_precipitation_climatology.py b/plot_precipitation_climatology.py
+index c6beb12..c11707c 100644
 --- a/plot_precipitation_climatology.py
 +++ b/plot_precipitation_climatology.py
-@@ -9,6 +9,7 @@ import iris.coord_categorisation
+@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
+ import numpy as np
  import cmocean
  
 +# A random comment
  
  def convert_pr_units(darray):
      """Convert kg m-2 s-1 to mm day-1.
-
 ~~~
 {: .output}
 
 which is the same as what you would get if you leave out `HEAD` (try it).
-The real goodness in all this is when you can refer to previous commits. 
+The real benefit of using the HEAD notation is the ease with which you can refer to previous commits. 
 We do that by adding `~1` to refer to the commit one before `HEAD`.
 
 ~~~
@@ -564,40 +556,30 @@ $ git diff HEAD~1 plot_precipitation_climatology.py
 ~~~
 {: .bash}
 
-If we want to see the differences between older commits we can use `git diff`
-again, but with the notation `HEAD~2`, `HEAD~3`, and so on, to refer to them.
-
-We could also use `git show` which shows us what changes we made at an older commit
-as well as the commit message,
-rather than the _differences_ between a commit and our working directory.
-
 ~~~
-$ git show HEAD~1 plot_precipitation_climatology.py
-~~~
-{: .bash}
-
-~~~
-commit 444c3c045dc69a323e40d4a04813b88e4b89e05e
-Author: Damien Irving <my@email.com>
-Date:   Mon Dec 18 14:59:47 2017 +1100
-
-    Small improvement to help information
-
 diff --git a/plot_precipitation_climatology.py b/plot_precipitation_climatology.py
-index 056b433..a0aa9e4 100644
+index 6c12b29..c11707c 100644
 --- a/plot_precipitation_climatology.py
 +++ b/plot_precipitation_climatology.py
-@@ -99,7 +99,7 @@ def main(inargs):
+@@ -1,10 +1,12 @@
++import argparse
++
+ import xarray as xr
+ import cartopy.crs as ccrs
+ import matplotlib.pyplot as plt
+ import numpy as np
+ import cmocean
+-import argparse
  
- if __name__ == '__main__':
++# A random comment
  
--    description='Plot the precipitation climatology.'
-+    description='Plot the precipitation climatology for a given season.'
-     parser = argparse.ArgumentParser(description=description)
-     
-     parser.add_argument("pr_file", type=str,
+ def convert_pr_units(darray):
+     """Convert kg m-2 s-1 to mm day-1.
 ~~~
 {: .output}
+
+If we want to see the differences between older commits we can use `git diff`
+again, but with the notation `HEAD~2`, `HEAD~3`, and so on, to refer to them.
 
 We can also refer to commits using
 those long strings of digits and letters
@@ -606,42 +588,49 @@ These are unique IDs for the changes,
 and "unique" really does mean unique:
 every change to any set of files on any computer
 has a unique 40-character identifier.
-Our second commit was given the ID
-`444c3c045dc69a323e40d4a04813b88e4b89e05e`,
+Our first commit (HEAD~2) was given the ID
+`8e69d7086cb7c44a48a096122e5324ad91b8a439`,
 but you only have to use the first seven characters
 for git to know what you mean:
 
 ~~~
-$ git diff 444c3c0 plot_precipitation_climatology.py
+$ git diff 8e69d70 plot_precipitation_climatology.py
 ~~~
 {: .bash}
 
 ~~~
-commit 444c3c045dc69a323e40d4a04813b88e4b89e05e
-Author: Damien Irving <my@email.com>
-Date:   Mon Dec 18 14:59:47 2017 +1100
-
-    Small improvement to help information
-
 diff --git a/plot_precipitation_climatology.py b/plot_precipitation_climatology.py
-index 056b433..a0aa9e4 100644
+index 58903f5..c11707c 100644
 --- a/plot_precipitation_climatology.py
 +++ b/plot_precipitation_climatology.py
-@@ -99,7 +99,7 @@ def main(inargs):
+@@ -1,10 +1,12 @@
++import argparse
++
+ import xarray as xr
+ import cartopy.crs as ccrs
+ import matplotlib.pyplot as plt
+ import numpy as np
+ import cmocean
+-import argparse
+ 
++# A random comment
+ 
+ def convert_pr_units(darray):
+     """Convert kg m-2 s-1 to mm day-1.
+@@ -62,7 +64,7 @@ def main(inargs):
+ 
  
  if __name__ == '__main__':
- 
 -    description='Plot the precipitation climatology.'
 +    description='Plot the precipitation climatology for a given season.'
      parser = argparse.ArgumentParser(description=description)
      
-     parser.add_argument("pr_file", type=str,
+     parser.add_argument("pr_file", type=str, help="Precipitation data file")
 ~~~
 {: .output}
 
 
-All right! So
-we can save changes to files and see what we've changed—now how
+Now that we can save changes to files and see what we've changed —- how
 can we restore older versions of things?
 Let's suppose we accidentally overwrite our file:
 
@@ -668,7 +657,7 @@ $ git status
 On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
-  (use "git checkout -- <file>..." to discard changes in working directory)
+  (use "git restore -- <file>..." to discard changes in working directory)
 
 	modified:   plot_precipitation_climatology.py
 
@@ -683,30 +672,36 @@ no changes added to commit (use "git add" and/or "git commit -a")
 {: .output}
 
 We can put things back the way they were at the time of our last commit
-by using `git checkout`:
+by using `git restore`:
 
 ~~~
-$ git checkout HEAD plot_precipitation_climatology.py
+$ git restore plot_precipitation_climatology.py
 $ cat plot_precipitation_climatology
 ~~~
 {: .bash}
 
 ~~~
 import argparse
-import numpy
+
+import xarray as xr
+import cartopy.crs as ccrs
 ...
 ~~~
 {: .output}
 
-As you might guess from its name,
-`git checkout` checks out (i.e., restores) an old version of a file.
-In this case,
-we're telling Git that we want to recover the version of the file recorded in `HEAD`,
-which is the last saved commit.
-
-We've lost the random comment that we inserted
+The random comment that we inserted has been lost
 (that change hadn't been committed)
-but everything else is there.
+but everything else that was in our last commit is there.
+
+> ## Checking out with Git
+>
+> If you're running a different version of Git,
+> you may see a suggestion for `git checkout` instead of `git restore`.
+> As of Git version 2.29,
+> `git restore` is still an experimental command,
+> and operates as a specialized form of `git checkout`.
+> `git checkout HEAD bin/plotcounts.py` is equivalent to the last command run.
+{: .callout}
 
 > ## plot_precipitation_climatology.py
 >
