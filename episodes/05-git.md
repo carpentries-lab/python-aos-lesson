@@ -21,7 +21,7 @@ keypoints:
 - "`git commit` saves the staged content as a new commit in the local repository."
 - "Always write a log message when committing changes."
 - "`git diff` displays differences between commits."
-- "`git checkout` recovers old versions of files."
+- "`git restore` recovers old versions of files."
 ---
 
 > ## Follow along
@@ -105,9 +105,9 @@ $ ls -F -a
 {: .language-bash}
 
 ~~~
-./					data/
-../					plot_precipitation_climatology.py
-.git/				script_template.py
+./                  data/
+../                 plot_precipitation_climatology.py
+.git/               script_template.py
 ~~~
 {: .output}
 
@@ -274,7 +274,7 @@ $ git status
 On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
-  (use "git restore -- <file>..." to discard changes in working directory)
+  (use "git restore <file>..." to discard changes in working directory)
 
 	modified:   plot_precipitation_climatology.py
 
@@ -379,26 +379,6 @@ To allow for this,
 Git has a special *staging area*
 where it keeps track of things that have been added to
 the current changeset but not yet committed.
-
-> ## Staging Area
->
-> If you think of Git as taking snapshots of changes over the life of a project,
-> `git add` specifies *what* will go in a snapshot
-> (putting things in the staging area),
-> and `git commit` then *actually takes* the snapshot, and
-> makes a permanent record of it (as a commit).
-> If you don't have anything staged when you type `git commit`,
-> Git will prompt you to use `git commit -a` or `git commit --all`,
-> which is kind of like gathering *everyone* for the picture!
-> However, it's almost always better to
-> explicitly add things to the staging area, because you might
-> commit changes you forgot you made. (Going back to snapshots,
-> you might get the extra with incomplete makeup walking on
-> the stage for the snapshot because you used `-a`!)
-> Try to stage things manually,
-> or you might find yourself searching for "git undo commit" more
-> than you would like!
-{: .callout}
 
 ![The Git Staging Area](../fig/05-git-staging-area.svg)
 
@@ -657,7 +637,7 @@ $ git status
 On branch master
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
-  (use "git restore -- <file>..." to discard changes in working directory)
+  (use "git restore <file>..." to discard changes in working directory)
 
 	modified:   plot_precipitation_climatology.py
 
@@ -698,9 +678,10 @@ but everything else that was in our last commit is there.
 > If you're running a different version of Git,
 > you may see a suggestion for `git checkout` instead of `git restore`.
 > As of Git version 2.29,
-> `git restore` is still an experimental command,
+> `git restore` is still an experimental command
 > and operates as a specialized form of `git checkout`.
-> `git checkout HEAD bin/plotcounts.py` is equivalent to the last command run.
+> `git checkout HEAD plot_precipitation_climatology`
+> is the equivalent command.
 {: .callout}
 
 > ## plot_precipitation_climatology.py
