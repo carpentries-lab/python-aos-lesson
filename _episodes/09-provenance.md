@@ -365,11 +365,11 @@ Mon Feb 08 11:40:43 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/pyth
 > ~~~
 > import pdb
 > import argparse
->
-> import numpy as np
-> import matplotlib.pyplot as plt
+> 
 > import xarray as xr
 > import cartopy.crs as ccrs
+> import matplotlib.pyplot as plt
+> import numpy as np
 > import cmocean
 > import cmdline_provenance as cmdprov
 >
