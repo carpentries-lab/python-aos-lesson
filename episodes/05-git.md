@@ -389,8 +389,10 @@ and into long-term storage.
 First,
 we'll tweak the section of the script that imports all the libraries we need,
 by putting them in the order suggested by the
-[PEP 8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/#imports)
-(standard library imports, related third party imports, then local application/library specific imports):
+[PEP 8 - Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/#imports).
+The convention is to import packages from the [Python Standard Library](https://docs.python.org/3/library/) first,
+then other external packages,
+then your own modules (with a blank line between each grouping).
 
 ~~~
 import argparse
