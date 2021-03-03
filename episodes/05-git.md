@@ -426,10 +426,10 @@ by putting them in the order suggested by the
 ~~~
 import argparse
 
-import numpy as np
-import matplotlib.pyplot as plt
 import xarray as xr
 import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
+import numpy as np
 import cmocean
 ~~~
 {: .language-python}
@@ -444,15 +444,15 @@ diff --git a/plot_precipitation_climatology.py b/plot_precipitation_climatology.
 index a0aa9e4..29a40fb 100644
 --- a/plot_precipitation_climatology.py
 +++ b/plot_precipitation_climatology.py
-@@ -1,13 +1,12 @@
- import argparse
+@@ -1,9 +1,10 @@
++import argparse
 +
-+import numpy as np
-+import matplotlib.pyplot as plt
  import xarray as xr
--import matplotlib.pyplot as plt
+ import cartopy.crs as ccrs
+ import matplotlib.pyplot as plt
+ import numpy as np
  import cmocean
--import numpy as np
+-import argparse 
  ~~~
 {: .output}
 
@@ -715,11 +715,11 @@ but everything else is there.
 >
 > ~~~
 > import argparse
->
-> import numpy as np
-> import matplotlib.pyplot as plt
+> 
 > import xarray as xr
 > import cartopy.crs as ccrs
+> import matplotlib.pyplot as plt
+> import numpy as np
 > import cmocean
 >
 >

@@ -140,12 +140,12 @@ $ cat plot_precipitation_climatology.py
 {: .language-bash}
 
 ~~~
-import argparse
 import xarray as xr
-import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
 import numpy as np
 import cmocean
+import argparse
 
 
 def convert_pr_units(darray):
@@ -355,12 +355,12 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > should look something like the following:
 >
 > ~~~
-> import argparse
 > import xarray as xr
-> import matplotlib.pyplot as plt
 > import cartopy.crs as ccrs
+> import matplotlib.pyplot as plt
 > import numpy as np
 > import cmocean
+> import argparse
 >
 >
 > def convert_pr_units(darray):

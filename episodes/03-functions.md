@@ -25,8 +25,8 @@ using the following commands:
 
 ~~~
 import xarray as xr
-import matplotlib.pyplot as plt
 import cartopy.crs as ccrs
+import matplotlib.pyplot as plt
 import numpy as np
 import cmocean
 
