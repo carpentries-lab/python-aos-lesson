@@ -15,7 +15,7 @@ instructors who work/study in the atmosphere and ocean sciences (see below).
 
 The lesson materials have been used in the following workshops and university courses:  
 * [AMS Python Short Course](https://damienirving.github.io/2021-03-02-ams/), March 2021
-* [Data Carpentry workshop at the 2021 AMOS Conference](https://damienirving.github.io/2021-02-04-amos/), February 2021
+* [Data Carpentry workshop at the 2021 AMOS Conference](https://damienirving.github.io/2021-02-04-amos/), February 2021 (access [video recording](https://vimeo.com/showcase/8206169) with password: AMOS_DCW2021)
 * [Data Carpentry workshop at Woods Hole Oceanographic Institution](https://k-rns.github.io/2020-10-26-WHOI-Data/), October 2020
 * [Data Carpentry workshop at the 2020 AMOS Conference](https://damienirving.github.io/2020-02-09-amos/), February 2020
 * [Data Carpentry workshop at the 2019 AMOS Conference](https://damienirving.github.io/2019-06-10-amos/), June 2019
