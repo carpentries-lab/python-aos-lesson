@@ -99,7 +99,6 @@ def get_log_and_key(pr_file, history_attr, plot_type):
     assert plot_type in valid_keys.keys(), f"Image format not one of: {*[*valid_keys],}"
     log_key = valid_keys[plot_type]
     new_log = cmdprov.new_log(infile_history={pr_file: history_attr})
-    new_log = new_log.replace('\n', ' END ')
     
     return log_key, new_log
    
