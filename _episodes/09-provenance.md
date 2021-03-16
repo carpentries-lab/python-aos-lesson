@@ -159,17 +159,9 @@ Megapixels                      : 2.4
 ~~~
 {: .output}
 
-We can see that the command log has been successfully added to the image metadata,
-but the newline characters `\n` have disappeared,
-so we might want to edit our python script to replace each `\n` with something different.
-
-~~~
-new_log = new_log.replace('\n', ' END ')
-~~~
-{: .language-python}
-
-Another issue is that different image files accept different metadata keys.
-For PNG files you can pick whatever keys you like (hence we picked "History"),
+Now that we've successfully added a command log to our PNG image,
+we might want to think about how our script should handle other image formats (e.g. PDF, EPS)?
+For PNG files you can pick whatever metadata keys you like (hence we picked "History"),
 but other formats only allow specific keys.
 For now we can add an assertion so that the program halts
 if someone tries to generate a format that isn't PNG,
@@ -181,7 +173,8 @@ assert image_format == 'png', 'Only valid output format is .png'
 ~~~
 {: .language-python}
 
-Putting this altogether,
+Putting this altogether
+(and removing the debugging tracer),
 here's what the `main` function in `plot_precipitation_climatology.py` looks like:
 
 ~~~
@@ -203,29 +196,9 @@ def main(inargs):
     image_format = inargs.output_file.split('.')[-1]
     assert image_format == 'png', 'Only valid image format is .png'
     new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
-    new_log = new_log.replace('\n', ' END ')
     plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 ~~~
 {: .language-python}
-
-We can re-generate our plot with these new additions to the script,
-and then view the history attribute if we ever need to document
-(or just recall) how we created it.
-
-~~~
-$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc SON pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png
-~~~ 
-{: .language-bash}
-
-~~~
-$ exiftool pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png | grep '^History*' | cut -d ':' -f2-
-~~~
-{: .language-bash}
-
-~~~
-Mon Feb 08 11:40:43 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/python plot_precipitation_climatology.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc SON pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png END Tue Jan 12 14:50:35 2021: ncatted -O -a history,pr,d,, pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc END Tue Jan 12 14:48:10 2021: cdo seldate,2010-01-01,2014-12-31 /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/Amon/pr/gn/latest/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_185001-201412.nc pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc END 2019-11-15T04:32:57Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.7 CMIP-6.2 and CF standards.  END
-~~~
-{: .output}
 
 > ## Handling different image formats
 >
@@ -275,7 +248,6 @@ Mon Feb 08 11:40:43 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/pyth
 > >    assert plot_type in valid_keys.keys(), f"Image format not one of: {*[*valid_keys],}"
 > >    log_key = valid_keys[plot_type]
 > >    new_log = cmdprov.new_log(infile_history={pr_file: history_attr})
-> >    new_log = new_log.replace('\n', ' END ')
 > >    
 > >    return log_key, new_log
 > > ~~~
@@ -463,7 +435,6 @@ Mon Feb 08 11:40:43 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/pyth
 >     assert plot_type in valid_keys.keys(), f"Image format not one of: {*[*valid_keys],}"
 >     log_key = valid_keys[plot_type]
 >     new_log = cmdprov.new_log(infile_history={pr_file: history_attr})
->     new_log = new_log.replace('\n', ' END ')
 >     
 >     return log_key, new_log
 >
