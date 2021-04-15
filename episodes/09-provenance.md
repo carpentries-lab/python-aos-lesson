@@ -60,7 +60,7 @@ and then make the following updates to the original line of code
 responsible for saving the image to file:
 
 ~~~
-new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
+new_log = cmdprov.new_log(infile_logs={inargs.pr_file: dset.attrs['history']})
 pdb.set_trace()
 plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 ~~~
@@ -69,7 +69,7 @@ plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 When we execute `plot_precipitation_climatology.py`,
 `cmdprov.new_log` will create a record of what was entered at the command line.
 The name of the input precipitation file and its history attribute
-have been provided using the `infile_history` argument,
+have been provided using the `infile_logs` argument,
 so that `cmdprov.new_log` can append the history of that file to the new command log.
 The `metadata` argument for `plt.savefig`
 has then been used to save the new command log to the image metadata.
@@ -195,7 +195,7 @@ def main(inargs):
     
     image_format = inargs.output_file.split('.')[-1]
     assert image_format == 'png', 'Only valid image format is .png'
-    new_log = cmdprov.new_log(infile_history={inargs.pr_file: dset.attrs['history']})
+    new_log = cmdprov.new_log(infile_logs={inargs.pr_file: dset.attrs['history']})
     plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 ~~~
 {: .language-python}
@@ -247,7 +247,7 @@ def main(inargs):
 > >
 > >    assert plot_type in valid_keys.keys(), f"Image format not one of: {*[*valid_keys],}"
 > >    log_key = valid_keys[plot_type]
-> >    new_log = cmdprov.new_log(infile_history={pr_file: history_attr})
+> >    new_log = cmdprov.new_log(infile_logs={pr_file: history_attr})
 > >    
 > >    return log_key, new_log
 > > ~~~
@@ -321,7 +321,7 @@ def main(inargs):
 > > to write the new command log to the history attribute of the output dataset:
 > > ~~~
 > > out_dset.attrs = in_dset.attrs
-> > new_log = cmdprov.new_log(infile_history={inargs.pr_file: in_dset.attrs['history']})
+> > new_log = cmdprov.new_log(infile_logs={inargs.pr_file: in_dset.attrs['history']})
 > > out_dset.attrs['history'] = new_log
 > > out_dset.to_netcdf(inargs.output_file)
 > > ~~~
@@ -434,7 +434,7 @@ def main(inargs):
 > 
 >     assert plot_type in valid_keys.keys(), f"Image format not one of: {*[*valid_keys],}"
 >     log_key = valid_keys[plot_type]
->     new_log = cmdprov.new_log(infile_history={pr_file: history_attr})
+>     new_log = cmdprov.new_log(infile_logs={pr_file: history_attr})
 >     
 >     return log_key, new_log
 >
