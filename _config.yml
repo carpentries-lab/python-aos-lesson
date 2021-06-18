@@ -14,7 +14,7 @@ title: "Python for Atmosphere and Ocean Scientists"
 email: "irving.damien@gmail.com"
 
 # Life cycle badge
-life_cycle: "beta"
+life_cycle: "stable"
 
 #------------------------------------------------------------
 # Generic settings (should not need to change).
