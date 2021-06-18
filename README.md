@@ -7,11 +7,12 @@ This repository contains the [Data Carpentry](https://datacarpentry.org/) lesson
 for a single day workshop on using python (and git) in the atmosphere and ocean sciences:
 [https://carpentrieslab.github.io/python-aos-lesson/](https://carpentrieslab.github.io/python-aos-lesson/)
 
-The lesson materials were initially written by [Damien Irving](https://damienirving.github.io/)
-based his experience teaching generic Software Carpentry workshops
-at the annual conference of the Australian Meteorological and Oceanographic Society (AMOS) from 2014-2017.
-They are now maintained and updated by the global community of qualified Carpentries
-instructors who work/study in the atmosphere and ocean sciences (see below). 
+The lessons are maintained and updated by the global community of qualified Carpentries
+instructors who work/study in the atmosphere and ocean sciences (see below).
+The lead maintainers are:
+- [Damien Irving](https://damienirving.github.io/), @DamienIrving
+- [Claire Trenham](https://people.csiro.au/T/C/claire-trenham), @hot007
+- [Sarah Murphy](https://sarahymurphy.github.io/), @sarahymurphy
 
 The lesson materials have been used in the following workshops and university courses:  
 * [AMS Python Short Course](https://damienirving.github.io/2021-03-02-ams/), March 2021 (see [video recording](https://www.youtube.com/playlist?list=PLg9E-Np_QpNVR2mdbnXLfd81-hmKk20sD))
@@ -41,13 +42,13 @@ dozens of workshops around the world.
 
 Now that an initial set of PyAOS lesson materials has been developed, tested and published,
 the goal is to grow the PyAOS instructor community:
-* [Damien Irving](https://damienirving.github.io/) (Climate Change Research Centre, University of New South Wales)
+* [Damien Irving](https://damienirving.github.io/) (Climate Science Centre, CSRIO)
+* [Claire Trenham](https://people.csiro.au/T/C/claire-trenham) (Climate Science Centre, CSIRO)
 * [Sarah Murphy](https://sarahymurphy.github.io/) (Washington State University)
 * [Holger Wolff](https://climateextremes.org.au/member-profile/?memberID=93) (ARC Centre of Excellence for Climate Extremes, Monash University) 
 * [Kathy Pegion](https://www.kathypegion.com/) (Department of Atmospheric Oceanic and Earth Sciences, George Mason University)
 * [Elizabeth Dobbins](https://uaf.edu/cfos/people/research-staff-and-post-docs/detail/elizabeth-dobbins.php) (College of Fisheries and Ocean Sciences, University of Alaska Fairbanks)
 * [Alma Castillo](https://scripps.ucsd.edu/profiles/a4castillotrujillo) (Scripps Institution of Oceanography, UC San Diego)
-* [Claire Trenham](https://people.csiro.au/T/C/claire-trenham) (Climate Science Centre, CSIRO)
 * [Romina Mezher](https://inta.gob.ar/personas/mezher.romina) (Instituto Nacional de Tecnología Agropecuaria)
 
 If you work or study in the atmosphere and ocean sciences and would be interested in getting involved,
