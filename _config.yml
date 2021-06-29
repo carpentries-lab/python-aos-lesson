@@ -3,7 +3,7 @@
 #------------------------------------------------------------
 
 # Which carpentry is this ("swc", "dc", or "lc")?
-carpentry: "dc"
+carpentry: "lab"
 
 # Overall title for pages.
 title: "Python for Atmosphere and Ocean Scientists"
@@ -15,6 +15,9 @@ email: "irving.damien@gmail.com"
 
 # Life cycle badge
 life_cycle: "stable"
+
+# DOI URL for published lesson
+doi: "https://doi.org/10.21105/jose.00037"
 
 #------------------------------------------------------------
 # Generic settings (should not need to change).
