@@ -15,6 +15,7 @@ The lead maintainers are:
 - [Sarah Murphy](https://sarahymurphy.github.io/), @sarahymurphy
 
 The lesson materials have been used in the following workshops and university courses:  
+* [Data Carpentry workshop at the 2022 ICSHMO conference](https://damienirving.github.io/2022-02-08-icshmo-online/), February 2022
 * [AMS Python Short Course](https://damienirving.github.io/2021-03-02-ams/), March 2021 (see [video recording](https://www.youtube.com/playlist?list=PLg9E-Np_QpNVR2mdbnXLfd81-hmKk20sD))
 * [Data Carpentry workshop at the 2021 AMOS Conference](https://damienirving.github.io/2021-02-04-amos/), February 2021 (access [video recording](https://vimeo.com/showcase/8206169) with password: AMOS_DCW2021)
 * [Software Carpentry workshop at the NOAA National Ocean Service](https://martinosorb.github.io/2020-12-08-NOAA/), December 2020
