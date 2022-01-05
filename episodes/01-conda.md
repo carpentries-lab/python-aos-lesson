@@ -159,6 +159,13 @@ $ conda list
 
 (This list can also be viewed in the environments tab of the Navigator.)
 
+> ## Mamba
+>
+> If you find that using conda to install libraries on your computer is slow,
+> try [mamba](https://mamba.readthedocs.io/en/latest/index.html).
+> It's a faster implementation of conda.
+>
+{: .callout}
 
 > ## Creating separate environments
 >
