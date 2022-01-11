@@ -45,7 +45,7 @@ The convention is to call the function that produces the output `main()`,
 but you can call it whatever you like.
 
 The next thing you'll need is a library to parse the command line for input arguments.
-An easy way to add command line argument to your code is [defopt](https://defopt.readthedocs.io/en/stable/features.html).
+An easy way to add command line arguments to your code is [defopt](https://defopt.readthedocs.io/en/stable/features.html).
 
 Putting those together,
 here's a template for what most python command line programs look like:
@@ -128,9 +128,10 @@ script_template.py: error: the following arguments are required: outfile
 ~~~
 {: .output}
 
-To achieve this magic, we need to define the types of arguments the `main` function takes and
-each argument must be documented. For instance `infile: str` indicates that we expect a string and 
-the doc string is `:param infile: Input file name`.
+Looks like magic? This worked because we need defined the types of arguments in the `main` function and
+each argument was documented. For instance `infile: str` indicates that we expect a string and 
+the corresponding doc string is `:param infile: Input file name`. Finally, we had to tell `defopt`
+which function should be run when we execute the script (`defopt.run(main)`).
 
 Using this template as a starting point,
 we can add the functions we developed previously to a script called
@@ -237,7 +238,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > (i.e. `['DJF', 'MAM', 'JJA', 'SON']`).
 >
 > (Hint: Read about the `choices` keyword argument
-> at the [argparse tutorial](https://defopt.readthedocs.io/en/stable/features.html).) 
+> in the [defopt documentation](https://defopt.readthedocs.io/en/stable/features.html).) 
 >
 > > ## Solution
 > >
@@ -254,7 +255,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > 
 > Add an optional command line argument that allows the user to add gridlines to the plot.
 > 
-> (Hint: Define gridlines to be of type `bool` and five it a default value) 
+> (Hint: Define gridlines to be of type `bool` and give it a default value) 
 >
 > > ## Solution
 > >
@@ -276,8 +277,8 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > > {: .language-python}
 > {: .solution}
 {: .challenge}
-> > Note the `*` argument in `main`, which indicates that all subsequent arguments can be set with an option. 
-> > The name of the option starts with the name of the variable, `-g` for gridlines. 
+> > Note the `*` argument in `main` argument list, which indicates that all subsequent arguments can be set with 
+> > command line options. The name of the option starts with the first letter of variable name, `-g` for gridlines. 
 
 > ## Colorbar levels
 >
