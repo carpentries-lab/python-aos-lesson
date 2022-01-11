@@ -6,7 +6,7 @@ import defopt
 
 def main(infile: str, outfile: str):
     """
-    Run the program.
+    Print the input arguments to the screen.
 
     :param str infile: input file
     :param str outfile: output file

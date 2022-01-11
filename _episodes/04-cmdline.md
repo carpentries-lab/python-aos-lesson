@@ -128,7 +128,7 @@ script_template.py: error: the following arguments are required: outfile
 ~~~
 {: .output}
 
-Looks like magic? This worked because we need defined the types of arguments in the `main` function and
+Looks like magic? This worked because we defined the types of arguments in the `main` function and
 each argument was documented. For instance `infile: str` indicates that we expect a string and 
 the corresponding doc string is `:param infile: Input file name`. Finally, we had to tell `defopt`
 which function should be run when we execute the script (`defopt.run(main)`).
@@ -233,7 +233,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 >  
 > For the first improvement,
 > edit the line of code that defines the season argument
-> (`...,season: str,...`)
+> (`..., season: str,...`)
 > so that it only allows the user to input a valid three letter abbreviation
 > (i.e. `['DJF', 'MAM', 'JJA', 'SON']`).
 >
@@ -255,7 +255,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > 
 > Add an optional command line argument that allows the user to add gridlines to the plot.
 > 
-> (Hint: Define gridlines to be of type `bool` and give it a default value) 
+> (Hint: Define gridlines to be of type `bool` and give it a default value.) 
 >
 > > ## Solution
 > >
@@ -278,7 +278,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > {: .solution}
 {: .challenge}
 > > Note the `*` argument in `main` argument list, which indicates that all subsequent arguments can be set with 
-> > command line options. The name of the option starts with the first letter of variable name, `-g` for gridlines. 
+> > command line options. The name of the option starts with the first letter of the variable name, `-g` for gridlines. 
 
 > ## Colorbar levels
 >
@@ -311,7 +311,8 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > >
 > > ...
 > >
-> > def main(pr_file: str, season: Literal['DJF', 'MAM', 'JJA', 'SON'], output_file: str, *, gridlines: bool=False, cbar_levels: list[float]=None)):
+> > def main(pr_file: str, season: Literal['DJF', 'MAM', 'JJA', 'SON'], output_file: str, *, 
+> >          gridlines: bool=False, cbar_levels: list[float]=None)):
 > >
 > >     ...
 > >     :param cbar_levels: list of levels / tick marks to appear on the colorbar
