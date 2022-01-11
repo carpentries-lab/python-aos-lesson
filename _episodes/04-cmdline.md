@@ -5,10 +5,10 @@ exercises: 30
 questions:
 - "How can I write my own command line programs?"
 objectives:
-- "Use the `argparse` library to manage command-line arguments in a program."
+- "Use the `defopt` library to manage command-line arguments in a program."
 - "Structure Python scripts according to a simple template."
 keypoints:
-- "Libraries such as `argparse` can be used the efficiently handle command line arguments."
+- "Libraries such as `defopt` can be used the efficiently handle command line arguments."
 - "Most Python scripts have a similar structure that can be used as a template."
 ---
 
@@ -45,7 +45,7 @@ The convention is to call the function that produces the output `main()`,
 but you can call it whatever you like.
 
 The next thing you'll need is a library to parse the command line for input arguments.
-The most widely used option is [argparse](https://docs.python.org/3/library/argparse.html).
+An easy way to add command line argument to your code is [defopt](https://defopt.readthedocs.io/en/stable/features.html).
 
 Putting those together,
 here's a template for what most python command line programs look like:
@@ -56,34 +56,32 @@ $ cat script_template.py
 {: .language-bash}
 
 ~~~
-import argparse
+import defopt
 
 #
 # All your functions (that will be called by main()) go here.
 #
 
-def main(inargs):
-    """Run the program."""
+def main(infile: str, outfile: str):
+    """
+    Run the program.
 
-    print('Input file: ', inargs.infile)
-    print('Output file: ', inargs.outfile)
+    :param infile: Input file name
+    :param outfile: Output file name
+    """
+
+    print('Input file: ', infile)
+    print('Output file: ', outfile)
 
 
 if __name__ == '__main__':
 
-    description='Print the input arguments to the screen.'
-    parser = argparse.ArgumentParser(description=description)
-    
-    parser.add_argument("infile", type=str, help="Input file name")
-    parser.add_argument("outfile", type=str, help="Output file name")
-
-    args = parser.parse_args()            
-    main(args)
+     defopt.run(main)
 ~~~
 {: .language-python}
 
 By running `script_template.py` at the command line
-we'll see that `argparse` handles all the input arguments:
+we'll see that `defopt` handles all the input arguments:
 
 ~~~
 $ python script_template.py in.nc out.nc
@@ -130,6 +128,10 @@ script_template.py: error: the following arguments are required: outfile
 ~~~
 {: .output}
 
+To achieve this magic, we need to define the types of arguments the `main` function takes and
+each argument must be documented. For instance `infile: str` indicates that we expect a string and 
+the doc string is `:param infile: Input file name`.
+
 Using this template as a starting point,
 we can add the functions we developed previously to a script called
 `plot_precipitation_climatology.py`.
@@ -145,7 +147,7 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import numpy as np
 import cmocean
-import argparse
+import defopt
 
 
 def convert_pr_units(darray):
@@ -163,7 +165,7 @@ def convert_pr_units(darray):
 
 
 def create_plot(clim, model, season, gridlines=False):
-    """Plot the precipitation climatology.
+    """Create plot.
     
     Args:
       clim (xarray.DataArray): Precipitation climatology data
@@ -191,29 +193,27 @@ def create_plot(clim, model, season, gridlines=False):
     plt.title(title)
 
 
-def main(inargs):
-    """Run the program."""
+def main(pr_file: str, season: str, output_file: str):
+    """
+    Plot the precipitation climatology.
 
-    dset = xr.open_dataset(inargs.pr_file)
+    :param pr_file: Precipitation data file
+    :param season: Season to plot
+    :param output_file: Output file name
+    """
+
+    dset = xr.open_dataset(pr_file)
     
     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
     clim = convert_pr_units(clim)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season)
-    plt.savefig(inargs.output_file, dpi=200)
+    create_plot(clim, dset.attrs['source_id'], season)
+    plt.savefig(output_file, dpi=200)
 
 
 if __name__ == '__main__':
-    description='Plot the precipitation climatology.'
-    parser = argparse.ArgumentParser(description=description)
-    
-    parser.add_argument("pr_file", type=str, help="Precipitation data file")
-    parser.add_argument("season", type=str, help="Season to plot")
-    parser.add_argument("output_file", type=str, help="Output file name")
 
-    args = parser.parse_args()
-    
-    main(args)
+     defopt.run(main)
 ~~~
 {: .language-python}
 
@@ -231,20 +231,20 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > that you downloaded earlier from the setup tab at the top of the page.
 >  
 > For the first improvement,
-> edit the line of code that defines the season command line argument
-> (`parser.add_argument("season", type=str, help="Season to plot")`)
+> edit the line of code that defines the season argument
+> (`...,season: str,...`)
 > so that it only allows the user to input a valid three letter abbreviation
 > (i.e. `['DJF', 'MAM', 'JJA', 'SON']`).
 >
 > (Hint: Read about the `choices` keyword argument
-> at the [argparse tutorial](https://docs.python.org/3/howto/argparse.html).) 
+> at the [argparse tutorial](https://defopt.readthedocs.io/en/stable/features.html).) 
 >
 > > ## Solution
 > >
 > > ~~~
-> > parser.add_argument("season", type=str,
-> >                     choices=['DJF', 'MAM', 'JJA', 'SON'], 
-> >                     help="Season to plot")
+> > from types import Literal
+> > ...
+> > def main(pr_file: str, season: Literal['DJF', 'MAM', 'JJA', 'SON'], output_file: str):
 > > ~~~                         
 > > {: .language-python}
 > {: .solution}
@@ -254,8 +254,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > 
 > Add an optional command line argument that allows the user to add gridlines to the plot.
 > 
-> (Hint: Read about the `action="store_true"` keyword argument
-> at the [argparse tutorial](https://docs.python.org/3/howto/argparse.html).) 
+> (Hint: Define gridlines to be of type `bool` and five it a default value) 
 >
 > > ## Solution
 > >
@@ -265,33 +264,24 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > > ~~~
 > > ...
 > >
-> > def main(inargs):
+> > def main(pr_file: str, season: Literal['DJF', 'MAM', 'JJA', 'SON'], output_file: str, *, gridlines: bool=False):
 > >
 > >    ... 
 > >
-> >    create_plot(clim, dset.attrs['source_id'], inargs.season, gridlines=inargs.gridlines)
+> >    create_plot(clim, dset.attrs['source_id'], season, gridlines=gridlines)
 > >
 > > ...
-> >
-> > if __name__ == '__main__':
-> >
-> >     ... 
-> > 
-> >     parser.add_argument("--gridlines", action="store_true", default=False,
-> >                         help="Include gridlines on the plot")
-> >
-> > ... 
 > > 
 > > ~~~
 > > {: .language-python}
 > {: .solution}
 {: .challenge}
+> > Note the `*` argument in `main`, which indicates that all subsequent arguments can be set with an option. 
+> > The name of the option starts with the name of the variable, `-g` for gridlines. 
 
 > ## Colorbar levels
 >
 > Add an optional command line argument that allows the user to specify the tick levels used in the colourbar 
->
-> (Hint: You'll need to use the `nargs='*'` keyword argument.)
 >
 > > ## Solution
 > >
@@ -320,24 +310,16 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > >
 > > ...
 > >
-> > def main(inargs):
+> > def main(pr_file: str, season: Literal['DJF', 'MAM', 'JJA', 'SON'], output_file: str, *, gridlines: bool=False, cbar_levels: list[float]=None)):
 > >
+> >     ...
+> >     :param cbar_levels: list of levels / tick marks to appear on the colorbar
 > >     ... 
 > >
-> >     create_plot(clim, dset.attrs['source_id'], inargs.season,
-> >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
+> >     create_plot(clim, dset.attrs['source_id'], season,
+> >                 gridlines=gridlines, levels=cbar_levels)
 > >
 > > ...
-> >
-> > if __name__ == '__main__':
-> >
-> >     ... 
-> > 
-> >     parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-> >                         help='list of levels / tick marks to appear on the colorbar')
-> >
-> > ... 
-> > 
 > > ~~~
 > > {: .language-python}
 > {: .solution}
@@ -360,7 +342,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 > import matplotlib.pyplot as plt
 > import numpy as np
 > import cmocean
-> import argparse
+> import defopt
 >
 >
 > def convert_pr_units(darray):
@@ -378,7 +360,7 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 >
 >
 > def create_plot(clim, model, season, gridlines=False, levels=None):
->     """Plot the precipitation climatology.
+>     """.
 >    
 >     Args:
 >       clim (xarray.DataArray): Precipitation climatology data
@@ -410,35 +392,31 @@ $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1
 >     plt.title(title)
 >
 >
-> def main(inargs):
->     """Run the program."""
+> def main(pr_file: str, season: Literal['DJF', 'MAM', 'JJA', 'SON'], output_file: str, *, 
+>          gridlines: bool=False, cbar_levels: list[float]=None):
+>     """
+>     Plot the precipitation climatology.
 > 
->     dset = xr.open_dataset(inargs.pr_file)
+>     :param pr_file: Precipitation data file
+>     :param season: Season to plot
+>     :param output_file: Output file name
+>     :param gridlines: Select whether to plot gridlines
+>     :param cbar_levels: List of levels / tick marks to appear on the colorbar
+>     """
+> 
+>     dset = xr.open_dataset(pr_file)
 >     
 >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >     clim = convert_pr_units(clim)
 > 
->     create_plot(clim, dset.attrs['source_id'], inargs.season,
->                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
->     plt.savefig(inargs.output_file, dpi=200)
+>     create_plot(clim, dset.attrs['source_id'], season,
+>                 gridlines=gridlines, levels=cbar_levels)
+>     plt.savefig(output_file, dpi=200)
 >
 >
 > if __name__ == '__main__':
->     description='Plot the precipitation climatology.'
->     parser = argparse.ArgumentParser(description=description)
->    
->     parser.add_argument("pr_file", type=str, help="Precipitation data file")
->     parser.add_argument("season", type=str, help="Season to plot")
->     parser.add_argument("output_file", type=str, help="Output file name")
 > 
->     parser.add_argument("--gridlines", action="store_true", default=False,
->                         help="Include gridlines on the plot")
->     parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
->                         help='list of levels / tick marks to appear on the colorbar')
->
->     args = parser.parse_args()
->    
->     main(args)
+>     defopt.run(main)
 >
 > ~~~
 > {: .language-python}

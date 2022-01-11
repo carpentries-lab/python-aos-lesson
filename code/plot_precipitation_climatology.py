@@ -3,7 +3,7 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import numpy as np
 import cmocean
-import argparse
+import defopt
 
 
 def convert_pr_units(darray):
@@ -49,27 +49,25 @@ def create_plot(clim, model, season, gridlines=False):
     plt.title(title)
 
 
-def main(inargs):
-    """Run the program."""
+def main(pr_file: str, season: str, output_file: str):
+    """
+    Plot the precipitation climatology.
 
-    dset = xr.open_dataset(inargs.pr_file)
+    :param pr_file: Precipitation data file
+    :param season: Season to plot
+    :param output_file: Output file name
+    """
+
+    dset = xr.open_dataset(pr_file)
     
     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
     clim = convert_pr_units(clim)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season)
-    plt.savefig(inargs.output_file, dpi=200)
+    create_plot(clim, dset.attrs['source_id'], season)
+    plt.savefig(output_file, dpi=200)
 
 
 if __name__ == '__main__':
-    description='Plot the precipitation climatology.'
-    parser = argparse.ArgumentParser(description=description)
     
-    parser.add_argument("pr_file", type=str, help="Precipitation data file")
-    parser.add_argument("season", type=str, help="Season to plot")
-    parser.add_argument("output_file", type=str, help="Output file name")
-
-    args = parser.parse_args()
-    
-    main(args)
+    defopt.run(main)
     
