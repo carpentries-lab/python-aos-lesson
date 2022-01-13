@@ -42,7 +42,7 @@ please follow The Carpentries [software installation instructions](https://carpe
 {: .callout}
 
 Your workshop instructor may also ask that you install the python packages introduced in the
-[first lesson](https://carpentrieslab.github.io/python-aos-lesson/01-conda/index.html)
+[first lesson](https://carpentries-lab.github.io/python-aos-lesson/01-conda/index.html)
 ahead of time.
 You can do this via the command line or by using the Anaconda Navigator:
 

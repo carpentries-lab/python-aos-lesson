@@ -374,7 +374,7 @@ Python 3 notebook:
 >
 > > ## Solution
 > > 
-> > The [setup menu](https://carpentrieslab.github.io/python-aos-lesson/setup.html)
+> > The [setup menu](https://carpentries-lab.github.io/python-aos-lesson/setup.html)
 > > at the top of the page
 > > contains drop-down boxes explaining how to install the Python libraries
 > > using the Bash Shell or Anaconda Navigator.

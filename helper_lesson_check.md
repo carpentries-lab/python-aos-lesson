@@ -5,7 +5,7 @@ Once you've installed the required software for the workshop (following the inst
 1. Clone this repository:
 
 ```
-$ git clone https://github.com/carpentrieslab/python-aos-lesson.git
+$ git clone https://github.com/carpentries-lab/python-aos-lesson.git
 $ cd python-aos-lesson
 ```
 
