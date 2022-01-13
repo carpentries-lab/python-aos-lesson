@@ -26,7 +26,7 @@ for the high resolution CNRM-CM6-1-HR model.
 >
 > Instructors teaching this lesson can download the CNRM-CM6-1-HR
 > daily precipitation data from the Earth System Grid Federation (ESGF).
-> See the [instructor notes](https://carpentrieslab.github.io/python-aos-lesson/guide/index.html) for details.
+> See the [instructor notes](https://carpentries-lab.github.io/python-aos-lesson/guide/index.html) for details.
 > Since it is a very large download (45 GB),
 > learners are not expected to download the data.
 > (None of the exercises at the end of the lesson require downloading the data.)

@@ -5,7 +5,7 @@
 
 This repository contains the [Data Carpentry](https://datacarpentry.org/) lesson materials
 for a single day workshop on using python (and git) in the atmosphere and ocean sciences:
-[https://carpentrieslab.github.io/python-aos-lesson/](https://carpentrieslab.github.io/python-aos-lesson/)
+[https://carpentries-lab.github.io/python-aos-lesson/](https://carpentries-lab.github.io/python-aos-lesson/)
 
 The lessons are maintained and updated by the global community of qualified Carpentries
 instructors who work/study in the atmosphere and ocean sciences (see below).

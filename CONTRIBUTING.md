@@ -47,7 +47,7 @@ and to meet some of our community members.
 ## Structure of the respository
 
 This respository contains all the code that generates the lesson website at
-<https://carpentrieslab.github.io/python-aos-lesson/>.
+<https://carpentries-lab.github.io/python-aos-lesson/>.
 
 In creating this repository,
 we have used The Carpentries [lesson template][lesson-template].
@@ -100,6 +100,6 @@ You can also [reach us by email][email].
 [github-flow]: https://github.com/dmgt/swc_github_flow/blob/master/for_novice_contributors.md
 [github-join]: https://github.com/join
 [how-contribute]: https://egghead.io/series/how-to-contribute-to-an-open-source-project-on-github
-[issues]: https://github.com/carpentrieslab/python-aos-lesson/issues
+[issues]: https://github.com/carpentries-lab/python-aos-lesson/issues
 [lesson-template]: https://carpentries.github.io/lesson-example
 [swc-site]: https://software-carpentry.org/
