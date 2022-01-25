@@ -252,7 +252,7 @@ to record how long it takes:
 
 ~~~
 %%time
-pr_max.compute()
+pr_max_done = pr_max.compute()
 ~~~
 {: .language-python}
 
@@ -291,7 +291,7 @@ Dashboard: http://127.0.0.1:8787/status   Cores: 4
 
 ~~~
 %%time
-pr_max.compute()
+pr_max_done = pr_max.compute()
 ~~~
 {: .language-python}
 
@@ -324,17 +324,17 @@ import cartopy.crs as ccrs
 import numpy as np
 import cmocean
 
-pr_max.data = pr_max.data * 86400
-pr_max.attrs['units'] = 'mm/day'
+pr_max_done.data = pr_max_done.data * 86400
+pr_max_done.attrs['units'] = 'mm/day'
 
 fig = plt.figure(figsize=[12,5])
 ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-pr_max.plot.contourf(ax=ax,
-                     levels=np.arange(0, 450, 50),
-                     extend='max',
-                     transform=ccrs.PlateCarree(),
-                     cbar_kwargs={'label': pr_max.units},
-                     cmap=cmocean.cm.haline_r)
+pr_max_done.plot.contourf(ax=ax,
+                         levels=np.arange(0, 450, 50),
+                         extend='max',
+                         transform=ccrs.PlateCarree(),
+                         cbar_kwargs={'label': pr_max.units},
+                         cmap=cmocean.cm.haline_r)
 ax.coastlines()
 
 model = dset.attrs['source_id']
