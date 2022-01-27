@@ -24,7 +24,7 @@ and place them in a new folder/directory:
 In order to complete the lessons,
 you will need access to the following:
 
-* The bash shell
+* The bash shell (the Z-shell is also fine, which is default on new Macs)
 * A text editor
 * Git
 * Anaconda (which is a Python distribution)
