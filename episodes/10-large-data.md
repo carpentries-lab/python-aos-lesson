@@ -73,7 +73,7 @@ while `?` matches any one character,
 just like at the Unix shell. 
 
 ~~~
-pr_files = glob.glob('data/pr*.nc')
+pr_files = glob.glob('data/pr_day*.nc')
 pr_files.sort()
 print(pr_files)
 ~~~
