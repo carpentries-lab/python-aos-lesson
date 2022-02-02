@@ -40,7 +40,7 @@ spread across seven netCDF files,
 most of which are 6.7 GB in size.
 
 ~~~
-$ ls -lh data/pr*.nc
+$ ls -lh data/pr_day*.nc
 ~~~
 {: .language-bash}
 
