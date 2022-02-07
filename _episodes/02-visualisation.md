@@ -332,8 +332,11 @@ plt.show()
 > > ## Solution
 > > ~~~
 > > clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True) 
-> > 
+> > clim.data = clim.data * 86400
+> > clim.attrs['units'] = 'mm/day'
+> >
 > > clim.sel(season='JJA').plot.contourf(ax=ax,
+> >                                      ...
 > > ~~~
 > > {: .language-python}
 > {: .solution}
