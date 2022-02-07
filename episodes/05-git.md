@@ -140,6 +140,16 @@ nothing added to commit but untracked files present (use "git add" to track)
 ~~~
 {: .output}
 
+> ## Branch naming
+>
+> If you're running an older version of Git,
+> you may see `On branch master` instead of `On branch main` 
+> at the top of the `git status` output. 
+> Since 2021, Git has followed a move in the developer community 
+> to change the default branch name from "master" to "main"
+> for cultural sensitivity reasons, avoiding "master/slave" terminology.
+{: .callout}
+
 ## Tracking changes
 
 The "untracked files" message means that there's a file/s in the directory
@@ -781,4 +791,3 @@ but everything else that was in our last commit is there.
 > ~~~
 > {: .language-python}
 {: .solution}
-
