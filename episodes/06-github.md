@@ -134,9 +134,7 @@ You give this padlock, or public key, to GitHub and say
 that have my private key can unlock communications and send git commands as my GitHub account.”  
 
 What we will do now is the minimum required to set up the SSH keys
-and add the public key to a GitHub account.
-The first thing we are going to do is check if this has already been done on the computer you’re on.
-Because generally speaking, this setup only needs to happen once and then you can forget about it. 
+and add the public key to a GitHub account. 
 
 > ## Keeping your keys secure
 >
@@ -145,6 +143,8 @@ Because generally speaking, this setup only needs to happen once and then you ca
 > Especially if you are using multiple computers to access your account.
 {: .callout}
 
+The first thing we are going to do is check if this has already been done on the computer we’re on.
+Because generally speaking, this setup only needs to happen once and then you can forget about it.
 We can run the list command to check what key pairs already exist on our computer.
 
 ~~~
@@ -152,8 +152,8 @@ ls -al ~/.ssh
 ~~~
 {: .language-bash}
 
-Your output is going to look a little different depending on whether or not SSH
-has ever been set up on the computer you are using. 
+(Your output is going to look a little different depending on whether or not SSH
+has ever been set up on the computer you are using.) 
 
 I have not set up SSH on my computer, so my output is 
 
@@ -174,7 +174,7 @@ $ ssh-keygen -t ed25519 -C "you@email.com"
 {: .language-bash}
 
 The `-t` option specifies which type of algorithm to use
-and `-C` attaches a comment to the key (here, your email):  
+and `-C` attaches a comment to the key (here, your email).
 
 If you are using a legacy system that doesn't support the Ed25519 algorithm, use:
 `$ ssh-keygen -t rsa -b 4096 -C "you@email.com"`
@@ -193,8 +193,9 @@ Enter passphrase (empty for no passphrase):
 ~~~
 {: .output}
 
-Now, it is prompting Dracula for a passphrase.
-Since he is using his lab’s laptop that other people sometimes have access to, he wants to create a passphrase.
+Now, it is prompting us for a passphrase.
+If you're using a laptop that other people sometimes have access to,
+you might want to create a passphrase.
 Be sure to use something memorable or save your passphrase somewhere,
 as there is no "reset my password" option. 
 
@@ -203,7 +204,7 @@ Enter same passphrase again:
 ~~~
 {: .output}
 
-After entering the same passphrase a second time, we receive the confirmation
+After entering the same passphrase a second time, we receive the confirmation.
 
 ~~~
 Your identification has been saved in /home/damien/.ssh/id_ed25519
@@ -287,8 +288,10 @@ Click "Settings," then on the settings page, click "SSH and GPG keys,"
 on the left side "Account settings" menu.
 Click the "New SSH key" button on the right side.
 Now, you can add a title
-(e.g. "my work laptop" so you can remember where the original key pair files are located),
+(e.g. "work laptop" so you can remember where the original key pair files are located),
 paste your SSH key into the field, and click the "Add SSH key" to complete the setup.
+
+![Adding SSH heys on GitHub](../fig/06-github-add-ssh-keys.png)
 
 Now that we’ve set that up, let’s check our authentication again from the command line. 
 ~~~
