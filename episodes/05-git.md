@@ -13,7 +13,7 @@ objectives:
 - "Compare various versions of tracked files."
 - "Restore old versions of files."
 keypoints:
-- "Use git config to configure a user name, email address, editor, and other preferences once per machine."
+- "Use `git config` to configure a user name, email address, editor, and other preferences once per machine."
 - "`git init` initializes a repository."
 - "`git status` shows the status of a repository."
 - "Files can be stored in a project’s working directory (which users see), the staging area (where the next commit is being built up) and the local repository (where commits are permanently recorded)."
@@ -125,7 +125,7 @@ $ git status
 
 ~~~
 $ git status
-On branch master
+On branch main
 
 Initial commit
 
@@ -159,7 +159,7 @@ $ git status
 {: .bash}
 
 ~~~
-On branch master
+On branch main
 
 Initial commit
 
@@ -187,7 +187,7 @@ $ git commit -m "Initial commit of precip climatology script"
 {: .bash}
 
 ~~~
-[master (root-commit) 8e69d70] Initial commit of precip climatology script
+[main (root-commit) 8e69d70] Initial commit of precip climatology script
  1 file changed, 75 insertions(+)
  create mode 100644 plot_precipitation_climatology.py
 ~~~
@@ -214,7 +214,7 @@ $ git status
 {: .bash}
 
 ~~~
-On branch master
+On branch main
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
@@ -271,7 +271,7 @@ $ git status
 {: .bash}
 
 ~~~
-On branch master
+On branch main
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
@@ -334,7 +334,7 @@ $ git commit -m "Small improvement to help information"
 {: .bash}
 
 ~~~
-On branch master
+On branch main
 Changes not staged for commit:
 	modified:   plot_precipitation_climatology.py
 
@@ -357,7 +357,7 @@ $ git commit -m "Small improvement to help information"
 {: .bash}
 
 ~~~
-[master 35f22b7] Small improvement to help information
+[main 35f22b7] Small improvement to help information
  1 file changed, 1 insertion(+), 1 deletion(-)
 ~~~
 {: .output}
@@ -439,7 +439,7 @@ $ git commit -m "Ordered imports according to PEP 8"
 {: .bash}
 
 ~~~
-[master a6cea2c] Ordered imports according to PEP 8
+[main a6cea2c] Ordered imports according to PEP 8
  1 file changed, 2 insertions(+), 1 deletion(-)
 ~~~
 {: .output}
@@ -452,7 +452,7 @@ $ git status
 {: .bash}
 
 ~~~
-On branch master
+On branch main
 Untracked files:
   (use "git add <file>..." to include in what will be committed)
 
@@ -471,7 +471,7 @@ $ git log
 {: .bash}
 
 ~~~
-commit a6cea2cd4facde6adfdde3a08ff9413b45479623 (HEAD -> master)
+commit a6cea2cd4facde6adfdde3a08ff9413b45479623 (HEAD -> main)
 Author: Damien Irving <my@email.com>
 Date:   Wed Mar 3 16:01:45 2021 +1100
 
@@ -636,7 +636,7 @@ $ git status
 {: .bash}
 
 ~~~
-On branch master
+On branch main
 Changes not staged for commit:
   (use "git add <file>..." to update what will be committed)
   (use "git restore <file>..." to discard changes in working directory)
