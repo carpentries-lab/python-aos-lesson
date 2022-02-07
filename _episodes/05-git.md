@@ -786,18 +786,8 @@ but everything else that was in our last commit is there.
 >
 >     args = parser.parse_args()
 >    
->     > ## Checking out with Git
->
-> If you're running a different version of Git,
-> you may see a suggestion for `git checkout` instead of `git restore`.
-> As of Git version 2.29,
-> `git restore` is still an experimental command
-> and operates as a specialized form of `git checkout`.
-> `git checkout HEAD plot_precipitation_climatology`
-> is the equivalent command.
-{: .callout}(args)
+>     main(args)
 >
 > ~~~
 > {: .language-python}
 {: .solution}
-
