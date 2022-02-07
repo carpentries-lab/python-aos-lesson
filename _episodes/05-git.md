@@ -140,6 +140,16 @@ nothing added to commit but untracked files present (use "git add" to track)
 ~~~
 {: .output}
 
+> ## Branch naming
+>
+> If you're running an older version of Git,
+> you may see `On branch master` instead of `On branch main` 
+> at the top of the `git status` output. 
+> Since 2021, Git has followed a move in the developer community 
+> to change the default branch name from "master" to "main"
+> for cultural sensitivity reasons, avoiding "master/slave" terminology.
+{: .callout}
+
 ## Tracking changes
 
 The "untracked files" message means that there's a file/s in the directory
@@ -776,7 +786,16 @@ but everything else that was in our last commit is there.
 >
 >     args = parser.parse_args()
 >    
->     main(args)
+>     > ## Checking out with Git
+>
+> If you're running a different version of Git,
+> you may see a suggestion for `git checkout` instead of `git restore`.
+> As of Git version 2.29,
+> `git restore` is still an experimental command
+> and operates as a specialized form of `git checkout`.
+> `git checkout HEAD plot_precipitation_climatology`
+> is the equivalent command.
+{: .callout}(args)
 >
 > ~~~
 > {: .language-python}
