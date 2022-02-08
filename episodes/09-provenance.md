@@ -453,7 +453,6 @@ def main(inargs):
 >
 >     create_plot(clim, dset.attrs['source_id'], inargs.season,
 >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
->     plt.savefig(inargs.output_file, dpi=200)
 >
 >     log_key, new_log = get_log_and_key(inargs.pr_file,
 >                                        dset.attrs['history'],
