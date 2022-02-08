@@ -358,21 +358,21 @@ $ git push origin master
 >     plt.title(title)
 >
 >
-> def main(inargs):
+> def main(pr_file, season, gridlines, cbar_levels, output_file, mask, sftlf_file, realm):
 >     """Run the program."""
 > 
->     dset = xr.open_dataset(inargs.pr_file)
+>     dset = xr.open_dataset(pr_file)
 >     
 >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >     clim = convert_pr_units(clim)
 > 
->     if inargs.mask:
->         sftlf_file, realm = inargs.mask
+>     if mask:
+>         sftlf_file, realm = mask
 >         clim = apply_mask(clim, sftlf_file, realm)
->
->     create_plot(clim, dset.attrs['source_id'], inargs.season,
->                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
->     plt.savefig(inargs.output_file, dpi=200)
+> 
+>     create_plot(clim, dset.attrs['source_id'], season,
+>                 gridlines=gridlines, levels=cbar_levels)
+>     plt.savefig(output_file, dpi=200)
 >
 >
 > if __name__ == '__main__':
@@ -390,10 +390,18 @@ $ git push origin master
 >     parser.add_argument("--mask", type=str, nargs=2,
 >                         metavar=('SFTLF_FILE', 'REALM'), default=None,
 >                         help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
->
+> 
 >     args = parser.parse_args()
 >   
->     main(args)
+>     if inargs.mask:
+>         mask = True
+>         sftlf_file, realm = inargs.mask
+>     else:
+>         mask = False
+>         sftlf_file = None
+>         realm = None
+> 
+>     main(inargs.pr_file, inargs.season, inargs.gridlines, inargs.cbar_levels, inargs.output_file, mask, sftlf_file, realm)
 >
 > ~~~
 > {: .language-python}
