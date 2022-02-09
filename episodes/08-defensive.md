@@ -5,6 +5,8 @@ exercises: 15
 questions:
 - "How can I make my programs more reliable?"
 objectives:
+- Signal errors by raising exceptions
+- Use `try`/`except` blocks to catch and handle exceptions 
 - "Explain what an assertion is."
 - "Add assertions that check the program's state is correct."
 - "Debug Python scripts using the `pdb` library."
@@ -26,205 +28,65 @@ keypoints:
 >
 {: .callout}
 
-Now that we've written `plot_precipitation_climatology.py`,
-how can we be sure that it's producing reliable results?
+Now that we've written a command line program to plot precipitation climatologies,
+it is inevitable that people (including our future selves)
+will misunderstand (or misremember) how to use the program.
+We should therefore plan from the start to detect and handle errors.
 
-The first step toward getting the right answers from our programs
-is to assume that mistakes *will* happen
-and to guard against them.
-This is called defensive programming,
-and the most common way to do it is to add assertions to our code
-so that it checks itself as it runs.
-An assertion is simply a statement that something must be true at a certain point in a program.
-When Python sees one,
-it evaluates the assertion's condition.
-If it's true,
-Python does nothing,
-but if it's false,
-Python halts the program immediately
-and prints the error message if one is provided.
-
-To demonstrate an assertion in action,
-consider this piece of code that halts as soon as the loop encounters a rainfall observation value that isn't positive:
+There are (at least) two distinguishable kinds of errors that can arise:
+syntax errors and exceptions.
+We are all very familiar with the former:
 
 ~~~
-rainfall_obs = [1.5, 2.3, 0.7, -0.2, 4.4]
-total = 0.0
-for ob in rainfall_obs:
-    assert ob >= 0.0, 'Rainfall observations should only contain positive values'
-    total += ob
-print('total rainfall is:', total)
+rainfall = 5
+if rainfall > 5
+    print('heavy rainfall')
 ~~~
 {: .language-python}
 
 ~~~
----------------------------------------------------------------------------
-AssertionError                            Traceback (most recent call last)
-<ipython-input-19-33d87ea29ae4> in <module>()
-      2 total = 0.0
-      3 for ob in rainfall_obs:
-----> 4     assert ob > 0.0, 'Rainfall observations should only contain positive values'
-      5     total += ob
-      6 print('total rainfall is:', total)
-
-AssertionError: Rainfall observations should only contain positive values
+    if rainfall > 10
+                    ^
+SyntaxError: expected ':'
 ~~~
 {: .error}
 
-Programs like the Firefox browser are full of assertions:
-10-20% of the code they contain
-are there to check that the other 80-90% are working correctly.
-
-To see how assertions might be useful
-in the context of the `plot_precipitation_climatology.py` script,
-let's try the following at the command line:
+Once a statement or expression is syntactically correct,
+it may cause an error when an attempt is made to execute it.
+Errors detected during execution are called exceptions
+(i.e. an exception from normal behaviour)
+and there are lots of [different types](https://docs.python.org/3/library/exceptions.html#exception-hierarchy):
 
 ~~~
-$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc JJA pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc Land
-~~~
-{: .language-bash}
-
-If we view the resulting image,
-we can see that the ocean has been masked,
-even though we specified the land at the command line.
-
-![Ocean masked rainfall plot](../fig/08-defensive-ocean-mask.png)
-
-When confronted with perplexing code behaviour like this,
-it can be useful to insert a tracer into your scripts using the Python debugger:
-
-~~~
-import pdb
-
-...
-def apply_mask(darray, sftlf_file, realm):
-    """Mask ocean or land using a sftlf (land surface fraction) file.
-    
-    Args:
-      darray (xarray.DataArray): Data to mask
-      sftlf_file (str): Land surface fraction file
-      realm (str): Realm to mask
-    
-    """
-   
-    dset = xr.open_dataset(sftlf_file)
-    pdb.set_trace()    
-    if realm == 'land':
-        masked_darray = darray.where(dset['sftlf'].data < 50)
-    else:
-        masked_darray = darray.where(dset['sftlf'].data > 50)   
-   
-    return masked_darray
-
-...
+10 * (1/0)
 ~~~
 {: .language-python}
 
-When we run the script,
-it will stop at the tracer and allow us to interrogate the code:
 ~~~
-$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc JJA pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc Land
-~~~
-{: .language-bash}
-
-~~~
-> /Users/irv033/Desktop/data-carpentry/plot_precipitation_climatology.py(40)apply_mask()
--> if realm == 'land':
-~~~
-{: .output}
-
-~~~
-(Pdb) print(realm)
-~~~
-{: .language-bash}
-
-~~~
-Land
-~~~
-{: .output}
-
-~~~
-(Pdb) 'Land' == 'land'
-~~~
-{: .language-bash}
-
-~~~
-False
-~~~
-{: .output}
-
-The problem appears to be that Python strings are case sensitive,
-which means we should have entered `land` as opposed to `Land` at the command line.
-We can fix this issue while in debug mode and then step through the code line by line
-(using `n`) to make sure the correct where statement is executed.
-~~~
-(Pdb) realm = 'land'
-(Pdb) n
-~~~
-{: .language-bash}
-
-~~~
-> /Users/irv033/Desktop/data-carpentry/plot_precipitation_climatology.py(41)apply_mask()
--> masked_darray = darray.where(dset['sftlf'].data < 50)
-~~~
-{: .output}
-
-Once we're satisfied, we can enter `c` to run the remainder of the script
-(it's `q` to quit at any time).
-
-To avoid making this case sensitive mistake in future,
-we should now remove the debugging tracer and replace it with an assertion
-to catch invalid inputs,
-~~~
-...
-def apply_mask(darray, sftlf_file, realm):
-    """Mask ocean or land using a sftlf (land surface fraction) file.
-    
-    Args:
-      darray (xarray.DataArray): Data to mask
-      sftlf_file (str): Land surface fraction file
-      realm (str): Realm to mask
-    
-    """
-   
-    dset = xr.open_dataset(sftlf_file)
-    assert realm in ['land', 'ocean'], """Valid realms are 'land' or 'ocean'"""   
-    if realm == 'land':
-        masked_darray = darray.where(dset['sftlf'].data < 50)
-    else:
-        masked_darray = darray.where(dset['sftlf'].data > 50)   
-   
-    return masked_darray
-
-...
-~~~
-{: .language-python}
-
-test to make sure it's working,
-~~~
-$ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc JJA pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412-JJA-clim_land-mask.png --mask data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc Land
-~~~
-{: .language-bash}
-
-~~~
-Traceback (most recent call last):
-  File "plot_precipitation_climatology.py", line 120, in <module>
-    main(args)
-  File "plot_precipitation_climatology.py", line 91, in main
-    clim = apply_mask(clim, sftlf_file, realm)
-  File "plot_precipitation_climatology.py", line 39, in apply_mask
-    assert realm in ['land', 'ocean'], """Valid realms are 'land' or 'ocean'"""
-AssertionError: Valid realms are 'land' or 'ocean'
+ZeroDivisionError: division by zero
 ~~~
 {: .error}
 
-and then commit the changes to git and push to GitHub.
 ~~~
-$ git add plot_precipitation_climatology.py
-$ git commit -m "Added realm check"
-$ git push origin master
+4 + spam*3
 ~~~
-{: .language-bash}
+{: .language-python}
+
+~~~
+NameError: name 'spam' is not defined
+~~~
+{: .error}
+
+~~~
+'2' + 2
+~~~
+{: .language-python}
+
+~~~
+TypeError: can only concatenate str (not "int") to str
+~~~
+{: .error}
+
 
 > ## Testing and continuous integration
 >
