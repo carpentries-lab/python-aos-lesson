@@ -5,8 +5,8 @@ exercises: 15
 questions:
 - "How can I make my programs more reliable?"
 objectives:
-- Signal errors by raising exceptions
-- Use `try`/`except` blocks to catch and handle exceptions 
+- "Signal errors by raising exceptions."
+- "Use `try`/`except` blocks to catch and handle exceptions."
 - "Explain what an assertion is."
 - "Add assertions that check the program's state is correct."
 - "Debug Python scripts using the `pdb` library."
@@ -28,12 +28,24 @@ keypoints:
 >
 {: .callout}
 
-Now that we've written a command line program to plot precipitation climatologies,
-it is inevitable that people (including our future selves)
-will misunderstand (or misremember) how to use the program.
-We should therefore plan from the start to detect and handle errors.
+Now that we've written `plot_precipitation_climatology.py`,
+how can we be sure that it's producing reliable results?
 
-There are (at least) two distinguishable kinds of errors that can arise:
+The first step toward getting the right answers from our programs
+is to assume that mistakes *will* happen
+and to guard against them.
+This is called defensive programming,
+and there are a number of tools and approaches at our disposal for doing this.
+Broadly speaking, we can raise and handle errors to check and respond to program inputs,
+use assertions to make sure nothing crazy or unexpected has happened,
+and write unit tests to make sure each component of our program produces expected outputs.
+In this lesson, we'll look at how error handling and assertions
+can make the unit conversion in our program more reliable,
+and we'll provide links to further information on unit testing.
+
+## Error handling
+
+There are (at least) two distinguishable kinds of errors that can arise in Python:
 syntax errors and exceptions.
 We are all very familiar with the former:
 
@@ -55,7 +67,7 @@ Once a statement or expression is syntactically correct,
 it may cause an error when an attempt is made to execute it.
 Errors detected during execution are called exceptions
 (i.e. an exception from normal behaviour)
-and there are lots of [different types](https://docs.python.org/3/library/exceptions.html#exception-hierarchy):
+and there are lots of [different types of exceptions](https://docs.python.org/3/library/exceptions.html#exception-hierarchy):
 
 ~~~
 10 * (1/0)
@@ -86,6 +98,100 @@ NameError: name 'spam' is not defined
 TypeError: can only concatenate str (not "int") to str
 ~~~
 {: .error}
+
+In the context of our `plot_precipitation_climatology.py` script,
+at the moment the data are multiplied by 86400 regardless of what the input units are.
+If our objective is a plot of the precipitation in mm/day,
+it would be better if the program multiplied by 86400 if the input units were kg m-2 s-1,
+performed no unit conversion of the input units are mm/day,
+or halted with an informative error message if the input data had some other units.
+
+~~~
+input_units = clim.attrs['units']
+if input_units == 'kg m-2 s-1':
+    clim = convert_pr_units(clim)
+elif input_units == 'mm/day':
+    pass
+else:
+    raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
+~~~
+{: .language-python} 
+
+If the input data file doesn't have a units attribute,
+our program would currently fail with a KeyError that looks something like this:
+
+~~~
+KeyError                                  Traceback (most recent call last)
+
+----> input_units = clim.attrs['units']
+
+KeyError: 'units'
+~~~
+{: .error}
+
+While it's certainly possible to get error messages that are more cryptic than this one,
+it's not entirely clear to the user what the problem is.
+To make it crystal clear that the input file needs to have a units attribute,
+we could use a `try`/`except` block to "catch" this `KeyError`.
+Rather than have the program halt with a regular error message,
+we could define a better error message.
+
+~~~
+try:
+    input_units = clim.attrs['units']
+except:
+    raise KeyError("Precipitation variable in the input file must have a units attribute")
+~~~
+{: .language-python} 
+
+
+## Assertions
+
+An assertion is simply a statement that something must be true at a certain point in a program.
+When Python sees one,
+it evaluates the assertion's condition.
+If it's true,
+Python does nothing,
+but if it's false,
+Python halts the program immediately
+and prints the error message if one is provided.
+
+To demonstrate an assertion in action,
+consider this piece of code that halts if any rainfall observations are negative:
+
+~~~
+import numpy as np
+
+rainfall_obs = np.array([1.5, 2.3, 0.7, -0.2, 4.4])
+assert rainfall_obs.min() >= 0.0, 'Rainfall observations should only contain positive values'
+~~~
+{: .language-python}
+
+~~~
+---------------------------------------------------------------------------
+AssertionError                            Traceback (most recent call last)
+<ipython-input-19-33d87ea29ae4> in <module>()
+----> 1 assert obs.min() >= 0.0, "Rainfall observations should only contain positive values"
+
+AssertionError: Rainfall observations should only contain positive values
+~~~
+{: .error}
+
+It's often useful to use assertions to check that nothing crazy has happened
+(like a negative rainfall value).
+With respect to our command line program,
+one thing to check would be that the climatological precipitation values lie within
+a sensible range after the unit conversion.
+The [world record highest daily rainfall total](https://wmo.asu.edu/content/world-greatest-twenty-four-hour-1-day-rainfall)
+is 1825mm (at Reunion Island in 1966),
+so climatological values across the globe should certainly be less than 2000 mm/day.
+
+~~~
+assert clim.data.min() >= 0.0, 'Precipitation values should all be positive'
+assert clim.data.max() < 2000, 'Precipitation values should be less than 2000 mm/day'
+~~~
+{: .language-python}
+
 
 
 > ## Testing and continuous integration
