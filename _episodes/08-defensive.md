@@ -9,13 +9,12 @@ objectives:
 - "Use `try`/`except` blocks to catch and handle exceptions."
 - "Explain what an assertion is."
 - "Add assertions that check the program's state is correct."
-- "Debug Python scripts using the `pdb` library."
 - "Identify sources of more advanced lessons on code testing."
 keypoints:
 - "Program defensively, i.e., assume that errors are going to arise, and write code to detect them when they do."
+- "Put `try`/`except` blocks in programs to catch and handle exceptions."
 - "Put assertions in programs to check their state as they run, and to help readers understand how those programs are supposed to work."
-- "The `pdb` library can be used to debug a Python script by stepping through line-by-line."
-- "Software Carpentry has more advanced lessons on code testing."
+- "Consult more advanced lessons on code testing."
 ---
 
 > ## Scientist's nightmare
@@ -100,11 +99,10 @@ TypeError: can only concatenate str (not "int") to str
 {: .error}
 
 In the context of our `plot_precipitation_climatology.py` script,
-at the moment the data are multiplied by 86400 regardless of what the input units are.
-If our objective is a plot of the precipitation in mm/day,
-it would be better if the program multiplied by 86400 if the input units were kg m-2 s-1,
+we currently multiply our data by 86400 regardless of what the input units are.
+It would be better if the program multiplied by 86400 if the input units are kg m-2 s-1,
 performed no unit conversion of the input units are mm/day,
-or halted with an informative error message if the input data had some other units.
+or halted with an informative error message if the input data have some other units.
 
 ~~~
 input_units = clim.attrs['units']
@@ -129,8 +127,8 @@ KeyError: 'units'
 ~~~
 {: .error}
 
-While it's certainly possible to get error messages that are more cryptic than this one,
-it's not entirely clear to the user what the problem is.
+By Python standards this is only a slightly cryptic error message,
+but it's not entirely obvious to the user what the problem is.
 To make it crystal clear that the input file needs to have a units attribute,
 we could use a `try`/`except` block to "catch" this `KeyError`.
 Rather than have the program halt with a regular error message,
@@ -139,11 +137,16 @@ we could define a better error message.
 ~~~
 try:
     input_units = clim.attrs['units']
-except:
+except KeyError:
     raise KeyError("Precipitation variable in the input file must have a units attribute")
 ~~~
 {: .language-python} 
 
+While this is a nice example of a `try`/`except` block in action,
+keep in mind that in practice you won't always want to raise an error after catching one.
+If your script was looping over many files, for instance,
+you might want your loop to simply go to the next file if a `FileNotFound` error is triggered
+rather than halting and returning an error massage.
 
 ## Assertions
 
@@ -187,11 +190,10 @@ is 1825mm (at Reunion Island in 1966),
 so climatological values across the globe should certainly be less than 2000 mm/day.
 
 ~~~
-assert clim.data.min() >= 0.0, 'Precipitation values should all be positive'
-assert clim.data.max() < 2000, 'Precipitation values should be less than 2000 mm/day'
+assert darray.data.min() >= 0.0, 'There are negative precipitation values'
+assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
 ~~~
 {: .language-python}
-
 
 
 > ## Testing and continuous integration
@@ -205,39 +207,32 @@ assert clim.data.max() < 2000, 'Precipitation values should be less than 2000 mm
 >
 {: .callout}
 
-> ## Add your own assertions
+> ## Error handling for land/ocean masks
 >
-> Add some more assertions to your copy of `plot_precipitation_climatology.py`.
-> Once you're done, commit the changes to git and push to GitHub.
+> In the previous lesson we added an `apply_mask` function to our script.
+> Update the following if statement in that function
+> so that it raises a `ValueError` if the realm is not `ocean` or `land`.
+>
+> ~~~
+> if realm == 'land':
+>     masked_darray = darray.where(dset['sftlf'].data < 50)
+> else:
+>     masked_darray = darray.where(dset['sftlf'].data > 50)
+> ~~~
+> {: .language-python}
 >
 > > ## Solution
 > >
-> > There are many examples of assertions that could be added,
-> > but the most critical is to check the units of the input data
-> > before converting from kg m-2 s-1 to mm day-1.
-> >
 > > ~~~
-> > ...
+> > if realm.lower() == 'land':
+> >     masked_darray = darray.where(dset['sftlf'].data < 50)
+> > elif realm.lower() == 'ocean':
+> >     masked_darray = darray.where(dset['sftlf'].data > 50)
+> > else:
+> >     raise ValueError("""Mask realm not 'ocean' or 'land'""")
+> ~~~
+> {: .language-python}
 > >
-> > def convert_pr_units(darray):
-> >     """Convert kg m-2 s-1 to mm day-1.
-> >    
-> >     Args:
-> >       darray (xarray.DataArray): Precipitation data
-> >    
-> >     """
-> >    
-> >     assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
-> >    
-> >     darray.data = darray.data * 86400
-> >     darray.attrs['units'] = 'mm/day'
-> >    
-> >     return darray
-> >
-> > ...
-> > 
-> > ~~~
-> > {: .language-python}
 > {: .solution}
 {: .challenge}
 
@@ -264,12 +259,13 @@ assert clim.data.max() < 2000, 'Precipitation values should be less than 2000 mm
 >       darray (xarray.DataArray): Precipitation data
 >    
 >     """
->    
->     assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
 >
 >     darray.data = darray.data * 86400
 >     darray.attrs['units'] = 'mm/day'
 >    
+>     assert darray.data.min() >= 0.0, 'There are negative precipitation values'
+>     assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
+>
 >     return darray
 >
 >
@@ -284,12 +280,13 @@ assert clim.data.max() < 2000, 'Precipitation values should be less than 2000 mm
 >     """
 >   
 >     dset = xr.open_dataset(sftlf_file)
->     assert realm in ['land', 'ocean'], """Valid realms are 'land' or 'ocean'"""
->     if realm == 'land':
+>     if realm.lower() == 'land':
 >         masked_darray = darray.where(dset['sftlf'].data < 50)
->     else:
+>     elif realm.lower() == 'ocean':
 >         masked_darray = darray.where(dset['sftlf'].data > 50)   
->    
+>     else:
+>         raise ValueError("""Mask realm not 'ocean' or 'land'""")    
+>
 >     return masked_darray
 >
 >
@@ -332,7 +329,18 @@ assert clim.data.max() < 2000, 'Precipitation values should be less than 2000 mm
 >     dset = xr.open_dataset(inargs.pr_file)
 >     
 >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
->     clim = convert_pr_units(clim)
+>
+>     try:
+>         input_units = clim.attrs['units']
+>     except KeyError:
+>         raise KeyError("Precipitation variable in the input file must have a units attribute")
+>
+>     if input_units == 'kg m-2 s-1':
+>         clim = convert_pr_units(clim)
+>     elif input_units == 'mm/day':
+>         pass
+>     else:
+>         raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
 > 
 >     if inargs.mask:
 >         sftlf_file, realm = inargs.mask

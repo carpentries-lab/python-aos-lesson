@@ -75,39 +75,15 @@ The `metadata` argument for `plt.savefig`
 has then been used to save the new command log to the image metadata.
 
 To see this in action,
-we've added a Python debugger tracer to the script:
+we can run the program,
 
 ~~~
 $ python plot_precipitation_climatology.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc SON pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png
 ~~~ 
 {: .language-bash}
 
-~~~
-> /Users/damien/Desktop/data-carpentry/plot_precipitation_climatology.py(98)main()
--> plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
-~~~
-{: .output}
 
-~~~
-(Pdb) new_log
-~~~
-{: .language-bash}
-
-~~~
-'Mon Feb 08 09:45:17 2021: /Users/damien/opt/anaconda3/envs/pyaos-lesson/bin/python plot_precipitation_climatology.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc SON pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412-SON-clim.png\nTue Jan 12 14:50:35 2021: ncatted -O -a history,pr,d,, pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc\nTue Jan 12 14:48:10 2021: cdo seldate,2010-01-01,2014-12-31 /g/data/fs38/publications/CMIP6/CMIP/CSIRO/ACCESS-ESM1-5/historical/r1i1p1f1/Amon/pr/gn/latest/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_185001-201412.nc pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc\n2019-11-15T04:32:57Z ; CMOR rewrote data to be consistent with CMIP6, CF-1.7 CMIP-6.2 and CF standards. \n'
-~~~
-{: .output}
-
-The log has been successfully updated,
-so let's have the debugger continue to the end of the script:
-
-~~~
-(Pdb) c
-~~~
-{: .language-bash}
-
-Now that we've written the command log to our PNG file,
-we need a way to view the metadata of image files.
+and then view the metadata of the new PNG image file.
 There are a number of different programs available to do this,
 but they can often be tricky to install.
 Fortunately,
@@ -163,13 +139,14 @@ Now that we've successfully added a command log to our PNG image,
 we might want to think about how our script should handle other image formats (e.g. PDF, EPS)?
 For PNG files you can pick whatever metadata keys you like (hence we picked "History"),
 but other formats only allow specific keys.
-For now we can add an assertion so that the program halts
+For now we can add raise an error so that the program halts
 if someone tries to generate a format that isn't PNG,
 and in the exercises we'll add more valid formats to the script.
 
 ~~~
 image_format = inargs.output_file.split('.')[-1])
-assert image_format == 'png', 'Only valid output format is .png'
+if image_format != 'png':
+    raise ValueError('Only valid output format is .png')
 ~~~
 {: .language-python}
 
@@ -194,7 +171,8 @@ def main(inargs):
                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
     
     image_format = inargs.output_file.split('.')[-1]
-    assert image_format == 'png', 'Only valid image format is .png'
+    if image_format != 'png':
+        raise ValueError('Only valid output format is .png')
     new_log = cmdprov.new_log(infile_logs={inargs.pr_file: dset.attrs['history']})
     plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 ~~~
@@ -245,8 +223,10 @@ def main(inargs):
 > >                  'eps': 'Creator',
 > >                  'ps' : 'Creator'}    
 > >
-> >    assert plot_type in valid_keys.keys(), f"Image format not one of: {*[*valid_keys],}"
-> >    log_key = valid_keys[plot_type]
+> >    if plot_type in valid_keys.keys():
+> >        log_key = valid_keys[plot_type]
+> >    else:
+           raise ValueError(f"Image format not one of: {*[*valid_keys],}")
 > >    new_log = cmdprov.new_log(infile_logs={pr_file: history_attr})
 > >    
 > >    return log_key, new_log
@@ -281,18 +261,34 @@ def main(inargs):
 >     Args:
 >       darray (xarray.DataArray): Precipitation data
 >     """
->     assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
+>
 >     darray.data = darray.data * 86400
 >     darray.attrs['units'] = 'mm/day'
->   
+>
+>     assert darray.data.min() >= 0.0, 'There are negative precipitation values'
+>     assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
+>
 >     return darray
 >
 >
 > def main(inargs):
 >     """Run the program."""
+>
 >     in_dset = xr.open_dataset(inargs.pr_file)
 >     clim = in_dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
->     clim = convert_pr_units(clim)
+>
+>     try:
+>         input_units = clim.attrs['units']
+>     except KeyError:
+>         raise KeyError("Precipitation variable in the input file must have a units attribute")
+>
+>     if input_units == 'kg m-2 s-1':
+>         clim = convert_pr_units(clim)
+>     elif input_units == 'mm/day':
+>         pass
+>     else:
+>         raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
+>
 >     out_dset = clim.to_dataset()
 >     out_dset.attrs = in_dset.attrs
 >     out_dset.to_netcdf(inargs.output_file)
@@ -353,11 +349,12 @@ def main(inargs):
 >       darray (xarray.DataArray): Precipitation data
 >    
 >     """
->    
->     assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
 >
 >     darray.data = darray.data * 86400
 >     darray.attrs['units'] = 'mm/day'
+>
+>     assert darray.data.min() >= 0.0, 'There are negative precipitation values'
+>     assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
 >    
 >     return darray
 >
@@ -373,12 +370,13 @@ def main(inargs):
 >     """
 >   
 >     dset = xr.open_dataset(sftlf_file)
->     assert realm in ['land', 'ocean'], """Valid realms are 'land' or 'ocean'"""
->     if realm == 'land':
+>     if realm.lower() == 'land':
 >         masked_darray = darray.where(dset['sftlf'].data < 50)
->     else:
+>     elif realm.lower() == 'ocean':
 >         masked_darray = darray.where(dset['sftlf'].data > 50)   
->    
+>     else:
+>         raise ValueError("""Mask realm not 'ocean' or 'land'""")    
+>
 >     return masked_darray
 >
 >
@@ -445,7 +443,18 @@ def main(inargs):
 >     dset = xr.open_dataset(inargs.pr_file)
 >     
 >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
->     clim = convert_pr_units(clim)
+>
+>     try:
+>         input_units = clim.attrs['units']
+>     except KeyError:
+>         raise KeyError("Precipitation variable in the input file must have a units attribute")
+>
+>     if input_units == 'kg m-2 s-1':
+>         clim = convert_pr_units(clim)
+>     elif input_units == 'mm/day':
+>         pass
+>     else:
+>         raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
 > 
 >     if inargs.mask:
 >         sftlf_file, realm = inargs.mask
