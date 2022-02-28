@@ -17,31 +17,33 @@ def convert_pr_units(darray):
     
     """
     
-    assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
-    
     darray.data = darray.data * 86400
     darray.attrs['units'] = 'mm/day'
+    
+    assert darray.data.min() >= 0.0, 'There are negative precipitation values'
+    assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
     
     return darray
 
 
 def apply_mask(darray, sftlf_file, realm):
     """Mask ocean or land using a sftlf (land surface fraction) file.
-    
+   
     Args:
       darray (xarray.DataArray): Data to mask
       sftlf_file (str): Land surface fraction file
       realm (str): Realm to mask
-    
+   
     """
-   
+  
     dset = xr.open_dataset(sftlf_file)
-    assert realm in ['land', 'ocean'], """Valid realms are 'land' or 'ocean'"""
-    if realm == 'land':
+    if realm.lower() == 'land':
         masked_darray = darray.where(dset['sftlf'].data < 50)
-    else:
+    elif realm.lower() == 'ocean':
         masked_darray = darray.where(dset['sftlf'].data > 50)   
-   
+    else:
+        raise ValueError("""Mask realm not 'ocean' or 'land'""")    
+
     return masked_darray
 
 
@@ -109,7 +111,18 @@ def main(inargs):
     dset = xr.open_dataset(inargs.pr_file)
     
     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
-    clim = convert_pr_units(clim)
+
+    try:
+        input_units = clim.attrs['units']
+    except KeyError:
+        raise KeyError("Precipitation variable in the input file must have a units attribute")
+
+    if input_units == 'kg m-2 s-1':
+        clim = convert_pr_units(clim)
+    elif input_units == 'mm/day':
+        pass
+    else:
+        raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
 
     if inargs.mask:
         sftlf_file, realm = inargs.mask
