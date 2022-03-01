@@ -128,8 +128,9 @@ or define our own [custom exception class](https://towardsdatascience.com/how-to
 
 In the context of our `plot_precipitation_climatology.py` script,
 we currently multiply our data by 86400 regardless of what the input units are.
-It would be better if the program multiplied by 86400 if the input units are kg m-2 s-1,
-performed no unit conversion of the input units are mm/day,
+It would be better if we modified the `main` function so that the program
+multiplied by 86400 if the input units are kg m-2 s-1,
+performed no unit conversion if the input units are mm/day,
 or halted with an informative error message if the input data have some other units.
 
 ~~~
@@ -183,8 +184,13 @@ print(scaled_quantity)
 {: .language-python} 
 
 ~~~
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
+ZeroDivisionError                         Traceback (most recent call last)
+/var/folders/6v/vrpsky6j509dff7250jyg8240000gp/T/ipykernel_12425/3927438267.py in <module>
+      2 n_stations = 0
+      3 
+----> 4 scaled_quantity = quantity / n_stations
+      5 print(scaled_quantity)
+
 ZeroDivisionError: division by zero
 ~~~
 {: .error}
@@ -218,7 +224,7 @@ that we access via `clim.attrs`.
 The dictionary keys are the names of the variable attributes
 (e.g. `standard_name`, `long_name`, `units`)
 and the dictionary values are the values corresponding to those keys
-(e.g. `precipitation_flux`, `Precipitation`, `kg m-2 s-1`).  
+(e.g. `precipitation_flux`, `Precipitation`, `kg m-2 s-1`).
 If the input data file didn't have a units attribute associated with the precipitation variable,
 our program would currently fail with a `KeyError`
 (which Python raises when you ask for a key that isn't in a dictionary).
