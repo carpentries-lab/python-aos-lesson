@@ -45,8 +45,8 @@ and we'll provide links to further information on unit testing.
 
 ## Raising errors
 
-There are (at least) two distinguishable kinds of errors that can arise in Python:
-syntax errors and exceptions.
+There are essentially two kinds of errors that can arise in Python:
+*syntax errors* and *exceptions*.
 We are all very familiar with the former:
 
 ~~~
@@ -99,8 +99,8 @@ TypeError: can only concatenate str (not "int") to str
 ~~~
 {: .error}
 
-In the context of defensive programming,
-it can sometimes be useful to raise your own errors (using the `raise` keyword).
+With respect to defensive programming,
+it can sometimes be useful to raise your own exceptions (using the `raise` keyword).
 
 ~~~
 infile = 'temperature_data.txt'
@@ -122,9 +122,9 @@ ValueError: temperature_data.txt does not have the netCDF file extension .nc
 {: .error}
 
 In this case we've chosen to raise a `ValueError`,
-but we could pick any of the [builtin error types](https://docs.python.org/3/library/exceptions.html#exception-hierarchy)
+but we could pick any of the [builtin exception types](https://docs.python.org/3/library/exceptions.html#exception-hierarchy)
 (including just a generic `Exception`)
-or define our own custom error type.
+or define our own [custom exception class](https://towardsdatascience.com/how-to-define-custom-exception-classes-in-python-bfa346629bca).
 
 In the context of our `plot_precipitation_climatology.py` script,
 we currently multiply our data by 86400 regardless of what the input units are.
@@ -147,13 +147,13 @@ else:
 ## Handling errors
 
 As we've seen in the examples above,
-if errors/exceptions aren't dealt with the program crashes.
+if exceptions aren't dealt with the program crashes.
 The error message upon crashing is sometimes be easy to understand
 (particularly if you wrote the `raise` statement yourself)
 but can often be cryptic.
 
-If we'd rather the program didn't crash when a particular error occurs,
-we can use a try and except block to catch and handle the associated exception.
+If we'd rather the program didn't crash when a particular exception occurs,
+we can use a try-except block to catch and handle the exception.
 The syntax of the try-except block is:
 
 ~~~
@@ -213,19 +213,33 @@ nan
 {: .output}
 
 In the context of our `plot_precipitation_climatology.py` script,
-if the input data file doesn't have a units attribute
-our program currently fails with a KeyError that looks something like this:
+the variable attributes from the input netCDF file are stored in a dictionary
+that we access via `clim.attrs`.
+The dictionary keys are the names of the variable attributes
+(e.g. `standard_name`, `long_name`, `units`)
+and the dictionary values are the values corresponding to those keys
+(e.g. `precipitation_flux`, `Precipitation`, `kg m-2 s-1`).  
+If the input data file didn't have a units attribute associated with the precipitation variable,
+our program would currently fail with a `KeyError`
+(which Python raises when you ask for a key that isn't in a dictionary).
+
+~~~
+example_dict = {'standard_name': 'precipitation_flux', 'long_name': 'Precipitation'}
+units = example_dict['units']
+~~~
+{: .language-python} 
 
 ~~~
 KeyError                                  Traceback (most recent call last)
-
-----> input_units = clim.attrs['units']
+/var/folders/6v/vrpsky6j509dff7250jyg8240000gp/T/ipykernel_12425/2679443625.py in <module>
+      1 example_dict = {'standard_name': 'precipitation_flux', 'long_name': 'Precipitation'}
+----> 2 units = example_dict['units']
 
 KeyError: 'units'
 ~~~
 {: .error}
 
-It's fine that the program crashes
+It's fine that our program would crash in this situation
 (we can't continue if we don't know the units of the input data),
 but the error message doesn't explicitly tell the user that the
 input file requires a units attribute.
@@ -245,7 +259,7 @@ except KeyError:
 ## Assertions
 
 Unexpected behaviour in a program can sometimes propagate a long way
-before triggering an error or perplexing result.
+before triggering an exception or producing a perplexing result.
 For instance,
 if a calculation produces a non-physical value for atmospheric humidity (e.g. 150%)
 that value could be used in various downstream calculations of fire risk
