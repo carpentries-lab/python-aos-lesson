@@ -42,7 +42,7 @@ def apply_mask(darray, sftlf_file, realm):
     elif realm.lower() == 'ocean':
         masked_darray = darray.where(dset['sftlf'].data > 50)   
     else:
-        raise ValueError("""Mask realm not 'ocean' or 'land'""")    
+        raise ValueError("""Mask realm is not 'ocean' or 'land'""")    
 
     return masked_darray
 
@@ -115,14 +115,14 @@ def main(inargs):
     try:
         input_units = clim.attrs['units']
     except KeyError:
-        raise KeyError("Precipitation variable in the input file must have a units attribute")
+        raise KeyError("Precipitation variable in {inargs.pr_file} must have a units attribute")
 
     if input_units == 'kg m-2 s-1':
         clim = convert_pr_units(clim)
     elif input_units == 'mm/day':
         pass
     else:
-        raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
+        raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
 
     if inargs.mask:
         sftlf_file, realm = inargs.mask

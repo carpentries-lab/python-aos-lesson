@@ -6,15 +6,16 @@ questions:
 - "How can I make my programs more reliable?"
 objectives:
 - "Signal errors by raising exceptions."
-- "Use `try`/`except` blocks to catch and handle exceptions."
+- "Use try-except blocks to catch and handle exceptions."
 - "Explain what an assertion is."
 - "Add assertions that check the program's state is correct."
 - "Identify sources of more advanced lessons on code testing."
 keypoints:
 - "Program defensively, i.e., assume that errors are going to arise, and write code to detect them when they do."
-- "Put `try`/`except` blocks in programs to catch and handle exceptions."
-- "Put assertions in programs to check their state as they run, and to help readers understand how those programs are supposed to work."
-- "Consult more advanced lessons on code testing."
+- "You can raise exceptions in your own code."
+- "Put try-except blocks in programs to catch and handle exceptions."
+- "Put assertions in programs to check their state as they run."
+- "The are more advanced lessons you can read to learn about code testing."
 ---
 
 > ## Scientist's nightmare
@@ -42,7 +43,7 @@ In this lesson, we'll look at how error handling and assertions
 can make the unit conversion in our program more reliable,
 and we'll provide links to further information on unit testing.
 
-## Error handling
+## Raising errors
 
 There are (at least) two distinguishable kinds of errors that can arise in Python:
 syntax errors and exceptions.
@@ -66,7 +67,7 @@ Once a statement or expression is syntactically correct,
 it may cause an error when an attempt is made to execute it.
 Errors detected during execution are called exceptions
 (i.e. an exception from normal behaviour)
-and there are lots of [different types of exceptions](https://docs.python.org/3/library/exceptions.html#exception-hierarchy):
+and there are lots of different types of exceptions:
 
 ~~~
 10 * (1/0)
@@ -98,6 +99,33 @@ TypeError: can only concatenate str (not "int") to str
 ~~~
 {: .error}
 
+In the context of defensive programming,
+it can sometimes be useful to raise your own errors (using the `raise` keyword).
+
+~~~
+infile = 'temperature_data.txt'
+file_format = infile.split('.')[-1]
+if file_format != 'nc':
+    raise ValueError(f"{infile} does not have the netCDF file extension .nc")
+~~~
+{: .language-python}
+
+~~~
+ValueError                                Traceback (most recent call last)
+/var/folders/6v/vrpsky6j509dff7250jyg8240000gp/T/ipykernel_12425/3612736507.py in <module>
+      2 file_format = infile.split('.')[-1]
+      3 if file_format != 'nc':
+----> 4     raise ValueError(f"{infile} does not have the netCDF file extension .nc")
+
+ValueError: temperature_data.txt does not have the netCDF file extension .nc
+~~~
+{: .error}
+
+In this case we've chosen to raise a `ValueError`,
+but we could pick any of the [builtin error types](https://docs.python.org/3/library/exceptions.html#exception-hierarchy)
+(including just a generic `Exception`)
+or define our own custom error type.
+
 In the context of our `plot_precipitation_climatology.py` script,
 we currently multiply our data by 86400 regardless of what the input units are.
 It would be better if the program multiplied by 86400 if the input units are kg m-2 s-1,
@@ -111,12 +139,82 @@ if input_units == 'kg m-2 s-1':
 elif input_units == 'mm/day':
     pass
 else:
-    raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
+    raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
 ~~~
 {: .language-python} 
 
-If the input data file doesn't have a units attribute,
-our program would currently fail with a KeyError that looks something like this:
+
+## Handling errors
+
+As we've seen in the examples above,
+if errors/exceptions aren't dealt with the program crashes.
+The error message upon crashing is sometimes be easy to understand
+(particularly if you wrote the `raise` statement yourself)
+but can often be cryptic.
+
+If we'd rather the program didn't crash when a particular error occurs,
+we can use a try and except block to catch and handle the associated exception.
+The syntax of the try-except block is:
+
+~~~
+try:
+    <do something>
+except Exception:
+    <handle the error>
+~~~
+{: .language-python} 
+
+The code in the except block is only executed if an exception occurred in the try block.
+The except block is required with a try block, even if it contains only the `pass` statement
+(i.e. ignore the exception and carry on).
+For example,
+let's say there's a calculation in our program where we need to divide
+by the number of available weather stations.
+If there were no weather stations available,
+by default the program would crash.
+
+~~~
+quantity = 500
+n_stations = 0
+
+scaled_quantity = quantity / n_stations
+print(scaled_quantity)
+~~~
+{: .language-python} 
+
+~~~
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ZeroDivisionError: division by zero
+~~~
+{: .error}
+
+If we'd prefer the program simply continue with a `scaled_quantity` value of NaN,
+we could catch and handle the `ZeroDivisionError`.
+
+~~~
+import numpy as np
+
+quantity = 500
+n_stations = 0
+
+try:
+    scaled_quantity = quantity / n_stations
+except ZeroDivisionError:
+    scaled_quantity = np.nan
+
+print(scaled_quantity)
+~~~
+{: .language-python} 
+
+~~~
+nan
+~~~
+{: .output}
+
+In the context of our `plot_precipitation_climatology.py` script,
+if the input data file doesn't have a units attribute
+our program currently fails with a KeyError that looks something like this:
 
 ~~~
 KeyError                                  Traceback (most recent call last)
@@ -127,29 +225,40 @@ KeyError: 'units'
 ~~~
 {: .error}
 
-By Python standards this is only a slightly cryptic error message,
-but it's not entirely obvious to the user what the problem is.
-To make it crystal clear that the input file needs to have a units attribute,
-we could use a `try`/`except` block to "catch" this `KeyError`.
-Rather than have the program halt with a regular error message,
-we could define a better error message.
+It's fine that the program crashes
+(we can't continue if we don't know the units of the input data),
+but the error message doesn't explicitly tell the user that the
+input file requires a units attribute.
+To make this crystal clear,
+we could use a try-except block in the `main` function to catch the `KeyError`
+and re-define a better error message.
 
 ~~~
 try:
     input_units = clim.attrs['units']
 except KeyError:
-    raise KeyError("Precipitation variable in the input file must have a units attribute")
+    raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
 ~~~
 {: .language-python} 
 
-While this is a nice example of a `try`/`except` block in action,
-keep in mind that in practice you won't always want to raise an error after catching one.
-If your script was looping over many files, for instance,
-you might want your loop to simply go to the next file if a `FileNotFound` error is triggered
-rather than halting and returning an error massage.
 
 ## Assertions
 
+Unexpected behaviour in a program can sometimes propagate a long way
+before triggering an error or perplexing result.
+For instance,
+if a calculation produces a non-physical value for atmospheric humidity (e.g. 150%)
+that value could be used in various downstream calculations of fire risk
+(combined with values for temperature, wind, rainfall deficit, etc).
+The final plot of the forest fire danger index might look wrong
+(or not, which would be even worse)
+to the scientist who wrote and executed the code,
+but it wouldn't be immediately obvious that the humidity calculation
+was the source of the problem.
+
+In order to avoid propagation,
+it's best to nip unexpected behaviour in the bud right when it occurs.
+A common way to do this is to add assertions to your code.
 An assertion is simply a statement that something must be true at a certain point in a program.
 When Python sees one,
 it evaluates the assertion's condition.
@@ -157,7 +266,7 @@ If it's true,
 Python does nothing,
 but if it's false,
 Python halts the program immediately
-and prints the error message if one is provided.
+and raises an `AssertionError` with a custom error message.
 
 To demonstrate an assertion in action,
 consider this piece of code that halts if any rainfall observations are negative:
@@ -180,14 +289,14 @@ AssertionError: Rainfall observations should only contain positive values
 ~~~
 {: .error}
 
-It's often useful to use assertions to check that nothing crazy has happened
-(like a negative rainfall value).
 With respect to our command line program,
 one thing to check would be that the climatological precipitation values lie within
 a sensible range after the unit conversion.
 The [world record highest daily rainfall total](https://wmo.asu.edu/content/world-greatest-twenty-four-hour-1-day-rainfall)
 is 1825mm (at Reunion Island in 1966),
 so climatological values across the globe should certainly be less than 2000 mm/day.
+We could add the following assertions to our `convert_pr_units` function
+to catch unexpected precipitation values.
 
 ~~~
 assert darray.data.min() >= 0.0, 'There are negative precipitation values'
@@ -195,6 +304,9 @@ assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
 ~~~
 {: .language-python}
 
+Assertions are also used in unit testing
+(each test culminates in an assertion),
+but that topic is beyond the scope of this lesson.
 
 > ## Testing and continuous integration
 >
@@ -229,7 +341,7 @@ assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
 > > elif realm.lower() == 'ocean':
 > >     masked_darray = darray.where(dset['sftlf'].data > 50)
 > > else:
-> >     raise ValueError("""Mask realm not 'ocean' or 'land'""")
+> >     raise ValueError("""Mask realm is not 'ocean' or 'land'""")
 > ~~~
 > {: .language-python}
 > >
@@ -285,7 +397,7 @@ assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
 >     elif realm.lower() == 'ocean':
 >         masked_darray = darray.where(dset['sftlf'].data > 50)   
 >     else:
->         raise ValueError("""Mask realm not 'ocean' or 'land'""")    
+>         raise ValueError("""Mask realm is not 'ocean' or 'land'""")    
 >
 >     return masked_darray
 >
@@ -333,14 +445,14 @@ assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
 >     try:
 >         input_units = clim.attrs['units']
 >     except KeyError:
->         raise KeyError("Precipitation variable in the input file must have a units attribute")
+>         raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
 >
 >     if input_units == 'kg m-2 s-1':
 >         clim = convert_pr_units(clim)
 >     elif input_units == 'mm/day':
 >         pass
 >     else:
->         raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
+>         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
 > 
 >     if inargs.mask:
 >         sftlf_file, realm = inargs.mask
