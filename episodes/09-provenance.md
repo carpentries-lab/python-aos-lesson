@@ -61,7 +61,6 @@ responsible for saving the image to file:
 
 ~~~
 new_log = cmdprov.new_log(infile_logs={inargs.pr_file: dset.attrs['history']})
-pdb.set_trace()
 plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 ~~~
 {: .language-python}
@@ -146,12 +145,11 @@ and in the exercises we'll add more valid formats to the script.
 ~~~
 image_format = inargs.output_file.split('.')[-1])
 if image_format != 'png':
-    raise ValueError('Only valid output format is .png')
+    raise ValueError('Output file must have the PNG image file extension .png')
 ~~~
 {: .language-python}
 
-Putting this altogether
-(and removing the debugging tracer),
+Putting this altogether,
 here's what the `main` function in `plot_precipitation_climatology.py` looks like:
 
 ~~~
@@ -161,7 +159,18 @@ def main(inargs):
     dset = xr.open_dataset(inargs.pr_file)
     
     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
-    clim = convert_pr_units(clim)
+
+    try:
+        input_units = clim.attrs['units']
+    except KeyError:
+        raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
+
+    if input_units == 'kg m-2 s-1':
+        clim = convert_pr_units(clim)
+    elif input_units == 'mm/day':
+        pass
+    else:
+        raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
 
     if inargs.mask:
         sftlf_file, realm = inargs.mask
@@ -172,7 +181,7 @@ def main(inargs):
     
     image_format = inargs.output_file.split('.')[-1]
     if image_format != 'png':
-        raise ValueError('Only valid output format is .png')
+        raise ValueError('Output file must have the PNG image file extension .png')
     new_log = cmdprov.new_log(infile_logs={inargs.pr_file: dset.attrs['history']})
     plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
 ~~~
@@ -375,7 +384,7 @@ def main(inargs):
 >     elif realm.lower() == 'ocean':
 >         masked_darray = darray.where(dset['sftlf'].data > 50)   
 >     else:
->         raise ValueError("""Mask realm not 'ocean' or 'land'""")    
+>         raise ValueError("""Mask realm is not 'ocean' or 'land'""")    
 >
 >     return masked_darray
 >
@@ -447,14 +456,14 @@ def main(inargs):
 >     try:
 >         input_units = clim.attrs['units']
 >     except KeyError:
->         raise KeyError("Precipitation variable in the input file must have a units attribute")
+>         raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
 >
 >     if input_units == 'kg m-2 s-1':
 >         clim = convert_pr_units(clim)
 >     elif input_units == 'mm/day':
 >         pass
 >     else:
->         raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
+>         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
 > 
 >     if inargs.mask:
 >         sftlf_file, realm = inargs.mask
