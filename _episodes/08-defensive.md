@@ -9,12 +9,14 @@ objectives:
 - "Use try-except blocks to catch and handle exceptions."
 - "Explain what an assertion is."
 - "Add assertions that check the program's state is correct."
+- "Use a logging framework to report on program activity."
 - "Identify sources of more advanced lessons on code testing."
 keypoints:
 - "Program defensively, i.e., assume that errors are going to arise, and write code to detect them when they do."
 - "You can raise exceptions in your own code."
 - "Put try-except blocks in programs to catch and handle exceptions."
 - "Put assertions in programs to check their state as they run."
+- "Use a logging framework instead of `print` statements to report program activity."
 - "The are more advanced lessons you can read to learn about code testing."
 ---
 
@@ -38,8 +40,9 @@ This is called defensive programming,
 and there are a number of tools and approaches at our disposal for doing this.
 Broadly speaking, we can raise and handle errors to check and respond to program inputs,
 use assertions to make sure nothing crazy or unexpected has happened,
-and write unit tests to make sure each component of our program produces expected outputs.
-In this lesson, we'll look at how error handling and assertions
+write unit tests to make sure each component of our program produces expected outputs,
+and use a logging framework to report on program activity.
+In this lesson, we'll look at how error handling, assertions and logging
 can make the unit conversion in our program more reliable,
 and we'll provide links to further information on unit testing.
 
@@ -342,19 +345,19 @@ but that topic is beyond the scope of this lesson.
 
 ## Logging
 
-So far we've considered how to have our programs halt or handle the situation when things go wrong.
-Another option in our defensive programming toolkit
-is to have our programs report what's happening so that we can monitor their progress.
+So far we've considered how to make our programs halt or handle the situation when things go wrong.
+Another option in our defensive programming toolkit is to have our programs report their own activity.
 
 For example,
 let's say we're working with relative humidity data.
-We wouldn't expect to encounter any values over 100% but they are technically possible,
-so rather than halt the program if a value over 100% occurs
-we might want our program to simply report the maximum relative humidity.
+We wouldn't typically expect to encounter any values over 100%, but it is physically possible.
+Rather than halt the program if a value over 100% occurs,
+we might therefore want our program to simply report the maximum relative humidity.
 We can then decide whether to trust the output or not
 (e.g. a value of 100.1% might be ok but not 150%).
 
-Our first instinct might be to add a `print` statement to the program,
+To do this reporting,
+our first instinct might be to add a `print` statement to the program.
 
 ~~~
 rh_data = np.array([1.5, 20.4, 100.1, 76.3, 54.4])
@@ -368,9 +371,9 @@ The maximum relative humidity was 100.1%
 ~~~
 {: .output}
 
-but simply printing information to the screen means it's lost once we close our command line session.
-Constantly adding and removing (or commenting out) `print` statements
-from code to figure out what's going on is also tedious and error-prone.
+The problem with this approach is that information printed to the screen is lost
+once we close our command line session.
+Constantly adding, removing or commenting out `print` statements is also tedious and error-prone.
 
 A better approach is to use a logging framework,
 such as Python’s `logging` library.
@@ -397,10 +400,10 @@ In order of increasing severity, the available levels are:
 - `error`: something has gone badly wrong, but the program hasn’t hurt anything.
 - `critcal`: potential loss of data, security breach, etc.
 
-If we want to see the output from less severe levels,
+If we want to see the output from less severe levels (i.e. turn our debugging statements on),
 we'd need to change the minimum level in the logging configuration.
-We can also provide the name of a file to write the logging information
-to so that it isn't lost when we finish our command line session.
+We can also provide the name of a file to write the logging information to,
+so that it isn't lost when we finish our command line session.
 
 ~~~
 # for loop only required in notebooks
@@ -415,7 +418,7 @@ logging.debug(f'The maximum relative humidity was {rh_max}%')
 ~~~
 {: .language-python}
 
-(The for loop is needed to turn of the background logging that the notebook does itself.
+(The for loop is needed to turn off the background logging the notebook does itself.
 It's not needed in a Python script.)
 
 ~~~
@@ -583,7 +586,7 @@ def main(inargs):
 > ~~~
 > {: .language-python}
 > >
-> {: .solution}
+> {: .solution}  
 {: .challenge}
 
 > ## plot_precipitation_climatology.py
@@ -723,12 +726,12 @@ def main(inargs):
 >     parser.add_argument('-v', '--verbose', action='store_true', default=False,
 >                         help='Change the minimum logging reporting level from WARNING (default) to DEBUG')
 >     parser.add_argument('--logfile', type=str, default=None,
->                         help='Name of log file (by default logging information is printed to the screen)')>
+>                         help='Name of log file (by default logging information is printed to the screen)')
 >
 >     args = parser.parse_args()
 >   
 >     main(args)
 >
 > ~~~
-> {: .language-python}
+> {: .language-python}  
 {: .solution}
