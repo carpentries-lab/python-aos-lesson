@@ -156,6 +156,9 @@ here's what the `main` function in `plot_precipitation_climatology.py` looks lik
 def main(inargs):
     """Run the program."""
 
+    log_lev = logging.DEBUG if inargs.verbose else logging.WARNING
+    logging.basicConfig(level=log_lev, filename=inargs.logfile) 
+
     dset = xr.open_dataset(inargs.pr_file)
     
     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
@@ -167,6 +170,7 @@ def main(inargs):
 
     if input_units == 'kg m-2 s-1':
         clim = convert_pr_units(clim)
+        logging.info('Units converted from kg m-2 s-1 to mm/day')
     elif input_units == 'mm/day':
         pass
     else:
@@ -274,8 +278,8 @@ def main(inargs):
 >     darray.data = darray.data * 86400
 >     darray.attrs['units'] = 'mm/day'
 >
->     assert darray.data.min() >= 0.0, 'There are negative precipitation values'
->     assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
+>     assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
+>     assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
 >
 >     return darray
 >
@@ -283,20 +287,24 @@ def main(inargs):
 > def main(inargs):
 >     """Run the program."""
 >
+>     log_lev = logging.DEBUG if inargs.verbose else logging.WARNING
+>     logging.basicConfig(level=log_lev, filename=inargs.logfile)
+>
 >     in_dset = xr.open_dataset(inargs.pr_file)
 >     clim = in_dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
 >
 >     try:
 >         input_units = clim.attrs['units']
 >     except KeyError:
->         raise KeyError("Precipitation variable in the input file must have a units attribute")
+>         raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
 >
 >     if input_units == 'kg m-2 s-1':
 >         clim = convert_pr_units(clim)
+>         logging.info('Units converted from kg m-2 s-1 to mm/day')
 >     elif input_units == 'mm/day':
 >         pass
 >     else:
->         raise ValueError("""Input units must be 'kg m-2 s-1' or 'mm/day'""")
+>         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
 >
 >     out_dset = clim.to_dataset()
 >     out_dset.attrs = in_dset.attrs
@@ -308,6 +316,10 @@ def main(inargs):
 >     parser = argparse.ArgumentParser(description=description)
 >     parser.add_argument("pr_file", type=str, help="Precipitation data file")
 >     parser.add_argument("output_file", type=str, help="Output file name")
+>     parser.add_argument('-v', '--verbose', action='store_true', default=False,
+>                         help='Change the minimum logging reporting level from WARNING (default) to DEBUG')
+>     parser.add_argument('--logfile', type=str, default=None,
+>                         help='Name of log file (by default logging information is printed to the screen)')
 >     args = parser.parse_args()  
 >     main(args)
 > ~~~
@@ -340,13 +352,13 @@ def main(inargs):
 > should look something like the following:
 >
 > ~~~
-> import pdb
+> import logging
 > import argparse
-> 
+>
+> import numpy as np
+> import matplotlib.pyplot as plt
 > import xarray as xr
 > import cartopy.crs as ccrs
-> import matplotlib.pyplot as plt
-> import numpy as np
 > import cmocean
 > import cmdline_provenance as cmdprov
 >
@@ -358,16 +370,16 @@ def main(inargs):
 >       darray (xarray.DataArray): Precipitation data
 >    
 >     """
->
+>     
 >     darray.data = darray.data * 86400
 >     darray.attrs['units'] = 'mm/day'
->
->     assert darray.data.min() >= 0.0, 'There are negative precipitation values'
->     assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
->    
+>     
+>     assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
+>     assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
+>     
 >     return darray
->
->
+> 
+> 
 > def apply_mask(darray, sftlf_file, realm):
 >     """Mask ocean or land using a sftlf (land surface fraction) file.
 >    
@@ -384,11 +396,11 @@ def main(inargs):
 >     elif realm.lower() == 'ocean':
 >         masked_darray = darray.where(dset['sftlf'].data > 50)   
 >     else:
->         raise ValueError("""Mask realm is not 'ocean' or 'land'""")    
->
+>         raise ValueError("""Mask realm is not 'ocean' or 'land'""")
+> 
 >     return masked_darray
->
->
+> 
+> 
 > def create_plot(clim, model, season, gridlines=False, levels=None):
 >     """Plot the precipitation climatology.
 >     
@@ -396,16 +408,16 @@ def main(inargs):
 >       clim (xarray.DataArray): Precipitation climatology data
 >       model (str): Name of the climate model
 >       season (str): Season
->      
+>       
 >     Kwargs:
 >       gridlines (bool): Select whether to plot gridlines
 >       levels (list): Tick marks on the colorbar    
 >     
 >     """
->
+> 
 >     if not levels:
 >         levels = np.arange(0, 13.5, 1.5)
->        
+>         
 >     fig = plt.figure(figsize=[12,5])
 >     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
 >     clim.sel(season=season).plot.contourf(ax=ax,
@@ -420,8 +432,8 @@ def main(inargs):
 >     
 >     title = f'{model} precipitation climatology ({season})'
 >     plt.title(title)
->
->
+> 
+> 
 > def get_log_and_key(pr_file, history_attr, plot_type):
 >     """Get key and command line log for image metadata.
 >    
@@ -436,6 +448,7 @@ def main(inargs):
 >     
 >     valid_keys = {'png': 'History',
 >                   'pdf': 'Title',
+>                   'svg': 'Title',
 >                   'eps': 'Creator',
 >                   'ps' : 'Creator'}    
 > 
@@ -444,22 +457,26 @@ def main(inargs):
 >     new_log = cmdprov.new_log(infile_logs={pr_file: history_attr})
 >     
 >     return log_key, new_log
->
->
+>    
+> 
 > def main(inargs):
 >     """Run the program."""
+> 
+>     log_lev = logging.INFO if inargs.verbose else logging.WARNING
+>     logging.basicConfig(level=log_lev, filename=inargs.logfile)
 > 
 >     dset = xr.open_dataset(inargs.pr_file)
 >     
 >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
->
+> 
 >     try:
 >         input_units = clim.attrs['units']
 >     except KeyError:
->         raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
->
+>         raise KeyError("Precipitation variable in {inargs.pr_file} must have a units attribute")
+> 
 >     if input_units == 'kg m-2 s-1':
 >         clim = convert_pr_units(clim)
+>         logging.info('Units converted from kg m-2 s-1 to mm/day')
 >     elif input_units == 'mm/day':
 >         pass
 >     else:
@@ -468,20 +485,20 @@ def main(inargs):
 >     if inargs.mask:
 >         sftlf_file, realm = inargs.mask
 >         clim = apply_mask(clim, sftlf_file, realm)
->
+> 
 >     create_plot(clim, dset.attrs['source_id'], inargs.season,
 >                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
->
+>                 
 >     log_key, new_log = get_log_and_key(inargs.pr_file,
 >                                        dset.attrs['history'],
 >                                        inargs.output_file.split('.')[-1])
 >     plt.savefig(inargs.output_file, metadata={log_key: new_log}, dpi=200)
->
->
+> 
+> 
 > if __name__ == '__main__':
 >     description='Plot the precipitation climatology for a given season.'
 >     parser = argparse.ArgumentParser(description=description)
->    
+>     
 >     parser.add_argument("pr_file", type=str, help="Precipitation data file")
 >     parser.add_argument("season", type=str, help="Season to plot")
 >     parser.add_argument("output_file", type=str, help="Output file name")
@@ -493,11 +510,14 @@ def main(inargs):
 >     parser.add_argument("--mask", type=str, nargs=2,
 >                         metavar=('SFTLF_FILE', 'REALM'), default=None,
 >                         help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
->
+>     parser.add_argument('-v', '--verbose', action='store_true', default=False,
+>                         help='Change the minimum logging reporting level from WARNING (default) to DEBUG')
+>     parser.add_argument('--logfile', type=str, default=None,
+>                         help='Name of log file (by default logging information is printed to the screen)')
+> 
 >     args = parser.parse_args()
->   
+>     
 >     main(args)
->
 > ~~~
 > {: .language-python}
 {: .solution}

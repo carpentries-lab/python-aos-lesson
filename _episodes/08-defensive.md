@@ -267,18 +267,18 @@ except KeyError:
 Unexpected behaviour in a program can sometimes propagate a long way
 before triggering an exception or producing a perplexing result.
 For instance,
-if a calculation produces a non-physical value for atmospheric humidity (e.g. 150%)
-that value could be used in various downstream calculations of fire risk
-(combined with values for temperature, wind, rainfall deficit, etc).
+if a calculation produces a non-physical value for precipitation (e.g. a negative value)
+that value could be used in various downstream calculations of drought and fire risk
+(combined with values for temperature, wind, humidity, etc).
 The final plot of the forest fire danger index might look wrong
 (or not, which would be even worse)
 to the scientist who wrote and executed the code,
-but it wouldn't be immediately obvious that the humidity calculation
+but it wouldn't be immediately obvious that the precipitation calculation
 was the source of the problem.
 
 In order to avoid propagation,
 it's best to nip unexpected behaviour in the bud right when it occurs.
-A common way to do this is to add assertions to your code.
+One way to do this is to add assertions to your code.
 An assertion is simply a statement that something must be true at a certain point in a program.
 When Python sees one,
 it evaluates the assertion's condition.
@@ -289,13 +289,13 @@ Python halts the program immediately
 and raises an `AssertionError` with a custom error message.
 
 To demonstrate an assertion in action,
-consider this piece of code that halts if any rainfall observations are negative:
+consider this piece of code that halts if any precipitation data is negative:
 
 ~~~
 import numpy as np
 
-rainfall_obs = np.array([1.5, 2.3, 0.7, -0.2, 4.4])
-assert rainfall_obs.min() >= 0.0, 'Rainfall observations should only contain positive values'
+pr_data = np.array([1.5, 2.3, 0.7, -0.2, 4.4])
+assert pr_data.min() >= 0.0, 'There is at least one negative precipitation value'
 ~~~
 {: .language-python}
 
@@ -303,9 +303,9 @@ assert rainfall_obs.min() >= 0.0, 'Rainfall observations should only contain pos
 ---------------------------------------------------------------------------
 AssertionError                            Traceback (most recent call last)
 <ipython-input-19-33d87ea29ae4> in <module>()
-----> 1 assert obs.min() >= 0.0, "Rainfall observations should only contain positive values"
+----> 1 assert pr_data.min() >= 0.0, "There is at least one negative precipitation value"
 
-AssertionError: Rainfall observations should only contain positive values
+AssertionError: There is at least one negative precipitation value
 ~~~
 {: .error}
 
@@ -314,13 +314,13 @@ one thing to check would be that the climatological precipitation values lie wit
 a sensible range after the unit conversion.
 The [world record highest daily rainfall total](https://wmo.asu.edu/content/world-greatest-twenty-four-hour-1-day-rainfall)
 is 1825mm (at Reunion Island in 1966),
-so climatological values across the globe should certainly be less than 2000 mm/day.
+so climatological values across the globe should be more than 0 but less than 2000 mm/day.
 We could add the following assertions to our `convert_pr_units` function
 to catch unexpected precipitation values.
 
 ~~~
-assert darray.data.min() >= 0.0, 'There are negative precipitation values'
-assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
+assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
+assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
 ~~~
 {: .language-python}
 
@@ -338,6 +338,224 @@ but that topic is beyond the scope of this lesson.
 > that is well worth a read. 
 >
 {: .callout}
+
+
+## Logging
+
+So far we've considered how to have our programs halt or handle the situation when things go wrong.
+Another option in our defensive programming toolkit
+is to have our programs report what's happening so that we can monitor their progress.
+
+For example,
+let's say we're working with relative humidity data.
+We wouldn't expect to encounter any values over 100% but they are technically possible,
+so rather than halt the program if a value over 100% occurs
+we might want our program to simply report the maximum relative humidity.
+We can then decide whether to trust the output or not
+(e.g. a value of 100.1% might be ok but not 150%).
+
+Our first instinct might be to add a `print` statement to the program,
+
+~~~
+rh_data = np.array([1.5, 20.4, 100.1, 76.3, 54.4])
+rh_max = rh_data.max()
+print(f'The maximum relative humidity was {rh_max}%')
+~~~
+{: .language-python}
+
+~~~
+The maximum relative humidity was 100.1%
+~~~
+{: .output}
+
+but simply printing information to the screen means it's lost once we close our command line session.
+Constantly adding and removing (or commenting out) `print` statements
+from code to figure out what's going on is also tedious and error-prone.
+
+A better approach is to use a logging framework,
+such as Python’s `logging` library.
+This lets us leave debugging statements in our code and turn them on or off at will.
+Let's start by replacing our `print` statement with a `logging` command.
+
+~~~
+import logging
+
+rh_data = np.array([1.5, 20.4, 100.1, 76.3, 54.4])
+rh_max = rh_data.max()
+logging.debug(f'The maximum relative humidity was {rh_max}%')
+~~~
+{: .language-python}
+
+Whoops!
+There's no output because by default the logging library only reports information
+at the "warning" level and above.
+In order of increasing severity, the available levels are:
+
+- `debug`: very detailed information used for localizing errors.
+- `info`: confirmation that things are working as expected.
+- `warning`: something unexpected happened, but the program will keep going.
+- `error`: something has gone badly wrong, but the program hasn’t hurt anything.
+- `critcal`: potential loss of data, security breach, etc.
+
+If we want to see the output from less severe levels,
+we'd need to change the minimum level in the logging configuration.
+We can also provide the name of a file to write the logging information
+to so that it isn't lost when we finish our command line session.
+
+~~~
+# for loop only required in notebooks
+for handler in logging.root.handlers[:]:
+    logging.root.removeHandler(handler)
+    
+logging.basicConfig(level=logging.debug, filename='log.txt')) 
+
+rh_data = np.array([1.5, 20.4, 100.1, 76.3, 54.4])
+rh_max = rh_data.max()
+logging.debug(f'The maximum relative humidity was {rh_max}%')
+~~~
+{: .language-python}
+
+(The for loop is needed to turn of the background logging that the notebook does itself.
+It's not needed in a Python script.)
+
+~~~
+$ cat log.txt
+~~~
+{: .language-bash}
+
+~~~
+DEBUG:root:The maximum relative humidity was 100.1%
+~~~
+{: .output}
+
+In the context of the `plot_precipitation_climatology.py` script,
+it would be nice to know whether or not unit conversion was performed.
+To do this we just need a few small changes to the script.
+We need to import the logging library at the top of the script,
+
+~~~
+import logging
+~~~
+{: .language-python}
+
+and set the logging configuration and add a `logging.info` command in the `main` function.
+
+~~~
+def main(inargs):
+    """Run the program."""
+    
+    logging.basicConfig(level=logging.debug, filename='log.txt') 
+    
+    ...
+    
+    if input_units == 'kg m-2 s-1':
+        clim = convert_pr_units(clim)
+        logging.info('Units converted from kg m-2 s-1 to mm/day')
+    elif input_units == 'mm/day':
+        pass
+    else:
+        raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
+    
+    ...
+~~~
+{: .language-python}
+
+> ## Update your script
+>
+> Update your working copy of `plot_precipitation_climatology.py` 
+> with the changes from this lesson.
+>
+> This will mean your `main` function will now read as follows,
+>
+> ~~~
+> def main(inargs):
+>     """Run the program."""
+>
+>     logging.basicConfig(level=logging.debug, filename='log.txt') 
+>
+>     dset = xr.open_dataset(inargs.pr_file)
+>    
+>     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+> 
+>     try:
+>         input_units = clim.attrs['units']
+>     except KeyError:
+>         raise KeyError("Precipitation variable in {inargs.pr_file} must have a units attribute")
+> 
+>     if input_units == 'kg m-2 s-1':
+>         clim = convert_pr_units(clim)
+>         logging.info('Units converted from kg m-2 s-1 to mm/day')
+>     elif input_units == 'mm/day':
+>         pass
+>     else:
+>         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
+>
+>     if inargs.mask:
+>         sftlf_file, realm = inargs.mask
+>         clim = apply_mask(clim, sftlf_file, realm)
+>
+>     create_plot(clim, dset.attrs['source_id'], inargs.season,
+>                 gridlines=inargs.gridlines, levels=inargs.cbar_levels)
+>                
+>     plt.savefig(inargs.output_file, dpi=200)
+> ~~~
+> {: .language-python}
+>
+> and your `convert_pr_units` as:
+>
+> ~~~
+> def convert_pr_units(darray):
+>     """Convert kg m-2 s-1 to mm day-1.
+>    
+>     Args:
+>       darray (xarray.DataArray): Precipitation data
+>     
+>     """
+>     
+>     darray.data = darray.data * 86400
+>     darray.attrs['units'] = 'mm/day'
+>    
+>     assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
+>     assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
+>     
+>     return darray
+> ~~~
+> {: .language-python}
+>
+{: .challenge}
+
+> ## Verbose reporting
+>
+> Add two new command line options to `plot_precipitation_climatology.py`.
+>
+> The first should change the logging level so reporting from the program is more verbose.
+> ~~~
+> parser.add_argument('-v', '--verbose', action='store_true', default=False,
+>                     help='Change the minimum logging reporting level from WARNING (default) to INFO')
+> ~~~
+> {: .language-python}
+>
+> The second should allow the user to specify the name of the log file. 
+> (If they don't specify a name then the logging information is printed to the screen.)
+> ~~~
+> parser.add_argument('--logfile', type=str, default=None,
+>                     help='Name of log file (by default logging information is printed to the screen)')
+> ~~~
+> {: .language-python}
+>
+> > ## Solution
+> >
+> > The basic configuration command at the top of the `main` function
+> > (`logging.basicConfig(level=logging.debug, filename='log.txt')`)
+> > needs to be replaced with the following:
+> > 
+> > ~~~
+> > log_lev = logging.INFO if inargs.verbose else logging.WARNING
+> > logging.basicConfig(level=log_lev, filename=inargs.logfile) 
+> > ~~~
+> > {: .language-python}
+> {: .solution}
+{: .challenge}
 
 > ## Error handling for land/ocean masks
 >
@@ -374,7 +592,7 @@ but that topic is beyond the scope of this lesson.
 > should look something like the following:
 >
 > ~~~
-> import pdb
+> import logging
 > import argparse
 > 
 > import xarray as xr
@@ -395,8 +613,8 @@ but that topic is beyond the scope of this lesson.
 >     darray.data = darray.data * 86400
 >     darray.attrs['units'] = 'mm/day'
 >    
->     assert darray.data.min() >= 0.0, 'There are negative precipitation values'
->     assert darray.data.max() < 2000, 'There are precipitation values > 2000 mm/day'
+>     assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
+>     assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
 >
 >     return darray
 >
@@ -458,6 +676,9 @@ but that topic is beyond the scope of this lesson.
 > def main(inargs):
 >     """Run the program."""
 > 
+>     log_lev = logging.DEBUG if inargs.verbose else logging.WARNING
+>     logging.basicConfig(level=log_lev, filename=inargs.logfile) 
+>
 >     dset = xr.open_dataset(inargs.pr_file)
 >     
 >     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
@@ -469,6 +690,7 @@ but that topic is beyond the scope of this lesson.
 >
 >     if input_units == 'kg m-2 s-1':
 >         clim = convert_pr_units(clim)
+>         logging.info('Units converted from kg m-2 s-1 to mm/day')
 >     elif input_units == 'mm/day':
 >         pass
 >     else:
@@ -498,6 +720,10 @@ but that topic is beyond the scope of this lesson.
 >     parser.add_argument("--mask", type=str, nargs=2,
 >                         metavar=('SFTLF_FILE', 'REALM'), default=None,
 >                         help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
+>     parser.add_argument('-v', '--verbose', action='store_true', default=False,
+>                         help='Change the minimum logging reporting level from WARNING (default) to DEBUG')
+>     parser.add_argument('--logfile', type=str, default=None,
+>                         help='Name of log file (by default logging information is printed to the screen)')>
 >
 >     args = parser.parse_args()
 >   
