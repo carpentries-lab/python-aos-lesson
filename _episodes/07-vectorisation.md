@@ -163,6 +163,8 @@ Attributes:
 > ~~~
 > {: .language-bash}
 >
+> ![Ocean masked rainfall plot](../fig/07-vectorisation-ocean-mask.png)
+>
 > Commit the changes to git and then push to GitHub.
 >
 > > ## Solution
