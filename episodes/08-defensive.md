@@ -556,8 +556,8 @@ def main(inargs):
 > > log_lev = logging.INFO if inargs.verbose else logging.WARNING
 > > logging.basicConfig(level=log_lev, filename=inargs.logfile) 
 > > ~~~
-> > {: .language-python}
-> {: .solution}
+> > {: .language-python}  
+> {: .solution}  
 {: .challenge}
 
 > ## Error handling for land/ocean masks
