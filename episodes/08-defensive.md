@@ -584,8 +584,7 @@ def main(inargs):
 > > else:
 > >     raise ValueError("""Mask realm is not 'ocean' or 'land'""")
 > ~~~
-> {: .language-python}
-> >
+> > {: .language-python}
 > {: .solution}  
 {: .challenge}
 
