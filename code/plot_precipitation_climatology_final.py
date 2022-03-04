@@ -1,4 +1,4 @@
-import pdb
+import logging
 import argparse
 
 import numpy as np
@@ -17,31 +17,33 @@ def convert_pr_units(darray):
     
     """
     
-    assert darray.units == 'kg m-2 s-1', "Program assumes input units are kg m-2 s-1"
-    
     darray.data = darray.data * 86400
     darray.attrs['units'] = 'mm/day'
+    
+    assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
+    assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
     
     return darray
 
 
 def apply_mask(darray, sftlf_file, realm):
     """Mask ocean or land using a sftlf (land surface fraction) file.
-    
+   
     Args:
       darray (xarray.DataArray): Data to mask
       sftlf_file (str): Land surface fraction file
       realm (str): Realm to mask
-    
+   
     """
-   
+  
     dset = xr.open_dataset(sftlf_file)
-    assert realm in ['land', 'ocean'], """Valid realms are 'land' or 'ocean'"""
-    if realm == 'land':
+    if realm.lower() == 'land':
         masked_darray = darray.where(dset['sftlf'].data < 50)
-    else:
+    elif realm.lower() == 'ocean':
         masked_darray = darray.where(dset['sftlf'].data > 50)   
-   
+    else:
+        raise ValueError("""Mask realm is not 'ocean' or 'land'""")    
+
     return masked_darray
 
 
@@ -106,10 +108,25 @@ def get_log_and_key(pr_file, history_attr, plot_type):
 def main(inargs):
     """Run the program."""
 
+    log_lev = logging.INFO if inargs.verbose else logging.WARNING
+    logging.basicConfig(level=log_lev, filename=inargs.logfile)
+
     dset = xr.open_dataset(inargs.pr_file)
     
     clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
-    clim = convert_pr_units(clim)
+
+    try:
+        input_units = clim.attrs['units']
+    except KeyError:
+        raise KeyError("Precipitation variable in {inargs.pr_file} must have a units attribute")
+
+    if input_units == 'kg m-2 s-1':
+        clim = convert_pr_units(clim)
+        logging.info('Units converted from kg m-2 s-1 to mm/day')
+    elif input_units == 'mm/day':
+        pass
+    else:
+        raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
 
     if inargs.mask:
         sftlf_file, realm = inargs.mask
@@ -139,6 +156,10 @@ if __name__ == '__main__':
     parser.add_argument("--mask", type=str, nargs=2,
                         metavar=('SFTLF_FILE', 'REALM'), default=None,
                         help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
+    parser.add_argument('-v', '--verbose', action='store_true', default=False,
+                        help='Change the minimum logging reporting level from WARNING (default) to DEBUG')
+    parser.add_argument('--logfile', type=str, default=None,
+                        help='Name of log file (by default logging information is printed to the screen)')
 
     args = parser.parse_args()
     
