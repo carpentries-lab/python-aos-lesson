@@ -46,7 +46,7 @@ In this lesson, we'll look at how error handling, assertions and logging
 can make the unit conversion in our program more reliable,
 and we'll provide links to further information on unit testing.
 
-## Raising errors
+## Types of errors
 
 There are essentially two kinds of errors that can arise in Python:
 *syntax errors* and *exceptions*.
@@ -54,7 +54,7 @@ We are all very familiar with the former:
 
 ~~~
 rainfall = 5
-if rainfall > 5
+if rainfall > 10
     print('heavy rainfall')
 ~~~
 {: .language-python}
@@ -102,6 +102,8 @@ TypeError: can only concatenate str (not "int") to str
 ~~~
 {: .error}
 
+## Raising errors
+
 With respect to defensive programming,
 it can sometimes be useful to raise your own exceptions (using the `raise` keyword).
 
@@ -146,7 +148,6 @@ else:
     raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
 ~~~
 {: .language-python} 
-
 
 ## Handling errors
 
@@ -264,7 +265,6 @@ except KeyError:
 ~~~
 {: .language-python} 
 
-
 ## Assertions
 
 Unexpected behaviour in a program can sometimes propagate a long way
@@ -341,7 +341,6 @@ but that topic is beyond the scope of this lesson.
 > that is well worth a read. 
 >
 {: .callout}
-
 
 ## Logging
 
@@ -420,6 +419,11 @@ logging.debug(f'The maximum relative humidity was {rh_max}%')
 
 (The for loop is needed to turn off the background logging the notebook does itself.
 It's not needed in a Python script.)
+
+By setting the logging level to "debug",
+our output "log.txt" file will now capture all logging information
+with a flag of 'debug' or higher - that is,
+all logging outputs will be written to our log file.
 
 ~~~
 $ cat log.txt
