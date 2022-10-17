@@ -409,7 +409,7 @@ so that it isn't lost when we finish our command line session.
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
     
-logging.basicConfig(level=logging.debug, filename='log.txt')) 
+logging.basicConfig(level=logging.DEBUG, filename='log.txt')) 
 
 rh_data = np.array([1.5, 20.4, 100.1, 76.3, 54.4])
 rh_max = rh_data.max()
@@ -420,7 +420,10 @@ logging.debug(f'The maximum relative humidity was {rh_max}%')
 (The for loop is needed to turn off the background logging the notebook does itself.
 It's not needed in a Python script.)
 
-By setting the logging level to "debug",
+Notice that we've used capital `logging.DEBUG` (which is an integer value) to set the logging level,
+as opposed to the `logging.debug` function that is used for logging a message.
+
+By setting the logging level to "DEBUG",
 our output "log.txt" file will now capture all logging information
 with a flag of 'debug' or higher - that is,
 all logging outputs will be written to our log file.
@@ -451,7 +454,7 @@ and set the logging configuration and add a `logging.info` command in the `main`
 def main(inargs):
     """Run the program."""
     
-    logging.basicConfig(level=logging.debug, filename='log.txt') 
+    logging.basicConfig(level=logging.DEBUG, filename='log.txt') 
     
     ...
     
@@ -478,7 +481,7 @@ def main(inargs):
 > def main(inargs):
 >     """Run the program."""
 >
->     logging.basicConfig(level=logging.debug, filename='log.txt') 
+>     logging.basicConfig(level=logging.DEBUG, filename='log.txt') 
 >
 >     dset = xr.open_dataset(inargs.pr_file)
 >    
@@ -553,7 +556,7 @@ def main(inargs):
 > > ## Solution
 > >
 > > The basic configuration command at the top of the `main` function
-> > (`logging.basicConfig(level=logging.debug, filename='log.txt')`)
+> > (`logging.basicConfig(level=logging.DEBUG, filename='log.txt')`)
 > > needs to be replaced with the following:
 > > 
 > > ~~~
