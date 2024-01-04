@@ -27,7 +27,7 @@ $ conda create -n pyaos-lesson jupyter xarray cmocean
 5. Run the final version of the script that participants will develop throughout the workshop:
 
 ```
-(pyaos-lesson) $ python code/plot_precipitation_climatology_final.py data/pr_Amon_ACCESS1-3_historical_r1i1p1_200101-200512.nc Jan test.png
+(pyaos-lesson) $ python code/plot_precipitation_climatology_final.py data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc DJF test.png
 ```
 
 It should produce an image file (`test.png`) as well as a log of command line entries (`test.txt`).
