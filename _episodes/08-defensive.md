@@ -397,7 +397,7 @@ In order of increasing severity, the available levels are:
 - `info`: confirmation that things are working as expected.
 - `warning`: something unexpected happened, but the program will keep going.
 - `error`: something has gone badly wrong, but the program hasn’t hurt anything.
-- `critcal`: potential loss of data, security breach, etc.
+- `critical`: potential loss of data, security breach, etc.
 
 If we want to see the output from less severe levels (i.e. turn our debugging statements on),
 we'd need to change the minimum level in the logging configuration.
