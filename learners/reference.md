@@ -1,7 +1,9 @@
 ---
-layout: reference
+title: 'Glossary'
 ---
 
 ## Glossary
 
 FIXME
+
+

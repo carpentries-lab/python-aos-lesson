@@ -1,6 +1,5 @@
 ---
-layout: page
-title: "Instructor Notes"
+title: Instructor Notes
 ---
 
 ## Teaching notes
@@ -34,6 +33,7 @@ Earth System Grid Federation (ESGF) following the
 [CMIP6 Guidance for Data Users](https://pcmdi.llnl.gov/CMIP6/Guide/dataUsers.html#3-accessing-model-output).
 (Workshop participants do not need to download this data.)
 Use the following search terms to locate the data at your nearest ESGF node:
+
 - Source ID: CNRM-CM6-1-HR
 - Experiment ID: historical
 - Variant Label: r1i1p1f2
@@ -50,4 +50,5 @@ You can also send the
 [helper lesson check](https://github.com/carpentries-lab/python-aos-lesson/blob/gh-pages/helper_lesson_check.md)
 to helpers prior to the workshop,
 so that they can test that all the software and code is working correctly.
+
 
