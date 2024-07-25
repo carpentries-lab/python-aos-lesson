@@ -33,7 +33,7 @@ for the high resolution CNRM-CM6-1-HR model.
 
 Instructors teaching this lesson can download the CNRM-CM6-1-HR
 daily precipitation data from the Earth System Grid Federation (ESGF).
-See the [instructor notes](https://carpentries-lab.github.io/python-aos-lesson/guide/index.html) for details.
+See the [instructor notes](https://carpentries-lab.github.io/python-aos-lesson/instructor/instructor-notes.html) for details.
 Since it is a very large download (45 GB),
 learners are not expected to download the data.
 (None of the exercises at the end of the lesson require downloading the data.)
@@ -353,8 +353,8 @@ that aren't built into `xarray`
 (e.g. an interpolation routine from the SciPy library)
 we'd first need to use the `apply_ufunc` or `map_blocks` function
 to make those operations "Dask-aware".
-The [xarray tutorial](https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/06_xarray_and_dask.html#Automatic-parallelization-with-apply_ufunc-and-map_blocks)
-from SciPy 2020 explains how to do this.
+There's an [xarray tutorial](https://docs.xarray.dev/en/stable/examples/apply_ufunc_vectorize_1d.html)
+that explains how to do this.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
