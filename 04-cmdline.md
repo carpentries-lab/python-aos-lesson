@@ -26,7 +26,8 @@ and/or take notes on a new data analysis task.
 Once you've scoped out the task (as we have for plotting the precipitation climatology),
 that code can be transferred to a Python script so that it can be executed at the command line.
 It's likely that your data processing workflows will include command line utilities
-from the CDO and NCO projects in addition to Python code,
+from the [CDO](https://code.mpimet.mpg.de/projects/cdo) and
+[NCO](https://nco.sourceforge.net/) projects in addition to Python code,
 so the command line is the natural place to manage your workflows
 (e.g. using shell scripts or make files).
 

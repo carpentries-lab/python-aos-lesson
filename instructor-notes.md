@@ -20,8 +20,8 @@ This is done to reinforce the repetitive "add, commit, push" workflow in git.
 
 At the beginning of the workshop,
 participants are required to download a number of data files
-(instructions at the [setup page](https://carpentries-lab.github.io/python-aos-lesson/setup.html)).
-In the [first lesson](https://carpentries-lab.github.io/python-aos-lesson/01-conda/index.html),
+(instructions at the [setup page](https://carpentries-lab.github.io/python-aos-lesson/index.html#data)).
+In the [first lesson](https://carpentries-lab.github.io/python-aos-lesson/01-conda.html#install-the-python-libraries-required-for-this-lesson)
 they are then required to install some python libraries (`jupyter`, `xarray`, `cmocean`, etc).
 Both these tasks can be problematic at venues with slow wifi,
 so it is often a good idea to ask participants to download the data
@@ -43,12 +43,10 @@ Use the following search terms to locate the data at your nearest ESGF node:
 
 ## Software and code
 
-The [setup page](https://carpentries-lab.github.io/python-aos-lesson/setup.html)
+The [setup page](https://carpentries-lab.github.io/python-aos-lesson/index.html#software-installation)
 gives details of the software installation instructions that can provided to participants.
 
 You can also send the
-[helper lesson check](https://github.com/carpentries-lab/python-aos-lesson/blob/gh-pages/helper_lesson_check.md)
+[helper lesson check](https://github.com/carpentries-lab/python-aos-lesson/blob/main/helper_lesson_check.md)
 to helpers prior to the workshop,
 so that they can test that all the software and code is working correctly.
-
-
