@@ -166,16 +166,6 @@ $ conda list
 
 :::::::::::::::::::::::::::::::::::::::::  callout
 
-## Mamba
-
-If you find that using conda to install libraries on your computer is slow,
-try [mamba](https://mamba.readthedocs.io/en/latest/index.html).
-It's a faster implementation of conda.
-
-::::::::::::::::::::::::::::::::::::::::::::::::::
-
-:::::::::::::::::::::::::::::::::::::::::  callout
-
 ## Creating separate environments
 
 If you've got multiple data science projects on the go,
@@ -274,7 +264,7 @@ we need to decide how we want to interact with Python.
 The most simple way to use Python is to type code directly into the interpreter.
 This can be accessed from the bash shell:
 
-```bash
+```
 $ python
 Python 3.7.1 (default, Dec 14 2018, 13:28:58) 
 [Clang 4.0.1 (tags/RELEASE_401/final)] :: Anaconda, Inc. on darwin
@@ -293,7 +283,7 @@ outlines all the special features that come with IPython,
 but as an example, it lets you execute bash shell commands
 without having to exit the IPython interpreter:
 
-```bash
+```
 $ ipython
 Python 3.7.1 (default, Dec 14 2018, 13:28:58) 
 Type 'copyright', 'credits' or 'license' for more information
@@ -374,8 +364,6 @@ If you create a new environment rather than using the base environment,
 you'll need to install jupyter too.)
 
 :::::::::::::::  solution
-
-## Solution
 
 The [setup menu](https://carpentries-lab.github.io/python-aos-lesson/setup.html)
 at the top of the page

@@ -33,7 +33,7 @@ so the command line is the natural place to manage your workflows
 In general, the first thing that gets added to any Python script is the following:
 
 ```python
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
 ```
 
@@ -69,13 +69,13 @@ import argparse
 def main(inargs):
     """Run the program."""
 
-    print('Input file: ', inargs.infile)
-    print('Output file: ', inargs.outfile)
+    print("Input file: ", inargs.infile)
+    print("Output file: ", inargs.outfile)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
-    description='Print the input arguments to the screen.'
+    description = "Print the input arguments to the screen."
     parser = argparse.ArgumentParser(description=description)
     
     parser.add_argument("infile", type=str, help="Input file name")
@@ -144,18 +144,18 @@ import cmocean
 import argparse
 
 
-def convert_pr_units(darray):
+def convert_pr_units(da):
     """Convert kg m-2 s-1 to mm day-1.
     
     Args:
-      darray (xarray.DataArray): Precipitation data
+      da (xarray.DataArray): Precipitation data
     
     """
     
-    darray.data = darray.data * 86400
-    darray.attrs['units'] = 'mm/day'
+    da.data = darray.data * 86400
+    da.attrs["units"] = "mm/day"
     
-    return darray
+    return da
 
 
 def create_plot(clim, model, season, gridlines=False):
@@ -173,33 +173,40 @@ def create_plot(clim, model, season, gridlines=False):
         
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-    clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=np.arange(0, 13.5, 1.5),
-                                          extend='max',
-                                          transform=ccrs.PlateCarree(),
-                                          cbar_kwargs={'label': clim.units},
-                                          cmap=cmocean.cm.haline_r)
+    clim.sel(season=season).plot.contourf(
+        ax=ax,
+        levels=np.arange(0, 13.5, 1.5),
+        extend="max",
+        transform=ccrs.PlateCarree(),
+        cbar_kwargs={"label": clim.units},
+        cmap=cmocean.cm.haline_r,
+    )
     ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
     
-    title = f'{model} precipitation climatology ({season})'
+    title = f"{model} precipitation climatology ({season})"
     plt.title(title)
 
 
 def main(inargs):
     """Run the program."""
 
-    dset = xr.open_dataset(inargs.pr_file)
+    ds = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
     clim = convert_pr_units(clim)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season)
-    plt.savefig(inargs.output_file, dpi=200)
+    create_plot(clim, ds.attrs["source_id"], inargs.season)
+    plt.savefig(
+        inargs.output_file,
+        dpi=200,
+        bbox_inches="tight",
+        facecolor="white",
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     description='Plot the precipitation climatology.'
     parser = argparse.ArgumentParser(description=description)
     
@@ -230,19 +237,20 @@ For the first improvement,
 edit the line of code that defines the season command line argument
 (`parser.add_argument("season", type=str, help="Season to plot")`)
 so that it only allows the user to input a valid three letter abbreviation
-(i.e. `['DJF', 'MAM', 'JJA', 'SON']`).
+(i.e. `["DJF", "MAM", "JJA", "SON"]`).
 
 (Hint: Read about the `choices` keyword argument
 at the [argparse tutorial](https://docs.python.org/3/howto/argparse.html).)
 
 :::::::::::::::  solution
 
-## Solution
-
 ```python
-parser.add_argument("season", type=str,
-                    choices=['DJF', 'MAM', 'JJA', 'SON'], 
-                    help="Season to plot")
+parser.add_argument(
+    "season",
+    type=str,
+    choices=["DJF", "MAM", "JJA", "SON"], 
+    help="Season to plot",
+)
 ```
 
 :::::::::::::::::::::::::
@@ -260,8 +268,6 @@ at the [argparse tutorial](https://docs.python.org/3/howto/argparse.html).)
 
 :::::::::::::::  solution
 
-## Solution
-
 Make the following additions to `plot_precipitation_climatology.py`
 (code omitted from this abbreviated version of the script is denoted `...`):
 
@@ -272,16 +278,25 @@ def main(inargs):
 
    ... 
 
-   create_plot(clim, dset.attrs['source_id'], inargs.season, gridlines=inargs.gridlines)
+   create_plot(
+       clim,
+       ds.attrs["source_id"],
+       inargs.season,
+       gridlines=inargs.gridlines,
+    )
 
 ...
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     ... 
 
-    parser.add_argument("--gridlines", action="store_true", default=False,
-                        help="Include gridlines on the plot")
+    parser.add_argument(
+        "--gridlines",
+        action="store_true",
+        default=False,
+        help="Include gridlines on the plot",
+    )
 
 ... 
 
@@ -323,8 +338,10 @@ def create_plot(clim, model_name, season, gridlines=False, levels=None):
 
     ...
 
-    clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=levels,
+    clim.sel(season=season).plot.contourf(
+        ax=ax,
+        ...,
+    )
 
 ...
 
@@ -332,17 +349,27 @@ def main(inargs):
 
     ... 
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season,
-                gridlines=inargs.gridlines, levels=inargs.cbar_levels)
+    create_plot(
+        clim,
+        ds.attrs["source_id"],
+        inargs.season,
+        gridlines=inargs.gridlines,
+        levels=inargs.cbar_levels,
+    )
 
 ...
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     ... 
 
-    parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-                        help='list of levels / tick marks to appear on the colorbar')
+    parser.add_argument(
+        "--cbar_levels",
+        type=float,
+        nargs="*",
+        default=None,
+        help="list of levels / tick marks to appear on the colorbar",
+    )
 
 ... 
 
@@ -360,12 +387,14 @@ Add any other options you'd like for customising the plot (e.g. title, axis labe
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::  solution
+:::::::::::::::::::::::::::::::::::::::  challenge
 
 ## plot\_precipitation\_climatology.py
 
 At the conclusion of this lesson your `plot_precipitation_climatology.py` script
 should look something like the following:
+
+:::::::::::::::  solution
 
 ```python
 import xarray as xr
@@ -376,18 +405,18 @@ import cmocean
 import argparse
 
 
-def convert_pr_units(darray):
+def convert_pr_units(da):
     """Convert kg m-2 s-1 to mm day-1.
    
     Args:
-      darray (xarray.DataArray): Precipitation data
+      da (xarray.DataArray): Precipitation data
     
     """
     
-    darray.data = darray.data * 86400
-    darray.attrs['units'] = 'mm/day'
+    da.data = darray.data * 86400
+    da.attrs["units"] = "mm/day"
    
-    return darray
+    return da
 
 
 def create_plot(clim, model, season, gridlines=False, levels=None):
@@ -409,53 +438,75 @@ def create_plot(clim, model, season, gridlines=False, levels=None):
         
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-    clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=levels,
-                                          extend='max',
-                                          transform=ccrs.PlateCarree(),
-                                          cbar_kwargs={'label': clim.units},
-                                          cmap=cmocean.cm.haline_r)
+    clim.sel(season=season).plot.contourf(
+        ax=ax,
+        levels=levels,
+        extend="max",
+        transform=ccrs.PlateCarree(),
+        cbar_kwargs={"label": clim.units},
+        cmap=cmocean.cm.haline_r,
+    )
     ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
     
-    title = f'{model} precipitation climatology ({season})'
+    title = f"{model} precipitation climatology ({season})"
     plt.title(title)
 
 
 def main(inargs):
     """Run the program."""
 
-    dset = xr.open_dataset(inargs.pr_file)
+    ds = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
     clim = convert_pr_units(clim)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season,
-                gridlines=inargs.gridlines, levels=inargs.cbar_levels)
-    plt.savefig(inargs.output_file, dpi=200)
+    create_plot(
+        clim,
+        ds.attrs["source_id"],
+        inargs.season,
+        gridlines=inargs.gridlines,
+        levels=inargs.cbar_levels,
+    )
+    plt.savefig(
+        inargs.output_file,
+        dpi=200,
+        bbox_inches="tight",
+        facecolor="white",
+    )
 
 
-if __name__ == '__main__':
-    description='Plot the precipitation climatology.'
+if __name__ == "__main__":
+    description = "Plot the precipitation climatology."
     parser = argparse.ArgumentParser(description=description)
    
     parser.add_argument("pr_file", type=str, help="Precipitation data file")
     parser.add_argument("season", type=str, help="Season to plot")
     parser.add_argument("output_file", type=str, help="Output file name")
 
-    parser.add_argument("--gridlines", action="store_true", default=False,
-                        help="Include gridlines on the plot")
-    parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-                        help='list of levels / tick marks to appear on the colorbar')
+    parser.add_argument(
+        "--gridlines",
+        action="store_true",
+        default=False,
+        help="Include gridlines on the plot",
+    )
+    parser.add_argument(
+        "--cbar_levels",
+        type=float,
+        nargs="*",
+        default=None,
+        help="list of levels / tick marks to appear on the colorbar",
+    )
 
     args = parser.parse_args()
-   
     main(args)
 
 ```
 
 :::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 

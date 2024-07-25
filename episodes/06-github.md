@@ -171,7 +171,8 @@ ls: cannot access '/home/damien/.ssh': No such file or directory
 If SSH has been set up on the computer you're using,
 the public and private key pairs will be listed.
 The file names are either `id_ed25519`/`id_ed25519.pub` or `id_rsa`/`id_rsa.pub`
-depending on how the key pairs were set up.  
+depending on how the key pairs were set up.
+
 If they don't exist on your computer, you can use this command to create them.
 
 ```bash
@@ -181,7 +182,7 @@ $ ssh-keygen -t ed25519 -C "you@email.com"
 The `-t` option specifies which type of algorithm to use
 and `-C` attaches a comment to the key (here, your email).
 
-If you are using a legacy system that doesn't support the Ed25519 algorithm, use:
+If you are using a legacy system that doesn't support the Ed25519 algorithm, use:  
 `$ ssh-keygen -t rsa -b 4096 -C "you@email.com"`
 
 ```output

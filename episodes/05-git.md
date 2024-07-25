@@ -254,7 +254,7 @@ by editing the `description` variable
 (which is used by argparse in the help information it displays at the command line).
 
 ```python
-description='Plot the precipitation climatology for a given season.'
+description = "Plot the precipitation climatology for a given season."
 ```
 
 When we run `git status` now,
@@ -306,8 +306,8 @@ index 58903f5..6c12b29 100644
  
  
  if __name__ == '__main__':
--    description='Plot the precipitation climatology.'
-+    description='Plot the precipitation climatology for a given season.'
+-    description = "Plot the precipitation climatology."
++    description = "Plot the precipitation climatology for a given season."
      parser = argparse.ArgumentParser(description=description)
      
      parser.add_argument("pr_file", type=str, help="Precipitation data file")
@@ -412,7 +412,7 @@ index 6c12b29..c6beb12 100644
 -import argparse
  
  
- def convert_pr_units(darray):
+ def convert_pr_units(da):
 ```
 
 Let's save our changes:
@@ -530,7 +530,7 @@ index 6c12b29..c11707c 100644
  
 +# A random comment
  
- def convert_pr_units(darray):
+ def convert_pr_units(da):
      """Convert kg m-2 s-1 to mm day-1.
 ```
 
@@ -570,14 +570,14 @@ index 58903f5..c11707c 100644
  
 +# A random comment
  
- def convert_pr_units(darray):
+ def convert_pr_units(da):
      """Convert kg m-2 s-1 to mm day-1.
 @@ -62,7 +64,7 @@ def main(inargs):
  
  
  if __name__ == '__main__':
--    description='Plot the precipitation climatology.'
-+    description='Plot the precipitation climatology for a given season.'
+-    description = "Plot the precipitation climatology."
++    description = "Plot the precipitation climatology for a given season."
      parser = argparse.ArgumentParser(description=description)
      
      parser.add_argument("pr_file", type=str, help="Precipitation data file")
@@ -655,12 +655,14 @@ is the equivalent command.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::  solution
+:::::::::::::::::::::::::::::::::::::::::  challenge
 
 ## plot\_precipitation\_climatology.py
 
 At the conclusion of this lesson your `plot_precipitation_climatology.py` script
 should look something like the following:
+
+:::::::::::::::  solution
 
 ```python
 import argparse
@@ -672,26 +674,26 @@ import numpy as np
 import cmocean
 
 
-def convert_pr_units(darray):
+def convert_pr_units(da):
     """Convert kg m-2 s-1 to mm day-1.
    
     Args:
-      darray (xarray.DataArray): Precipitation data
+      da (xarray.DataArray): Precipitation data
     
     """
     
-    darray.data = darray.data * 86400
-    darray.attrs['units'] = 'mm/day'
+    da.data = da.data * 86400
+    da.attrs["units"] = "mm/day"
    
     return darray
 
 
-def create_plot(clim, model_name, season, gridlines=False, levels=None):
+def create_plot(clim, model, season, gridlines=False, levels=None):
     """Plot the precipitation climatology.
    
     Args:
       clim (xarray.DataArray): Precipitation climatology data
-      model_name (str): Name of the climate model
+      model (str): Name of the climate model
       season (str): Season
       
     Kwargs:
@@ -705,53 +707,75 @@ def create_plot(clim, model_name, season, gridlines=False, levels=None):
         
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-    clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=levels,
-                                          extend='max',
-                                          transform=ccrs.PlateCarree(),
-                                          cbar_kwargs={'label': clim.units},
-                                          cmap=cmocean.cm.haline_r)
+    clim.sel(season=season).plot.contourf(
+        ax=ax,
+        levels=levels,
+        extend="max",
+        transform=ccrs.PlateCarree(),
+        cbar_kwargs={"label": clim.units},
+        cmap=cmocean.cm.haline_r
+    )
     ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
     
-    title = '%s precipitation climatology (%s)' %(model_name, season)
+    title = f"{model} precipitation climatology ({season})"
     plt.title(title)
 
 
 def main(inargs):
     """Run the program."""
 
-    dset = xr.open_dataset(inargs.pr_file)
+    ds = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean('time')
+    clim = ds["pr"].groupby("time.season").mean("time")
     clim = convert_pr_units(clim)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season,
-                gridlines=inargs.gridlines, levels=inargs.cbar_levels)
-    plt.savefig(inargs.output_file, dpi=200)
+    create_plot(
+        clim,
+        ds.attrs["source_id"],
+        inargs.season,
+        gridlines=inargs.gridlines,
+        levels=inargs.cbar_levels
+    )
+    plt.savefig(
+        inargs.output_file,
+        dpi=200,
+        bbox_inches="tight",
+        facecolor="white",
+    )
 
 
-if __name__ == '__main__':
-    description='Plot the precipitation climatology for a given season.'
+if __name__ == "__main__":
+    description = "Plot the precipitation climatology for a given season."
     parser = argparse.ArgumentParser(description=description)
    
     parser.add_argument("pr_file", type=str, help="Precipitation data file")
     parser.add_argument("season", type=str, help="Season to plot")
     parser.add_argument("output_file", type=str, help="Output file name")
 
-    parser.add_argument("--gridlines", action="store_true", default=False,
-                        help="Include gridlines on the plot")
-    parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-                        help='list of levels / tick marks to appear on the colorbar')
+    parser.add_argument(
+        "--gridlines",
+        action="store_true",
+        default=False,
+        help="Include gridlines on the plot",
+    )
+    parser.add_argument(
+        "--cbar_levels",
+        type=float,
+        nargs="*",
+        default=None,
+        help="list of levels / tick marks to appear on the colorbar",
+    )
 
     args = parser.parse_args()
-   
     main(args)
 
 ```
 
 :::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::: 
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 

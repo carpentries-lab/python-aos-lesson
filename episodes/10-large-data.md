@@ -77,7 +77,7 @@ while `?` matches any one character,
 just like at the Unix shell.
 
 ```python
-pr_files = glob.glob('data/pr_day*.nc')
+pr_files = glob.glob("data/pr_day*.nc")
 pr_files.sort()
 print(pr_files)
 ```
@@ -101,9 +101,9 @@ This may take a little time for a large multifile dataset.
 ```python
 import xarray as xr
 
-dset = xr.open_mfdataset(pr_files, chunks={'time': '500MB'})
+ds = xr.open_mfdataset(pr_files, chunks={"time": "500MB"})
 
-print(dset)
+print(ds)
 ```
 
 ```output
@@ -172,7 +172,7 @@ Attributes:
     tracking_id:            hdl:21.14100/223fa794-73fe-4bb5-9209-8ff910f7dc40
 ```
 
-We can see that our `dset` object is an `xarray.Dataset`,
+We can see that our `ds` object is an `xarray.Dataset`,
 but notice now that each variable has type `dask.array`
 with a `chunksize` attribute.
 Dask will access the data chunk-by-chunk (rather than all at once),
@@ -198,7 +198,7 @@ We can have the Jupyter notebook display the size and shape of our chunks,
 just to make sure they are indeed 500MB.
 
 ```python
-dset['pr'].data
+ds['pr'].data
 ```
 
 ```output
@@ -213,7 +213,7 @@ Now that we understand the chunking information contained in the metadata,
 let's go ahead and calculate the daily maximum precipitation.
 
 ```python
-pr_max = dset['pr'].max('time', keep_attrs=True)
+pr_max = ds["pr"].max("time", keep_attrs=True)
 print(pr_max)
 ```
 
@@ -316,21 +316,24 @@ import cartopy.crs as ccrs
 import numpy as np
 import cmocean
 
+
 pr_max_done.data = pr_max_done.data * 86400
-pr_max_done.attrs['units'] = 'mm/day'
+pr_max_done.attrs["units"] = "mm/day"
 
 fig = plt.figure(figsize=[12,5])
 ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-pr_max_done.plot.contourf(ax=ax,
-                         levels=np.arange(0, 450, 50),
-                         extend='max',
-                         transform=ccrs.PlateCarree(),
-                         cbar_kwargs={'label': pr_max.units},
-                         cmap=cmocean.cm.haline_r)
+pr_max_done.plot.contourf(
+    ax=ax,
+    levels=np.arange(0, 450, 50),
+    extend="max",
+    transform=ccrs.PlateCarree(),
+    cbar_kwargs={"label": pr_max.units},
+    cmap=cmocean.cm.haline_r,
+)
 ax.coastlines()
 
-model = dset.attrs['source_id']
-title = f'Daily maximum precipitation, 1850-2014 ({model})'
+model = ds.attrs["source_id"]
+title = f"Daily maximum precipitation, 1850-2014 ({model})"
 plt.title(title)
 
 plt.show()

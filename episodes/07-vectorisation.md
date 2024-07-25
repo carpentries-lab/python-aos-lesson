@@ -25,10 +25,11 @@ To do this, we need to use the land area fraction file.
 import numpy as np
 import xarray as xr
 
-accesscm2_sftlf_file = 'data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc'
 
-dset = xr.open_dataset(accesscm2_sftlf_file)
-sftlf = dset['sftlf']
+accesscm2_sftlf_file = "data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc"
+
+ds = xr.open_dataset(accesscm2_sftlf_file)
+sftlf = ds["sftlf"]
 print(sftlf)
 ```
 
@@ -77,8 +78,8 @@ it is a land point (and thus needs to be set to `np.nan`).
 (For this example, we are going to define land as any grid point that is more than 50% land.)
 
 ```python
-dset = xr.open_dataset('data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc')
-clim = dset['pr'].mean('time', keep_attrs=True)
+ds = xr.open_dataset("data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc")
+clim = ds['pr'].mean("time", keep_attrs=True)
 
 nlats, nlons = clim.data.shape
 for y in range(nlats):
@@ -147,9 +148,14 @@ Modify `plot_precipitation_climatology.py` so that the user can choose to apply 
 via the following `argparse` option:
 
 ```python
-parser.add_argument("--mask", type=str, nargs=2,
-                    metavar=('SFTLF_FILE', 'REALM'), default=None,
-                    help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
+parser.add_argument(
+    "--mask",
+    type=str,
+    nargs=2,
+    metavar=("SFTLF_FILE", "REALM"),
+    default=None,
+    help="""Provide sftlf file and realm to mask ('land' or 'ocean')""",
+)
 ```
 
 This should involve defining a new function called `apply_mask()`,
@@ -167,39 +173,37 @@ Commit the changes to git and then push to GitHub.
 
 :::::::::::::::  solution
 
-## Solution
-
 Make the following additions to `plot_precipitation_climatology.py`
 (code omitted from this abbreviated version of the script is denoted `...`):
 
 ```python
-def apply_mask(darray, sftlf_file, realm):
+def apply_mask(da, sftlf_file, realm):
     """Mask ocean or land using a sftlf (land surface fraction) file.
    
     Args:
-     darray (xarray.DataArray): Data to mask
+     da (xarray.DataArray): Data to mask
      sftlf_file (str): Land surface fraction file
      realm (str): Realm to mask
    
     """
   
-    dset = xr.open_dataset(sftlf_file)
+    ds = xr.open_dataset(sftlf_file)
   
     if realm == 'land':
-        masked_darray = darray.where(dset['sftlf'].data < 50)
+        masked_da = da.where(ds['sftlf'].data < 50)
     else:
-        masked_darray = darray.where(dset['sftlf'].data > 50)   
+        masked_da = da.where(ds['sftlf'].data > 50)   
   
-    return masked_darray
+    return masked_da
 
 ...
 
 def main(inargs):
     """Run the program."""
 
-    dset = xr.open_dataset(inargs.pr_file)
+    ds = xr.open_dataset(inargs.pr_file)
    
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
     clim = convert_pr_units(clim)
 
     if inargs.mask:
@@ -208,15 +212,21 @@ def main(inargs):
 
     ...
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
-    description='Plot the precipitation climatology for a given season.'
+    description = "Plot the precipitation climatology for a given season."
     parser = argparse.ArgumentParser(description=description)
 
     ...
    
-    parser.add_argument("--mask", type=str, nargs=2, metavar=('SFTLF_FILE', 'REALM'), default=None,
-                           help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
+    parser.add_argument(
+        "--mask",
+        type=str,
+        nargs=2,
+        metavar=("SFTLF_FILE", "REALM"),
+        default=None,
+        help="""Provide sftlf file and realm to mask ('land' or 'ocean')""",
+    )
 
     args = parser.parse_args()            
     main(args)
@@ -227,12 +237,14 @@ if __name__ == '__main__':
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::  solution
+:::::::::::::::::::::::::::::::::::::::  challenge
 
 ## plot\_precipitation\_climatology.py
 
 At the conclusion of this lesson your `plot_precipitation_climatology.py` script
 should look something like the following:
+
+:::::::::::::::  solution
 
 ```python
 import argparse
@@ -244,38 +256,38 @@ import numpy as np
 import cmocean
 
 
-def convert_pr_units(darray):
+def convert_pr_units(da):
     """Convert kg m-2 s-1 to mm day-1.
     
     Args:
-      darray (xarray.DataArray): Precipitation data
+      da (xarray.DataArray): Precipitation data
    
     """
    
-    darray.data = darray.data * 86400
-    darray.attrs['units'] = 'mm/day'
+    da.data = da.data * 86400
+    da.attrs["units"] = "mm/day"
    
-    return darray
+    return da
 
 
-def apply_mask(darray, sftlf_file, realm):
+def apply_mask(da, sftlf_file, realm):
     """Mask ocean or land using a sftlf (land surface fraction) file.
    
     Args:
-      darray (xarray.DataArray): Data to mask
+      da (xarray.DataArray): Data to mask
       sftlf_file (str): Land surface fraction file
       realm (str): Realm to mask
    
     """
   
-    dset = xr.open_dataset(sftlf_file)
+    ds = xr.open_dataset(sftlf_file)
   
     if realm == 'land':
-        masked_darray = darray.where(dset['sftlf'].data < 50)
+        masked_da = da.where(ds['sftlf'].data < 50)
     else:
-        masked_darray = darray.where(dset['sftlf'].data > 50)   
+        masked_da = da.where(ds['sftlf'].data > 50)   
    
-    return masked_darray
+    return masked_da
 
 
 def create_plot(clim, model, season, gridlines=False, levels=None):
@@ -297,60 +309,87 @@ def create_plot(clim, model, season, gridlines=False, levels=None):
        
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-    clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=levels,
-                                          extend='max',
-                                          transform=ccrs.PlateCarree(),
-                                          cbar_kwargs={'label': clim.units},
-                                          cmap=cmocean.cm.haline_r)
+    clim.sel(season=season).plot.contourf(
+        ax=ax,
+        levels=levels,
+        extend="max",
+        transform=ccrs.PlateCarree(),
+        cbar_kwargs={"label": clim.units},
+        cmap=cmocean.cm.haline_r
+    )
     ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
     
-    title = f'{model} precipitation climatology ({season})'
+    title = f"{model} precipitation climatology ({season})"
     plt.title(title)
 
 
 def main(inargs):
     """Run the program."""
 
-    dset = xr.open_dataset(inargs.pr_file)
+    ds = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
     clim = convert_pr_units(clim)
 
     if inargs.mask:
         sftlf_file, realm = inargs.mask
         clim = apply_mask(clim, sftlf_file, realm)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season,
-                gridlines=inargs.gridlines, levels=inargs.cbar_levels)
-    plt.savefig(inargs.output_file, dpi=200)
+    create_plot(
+        clim,
+        ds.attrs["source_id"],
+        inargs.season,
+        gridlines=inargs.gridlines,
+        levels=inargs.cbar_levels
+    )
+    plt.savefig(
+        inargs.output_file,
+        dpi=200,
+        bbox_inches="tight",
+        facecolor="white",
+    )
 
 
-if __name__ == '__main__':
-    description='Plot the precipitation climatology for a given season.'
+if __name__ == "__main__":
+    description = "Plot the precipitation climatology for a given season."
     parser = argparse.ArgumentParser(description=description)
    
     parser.add_argument("pr_file", type=str, help="Precipitation data file")
     parser.add_argument("season", type=str, help="Season to plot")
     parser.add_argument("output_file", type=str, help="Output file name")
 
-    parser.add_argument("--gridlines", action="store_true", default=False,
-                        help="Include gridlines on the plot")
-    parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-                        help='list of levels / tick marks to appear on the colorbar')
-    parser.add_argument("--mask", type=str, nargs=2,
-                        metavar=('SFTLF_FILE', 'REALM'), default=None,
-                        help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
+    parser.add_argument(
+        "--gridlines",
+        action="store_true",
+        default=False,
+        help="Include gridlines on the plot",
+    )
+    parser.add_argument(
+        "--cbar_levels",
+        type=float,
+        nargs="*",
+        default=None,
+        help="list of levels / tick marks to appear on the colorbar",
+    )
+    parser.add_argument(
+        "--mask",
+        type=str,
+        nargs=2,
+        metavar=("SFTLF_FILE", "REALM"),
+        default=None,
+        help="""Provide sftlf file and realm to mask ('land' or 'ocean')""",
+    )
 
     args = parser.parse_args()
-  
     main(args)
 
 ```
 
 :::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 

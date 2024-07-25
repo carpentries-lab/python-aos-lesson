@@ -53,12 +53,12 @@ and we'll provide links to further information on unit testing.
 
 There are essentially two kinds of errors that can arise in Python:
 *syntax errors* and *exceptions*.
-We are all very familiar with the former:
+You're probably familiar with the former:
 
 ```python
 rainfall = 5
 if rainfall > 10
-    print('heavy rainfall')
+    print("heavy rainfall")
 ```
 
 ```error
@@ -90,7 +90,7 @@ NameError: name 'spam' is not defined
 ```
 
 ```python
-'2' + 2
+"2" + 2
 ```
 
 ```error
@@ -103,17 +103,17 @@ With respect to defensive programming,
 it can sometimes be useful to raise your own exceptions (using the `raise` keyword).
 
 ```python
-infile = 'temperature_data.txt'
-file_format = infile.split('.')[-1]
-if file_format != 'nc':
+infile = "temperature_data.txt"
+file_format = infile.split(".")[-1]
+if file_format != "nc":
     raise ValueError(f"{infile} does not have the netCDF file extension .nc")
 ```
 
 ```error
 ValueError                                Traceback (most recent call last)
 /var/folders/6v/vrpsky6j509dff7250jyg8240000gp/T/ipykernel_12425/3612736507.py in <module>
-      2 file_format = infile.split('.')[-1]
-      3 if file_format != 'nc':
+      2 file_format = infile.split(".")[-1]
+      3 if file_format != "nc":
 ----> 4     raise ValueError(f"{infile} does not have the netCDF file extension .nc")
 
 ValueError: temperature_data.txt does not have the netCDF file extension .nc
@@ -132,10 +132,10 @@ performed no unit conversion if the input units are mm/day,
 or halted with an informative error message if the input data have some other units.
 
 ```python
-input_units = clim.attrs['units']
-if input_units == 'kg m-2 s-1':
+input_units = clim.attrs["units"]
+if input_units == "kg m-2 s-1":
     clim = convert_pr_units(clim)
-elif input_units == 'mm/day':
+elif input_units == "mm/day":
     pass
 else:
     raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
@@ -194,6 +194,7 @@ we could catch and handle the `ZeroDivisionError`.
 ```python
 import numpy as np
 
+
 quantity = 500
 n_stations = 0
 
@@ -221,15 +222,21 @@ our program would currently fail with a `KeyError`
 (which Python raises when you ask for a key that isn't in a dictionary).
 
 ```python
-example_dict = {'standard_name': 'precipitation_flux', 'long_name': 'Precipitation'}
-units = example_dict['units']
+example_dict = {
+    "standard_name": "precipitation_flux",
+    "long_name": "Precipitation",
+}
+units = example_dict["units"]
 ```
 
 ```error
 KeyError                                  Traceback (most recent call last)
 /var/folders/6v/vrpsky6j509dff7250jyg8240000gp/T/ipykernel_12425/2679443625.py in <module>
-      1 example_dict = {'standard_name': 'precipitation_flux', 'long_name': 'Precipitation'}
-----> 2 units = example_dict['units']
+      1 example_dict = {
+      2     "standard_name": "precipitation_flux",
+      3     "long_name": "Precipitation",
+      4 }
+----> 5 units = example_dict["units"]
 
 KeyError: 'units'
 ```
@@ -244,7 +251,7 @@ and re-define a better error message.
 
 ```python
 try:
-    input_units = clim.attrs['units']
+    input_units = clim.attrs["units"]
 except KeyError:
     raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
 ```
@@ -282,7 +289,7 @@ consider this piece of code that halts if any precipitation data is negative:
 import numpy as np
 
 pr_data = np.array([1.5, 2.3, 0.7, -0.2, 4.4])
-assert pr_data.min() >= 0.0, 'There is at least one negative precipitation value'
+assert pr_data.min() >= 0.0, "There is at least one negative precipitation value"
 ```
 
 ```error
@@ -304,8 +311,8 @@ We could add the following assertions to our `convert_pr_units` function
 to catch unexpected precipitation values.
 
 ```python
-assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
-assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
+assert darray.data.min() >= 0.0, "There is at least one negative precipitation value"
+assert darray.data.max() < 2000, "There is a precipitation value/s > 2000 mm/day"
 ```
 
 Assertions are also used in unit testing
@@ -344,7 +351,7 @@ our first instinct might be to add a `print` statement to the program.
 ```python
 rh_data = np.array([1.5, 20.4, 100.1, 76.3, 54.4])
 rh_max = rh_data.max()
-print(f'The maximum relative humidity was {rh_max}%')
+print(f"The maximum relative humidity was {rh_max}%")
 ```
 
 ```output
@@ -365,7 +372,7 @@ import logging
 
 rh_data = np.array([1.5, 20.4, 100.1, 76.3, 54.4])
 rh_max = rh_data.max()
-logging.debug(f'The maximum relative humidity was {rh_max}%')
+logging.debug(f"The maximum relative humidity was {rh_max}%")
 ```
 
 Whoops!
@@ -389,11 +396,11 @@ so that it isn't lost when we finish our command line session.
 for handler in logging.root.handlers[:]:
     logging.root.removeHandler(handler)
     
-logging.basicConfig(level=logging.DEBUG, filename='log.txt')) 
+logging.basicConfig(level=logging.DEBUG, filename="log.txt")) 
 
 rh_data = np.array([1.5, 20.4, 100.1, 76.3, 54.4])
 rh_max = rh_data.max()
-logging.debug(f'The maximum relative humidity was {rh_max}%')
+logging.debug(f"The maximum relative humidity was {rh_max}%")
 ```
 
 (The for loop is needed to turn off the background logging the notebook does itself.
@@ -430,14 +437,14 @@ and set the logging configuration and add a `logging.info` command in the `main`
 def main(inargs):
     """Run the program."""
     
-    logging.basicConfig(level=logging.DEBUG, filename='log.txt') 
+    logging.basicConfig(level=logging.DEBUG, filename="log.txt") 
     
     ...
     
     if input_units == 'kg m-2 s-1':
         clim = convert_pr_units(clim)
-        logging.info('Units converted from kg m-2 s-1 to mm/day')
-    elif input_units == 'mm/day':
+        logging.info("Units converted from kg m-2 s-1 to mm/day")
+    elif input_units == "mm/day":
         pass
     else:
         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
@@ -458,21 +465,21 @@ This will mean your `main` function will now read as follows,
 def main(inargs):
     """Run the program."""
 
-    logging.basicConfig(level=logging.DEBUG, filename='log.txt') 
+    logging.basicConfig(level=logging.DEBUG, filename="log.txt") 
 
-    dset = xr.open_dataset(inargs.pr_file)
+    ds = xr.open_dataset(inargs.pr_file)
    
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
 
     try:
-        input_units = clim.attrs['units']
+        input_units = clim.attrs["units"]
     except KeyError:
-        raise KeyError("Precipitation variable in {inargs.pr_file} must have a units attribute")
+        raise KeyError(f"Precipitation variable in {inargs.pr_file} must have a units attribute")
 
-    if input_units == 'kg m-2 s-1':
+    if input_units == "kg m-2 s-1":
         clim = convert_pr_units(clim)
-        logging.info('Units converted from kg m-2 s-1 to mm/day')
-    elif input_units == 'mm/day':
+        logging.info("Units converted from kg m-2 s-1 to mm/day")
+    elif input_units == "mm/day":
         pass
     else:
         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
@@ -481,30 +488,39 @@ def main(inargs):
         sftlf_file, realm = inargs.mask
         clim = apply_mask(clim, sftlf_file, realm)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season,
-                gridlines=inargs.gridlines, levels=inargs.cbar_levels)
-               
-    plt.savefig(inargs.output_file, dpi=200)
+    create_plot(
+        clim,
+        dset.attrs["source_id"],
+        inargs.season,
+        gridlines=inargs.gridlines,
+        levels=inargs.cbar_levels
+    )    
+    plt.savefig(
+        inargs.output_file,
+        dpi=200,
+        bbox_inches="tight",
+        facecolor="white",
+    )
 ```
 
 and your `convert_pr_units` as:
 
 ```python
-def convert_pr_units(darray):
+def convert_pr_units(da):
     """Convert kg m-2 s-1 to mm day-1.
    
     Args:
-      darray (xarray.DataArray): Precipitation data
+      da (xarray.DataArray): Precipitation data
     
     """
     
-    darray.data = darray.data * 86400
-    darray.attrs['units'] = 'mm/day'
+    da.data = da.data * 86400
+    da.attrs["units"] = "mm/day"
    
-    assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
-    assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
+    assert da.data.min() >= 0.0, "There is at least one negative precipitation value"
+    assert da.data.max() < 2000, "There is a precipitation value/s > 2000 mm/day"
     
-    return darray
+    return da
 ```
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -518,24 +534,31 @@ Add two new command line options to `plot_precipitation_climatology.py`.
 The first should change the logging level so reporting from the program is more verbose.
 
 ```python
-parser.add_argument('-v', '--verbose', action='store_true', default=False,
-                    help='Change the minimum logging reporting level from WARNING (default) to INFO')
+parser.add_argument(
+    "-v",
+    "--verbose",
+    action="store_true",
+    default=False,
+    help="Change the minimum logging reporting level from WARNING (default) to INFO",
+)
 ```
 
 The second should allow the user to specify the name of the log file.
 (If they don't specify a name then the logging information is printed to the screen.)
 
 ```python
-parser.add_argument('--logfile', type=str, default=None,
-                    help='Name of log file (by default logging information is printed to the screen)')
+parser.add_argument(
+    "--logfile",
+    type=str,
+    default=None,
+    help="Name of log file (by default logging information is printed to the screen)",
+)
 ```
 
 :::::::::::::::  solution
 
-## Solution
-
 The basic configuration command at the top of the `main` function
-(`logging.basicConfig(level=logging.DEBUG, filename='log.txt')`)
+(`logging.basicConfig(level=logging.DEBUG, filename="log.txt")`)
 needs to be replaced with the following:
 
 ```python
@@ -556,36 +579,35 @@ Update the following if statement in that function
 so that it raises a `ValueError` if the realm is not `ocean` or `land`.
 
 ```python
-if realm == 'land':
-    masked_darray = darray.where(dset['sftlf'].data < 50)
+if realm == "land":
+    masked_da = da.where(ds["sftlf"].data < 50)
 else:
-    masked_darray = darray.where(dset['sftlf'].data > 50)
+    masked_da = da.where(ds["sftlf"].data > 50)
 ```
 
-> ## Solution
-> 
-> ```
-> if realm.lower() == 'land':
->     masked_darray = darray.where(dset['sftlf'].data < 50)
-> elif realm.lower() == 'ocean':
->     masked_darray = darray.where(dset['sftlf'].data > 50)
-> else:
->     raise ValueError("""Mask realm is not 'ocean' or 'land'""")
-> ```
+:::::::::::::::  solution
+ 
+```python
+if realm.lower() == 'land':
+    masked_da = da.where(ds["sftlf"].data < 50)
+elif realm.lower() == 'ocean':
+    masked_da = da.where(ds["sftlf"].data > 50)
+else:
+    raise ValueError("""Mask realm is not 'ocean' or 'land'""")
+```
 
-```
-> {: .language-python}
-{: .solution}  
-```
+:::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::  solution
+:::::::::::::::::::::::::::::::::::::::  challenge
 
 ## plot\_precipitation\_climatology.py
 
 At the conclusion of this lesson your `plot_precipitation_climatology.py` script
 should look something like the following:
+
+:::::::::::::::  solution
 
 ```python
 import logging
@@ -598,42 +620,42 @@ import numpy as np
 import cmocean
 
 
-def convert_pr_units(darray):
+def convert_pr_units(da):
     """Convert kg m-2 s-1 to mm day-1.
     
     Args:
-      darray (xarray.DataArray): Precipitation data
+      da (xarray.DataArray): Precipitation data
    
     """
 
-    darray.data = darray.data * 86400
-    darray.attrs['units'] = 'mm/day'
+    da.data = da.data * 86400
+    da.attrs["units"] = "mm/day"
    
-    assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
-    assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
+    assert da.data.min() >= 0.0, "There is at least one negative precipitation value"
+    assert da.data.max() < 2000, "There is a precipitation value/s > 2000 mm/day"
 
-    return darray
+    return da
 
 
-def apply_mask(darray, sftlf_file, realm):
+def apply_mask(da, sftlf_file, realm):
     """Mask ocean or land using a sftlf (land surface fraction) file.
    
     Args:
-      darray (xarray.DataArray): Data to mask
+      da (xarray.DataArray): Data to mask
       sftlf_file (str): Land surface fraction file
       realm (str): Realm to mask
    
     """
   
-    dset = xr.open_dataset(sftlf_file)
-    if realm.lower() == 'land':
-        masked_darray = darray.where(dset['sftlf'].data < 50)
+    ds = xr.open_dataset(sftlf_file)
+    if realm.lower() == "land":
+        masked_da = da.where(ds["sftlf"].data < 50)
     elif realm.lower() == 'ocean':
-        masked_darray = darray.where(dset['sftlf'].data > 50)   
+        masked_da = da.where(ds["sftlf"].data > 50)   
     else:
         raise ValueError("""Mask realm is not 'ocean' or 'land'""")    
 
-    return masked_darray
+    return masked_da
 
 
 def create_plot(clim, model, season, gridlines=False, levels=None):
@@ -655,17 +677,19 @@ def create_plot(clim, model, season, gridlines=False, levels=None):
        
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-    clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=levels,
-                                          extend='max',
-                                          transform=ccrs.PlateCarree(),
-                                          cbar_kwargs={'label': clim.units},
-                                          cmap=cmocean.cm.haline_r)
+    clim.sel(season=season).plot.contourf(
+        ax=ax,
+        levels=levels,
+        extend='max',
+        transform=ccrs.PlateCarree(),
+        cbar_kwargs={"label": clim.units},
+        cmap=cmocean.cm.haline_r,
+    )
     ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
     
-    title = f'{model} precipitation climatology ({season})'
+    title = f"{model} precipitation climatology ({season})"
     plt.title(title)
 
 
@@ -675,19 +699,19 @@ def main(inargs):
     log_lev = logging.DEBUG if inargs.verbose else logging.WARNING
     logging.basicConfig(level=log_lev, filename=inargs.logfile) 
 
-    dset = xr.open_dataset(inargs.pr_file)
+    ds = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = ds['pr'].groupby("time.season").mean("time", keep_attrs=True)
 
     try:
-        input_units = clim.attrs['units']
+        input_units = clim.attrs["units"]
     except KeyError:
         raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
 
-    if input_units == 'kg m-2 s-1':
+    if input_units == "kg m-2 s-1":
         clim = convert_pr_units(clim)
-        logging.info('Units converted from kg m-2 s-1 to mm/day')
-    elif input_units == 'mm/day':
+        logging.info("Units converted from kg m-2 s-1 to mm/day")
+    elif input_units == "mm/day":
         pass
     else:
         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
@@ -696,9 +720,19 @@ def main(inargs):
         sftlf_file, realm = inargs.mask
         clim = apply_mask(clim, sftlf_file, realm)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season,
-                gridlines=inargs.gridlines, levels=inargs.cbar_levels)
-    plt.savefig(inargs.output_file, dpi=200)
+    create_plot(
+        clim,
+        ds.attrs["source_id"],
+        inargs.season,
+        gridlines=inargs.gridlines,
+        levels=inargs.cbar_levels
+    )
+    plt.savefig(
+        inargs.output_file,
+        dpi=200,
+        bbox_inches="tight",
+        facecolor="white",
+    )
 
 
 if __name__ == '__main__':
@@ -709,25 +743,49 @@ if __name__ == '__main__':
     parser.add_argument("season", type=str, help="Season to plot")
     parser.add_argument("output_file", type=str, help="Output file name")
 
-    parser.add_argument("--gridlines", action="store_true", default=False,
-                        help="Include gridlines on the plot")
-    parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-                        help='list of levels / tick marks to appear on the colorbar')
-    parser.add_argument("--mask", type=str, nargs=2,
-                        metavar=('SFTLF_FILE', 'REALM'), default=None,
-                        help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
-                        help='Change the minimum logging reporting level from WARNING (default) to DEBUG')
-    parser.add_argument('--logfile', type=str, default=None,
-                        help='Name of log file (by default logging information is printed to the screen)')
+    parser.add_argument(
+        "--gridlines",
+        action="store_true",
+        default=False,
+        help="Include gridlines on the plot",
+    )
+    parser.add_argument(
+        "--cbar_levels",
+        type=float,
+        nargs="*",
+        default=None,
+        help="list of levels / tick marks to appear on the colorbar",
+    )
+    parser.add_argument(
+        "--mask",
+        type=str,
+        nargs=2,
+        metavar=("SFTLF_FILE", "REALM"),
+        default=None,
+        help="""Provide sftlf file and realm to mask ('land' or 'ocean')""",
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Change the minimum logging reporting level from WARNING (default) to DEBUG",
+    )
+    parser.add_argument(
+        "--logfile",
+        type=str,
+        default=None,
+        help="Name of log file (by default logging information is printed to the screen)",
+    )
 
     args = parser.parse_args()
-  
     main(args)
 
 ```
 
 :::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 

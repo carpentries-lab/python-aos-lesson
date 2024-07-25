@@ -46,9 +46,7 @@ Your workshop instructor may also ask that you install the python packages intro
 ahead of time.
 You can do this via the command line or by using the Anaconda Navigator:
 
-:::::::::::::::  solution
-
-## Installation of python packages: via the command line
+### Installation of python packages: via the command line
 
 (Windows users may need to open the Anaconda Prompt program
 and run `conda init bash` to make conda available at the Bash Shell.)
@@ -88,11 +86,7 @@ $ conda activate pyaos-lesson
 Type `conda deactivate` to exit that environment.
 
 
-:::::::::::::::::::::::::
-
-:::::::::::::::  solution
-
-## Installation of python packages: via the Anaconda Navigator
+### Installation of python packages: via the Anaconda Navigator
 
 Once you've opened the Anaconda Navigator program
 (which can be found at the start menu on Windows),
@@ -117,8 +111,6 @@ If you've created a new environment,
 you'll need to install `jupyter` too.
 ![](fig/01-navigator-xarray.png){alt='Anaconda Navigator install xarray'}
 
-
-:::::::::::::::::::::::::
 
 ## Software check
 

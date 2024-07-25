@@ -24,7 +24,7 @@ ACCESS-CM2 and ACCESS-ESM1-5 historical precipitation climatology,
 we are going to create a quick plot of the ACCESS-CM2 data.
 
 ```python
-accesscm2_pr_file = 'data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc'
+accesscm2_pr_file = "data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc"
 ```
 
 We will need a number of the libraries introduced in the previous lesson.
@@ -43,8 +43,8 @@ We can then view summary information about the contents of the file
 before deciding whether we'd like to load some or all of the data into memory.
 
 ```python
-dset = xr.open_dataset(accesscm2_pr_file)
-print(dset)
+ds = xr.open_dataset(accesscm2_pr_file)
+print(ds)
 ```
 
 ```output
@@ -113,14 +113,14 @@ Attributes:
     NCO:                    netCDF Operators version 4.9.2 (Homepage = http:/...
 ```
 
-We can see that our `dset` object is an `xarray.Dataset`,
+We can see that our `ds` object is an `xarray.Dataset`,
 which when printed shows all the metadata associated with our netCDF data file.
 
 In this case,
 we are interested in the precipitation variable contained within that xarray Dataset:
 
 ```python
-print(dset['pr'])
+print(ds["pr"])
 ```
 
 ```output
@@ -139,7 +139,7 @@ Attributes:
     cell_measures:  area: areacella
 ```
 
-We can actually use either the `dset['pr']` or `dset.pr` syntax to access the precipitation
+We can actually use either the `ds["pr"]` or `ds.pr` syntax to access the precipitation
 `xarray.DataArray`.
 
 To calculate the precipitation climatology,
@@ -147,11 +147,11 @@ we can make use of the fact that xarray DataArrays have built in functionality
 for averaging over their dimensions.
 
 ```python
-clim = dset['pr'].mean('time', keep_attrs=True)
+clim = ds["pr"].mean("time", keep_attrs=True)
 print(clim)
 ```
 
-```
+```output
 <xarray.DataArray 'pr' (lat: 144, lon: 192)>
 array([[1.8461452e-06, 1.9054805e-06, 1.9228980e-06, ..., 1.9869783e-06,
         2.0026005e-06, 1.9683730e-06],
@@ -178,8 +178,6 @@ Attributes:
     cell_measures:  area: areacella
 ```
 
-{: output}
-
 Now that we've calculated the climatology,
 we want to convert the units from kg m-2 s-1
 to something that we are a little more familiar with like mm day-1.
@@ -203,7 +201,7 @@ so we can go ahead and multiply that array by 86400 and update the units attribu
 
 ```python
 clim.data = clim.data * 86400
-clim.attrs['units'] = 'mm/day' 
+clim.attrs["units"] = "mm/day"
 
 print(clim)
 ```
@@ -247,11 +245,13 @@ fig = plt.figure(figsize=[12,5])
 
 ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
 
-clim.plot.contourf(ax=ax,
-                   levels=np.arange(0, 13.5, 1.5),
-                   extend='max',
-                   transform=ccrs.PlateCarree(),
-                   cbar_kwargs={'label': clim.units})
+clim.plot.contourf(
+    ax=ax,
+    levels=np.arange(0, 13.5, 1.5),
+    extend="max",
+    transform=ccrs.PlateCarree(),
+    cbar_kwargs={"label": clim.units}
+)
 ax.coastlines()
 
 plt.show()
@@ -273,57 +273,54 @@ import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import numpy as np
 
-accesscm2_pr_file = 'data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc'
 
-dset = xr.open_dataset(accesscm2_pr_file)
+accesscm2_pr_file = "data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc"
 
-clim = dset['pr'].mean('time', keep_attrs=True)
+ds = xr.open_dataset(accesscm2_pr_file)
+
+clim = ds["pr"].mean("time", keep_attrs=True)
 
 clim.data = clim.data * 86400
-clim.attrs['units'] = 'mm/day'
+clim.attrs["units"] = "mm/day"
 
 fig = plt.figure(figsize=[12,5])
 ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-clim.plot.contourf(ax=ax,
-                   levels=np.arange(0, 13.5, 1.5),
-                   extend='max',
-                   transform=ccrs.PlateCarree(),
-                   cbar_kwargs={'label': clim.units},
-                   cmap='viridis_r')
+clim.plot.contourf(
+    ax=ax,
+    levels=np.arange(0, 13.5, 1.5),
+    extend="max",
+    transform=ccrs.PlateCarree(),
+    cbar_kwargs={"label": clim.units},
+    cmap="viridis_r",
+)
 ax.coastlines()
 plt.show()
 ```
 
 ![](fig/02-visualisation-viridis_r.png){alt='Precipitation climatology'}
 
-> ## Color palette
-> 
-> Copy and paste the final slab of code above into your own Jupyter notebook.
-> 
-> The viridis color palette doesn't seem quite right for rainfall.
-> Change it to the "haline" [cmocean](https://matplotlib.org/cmocean/) palette
-> used for ocean salinity data.
-> 
-> > ## Solution
-> > 
-> > ```
-> > import cmocean
-> > 
-> > ...
-> > clim.plot.contourf(ax=ax,
-> > ```
-
-```
-                   ...
-                   cmap=cmocean.cm.haline_r)
-```
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
-:::::::::::::::  solution
+## Color palette
+ 
+Copy and paste the final slab of code above into your own Jupyter notebook.
+ 
+The viridis color palette doesn't seem quite right for rainfall.
+Change it to the "haline" [cmocean](https://matplotlib.org/cmocean/) palette
+used for ocean salinity data.
 
-```
-{: .language-python}
+:::::::::::::::  solution
+ 
+```python
+import cmocean
+ 
+...
+clim.plot.contourf(
+    ax=ax,
+    ...
+    cmap=cmocean.cm.haline_r,
+)
 ```
 
 :::::::::::::::::::::::::
@@ -342,15 +339,15 @@ group all the data into seasons prior to averaging over the time axis)
 
 :::::::::::::::  solution
 
-## Solution
-
 ```python
-clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True) 
+clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True) 
 clim.data = clim.data * 86400
-clim.attrs['units'] = 'mm/day'
+clim.attrs['units'] = "mm/day"
 
-clim.sel(season='JJA').plot.contourf(ax=ax,
-                                     ...
+clim.sel(season="JJA").plot.contourf(
+    ax=ax,
+    ...
+)
 ```
 
 :::::::::::::::::::::::::
@@ -362,16 +359,14 @@ clim.sel(season='JJA').plot.contourf(ax=ax,
 ## Add a title
 
 Add a title to the plot which gives the name of the model
-(taken from the `dset` attributes)
+(taken from the `ds` attributes)
 followed by the words "precipitation climatology (JJA)"
 
 :::::::::::::::  solution
 
-## Solution
-
 ```python
-model = dset.attrs['source_id']
-title = f'{model} precipitation climatology (JJA)'
+model = ds.attrs["source_id"]
+title = f"{model} precipitation climatology (JJA)"
 plt.title(title)
 ```
 

@@ -35,10 +35,11 @@ used in these lessons:
 ```python
 import xarray as xr
 
-accessesm15_pr_file = 'data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc'
-dset = xr.open_dataset(accessesm15_pr_file)
 
-print(dset.attrs['history'])
+accessesm15_pr_file = "data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc"
+ds = xr.open_dataset(accessesm15_pr_file)
+
+print(ds.attrs['history'])
 ```
 
 ```output
@@ -63,8 +64,14 @@ and then make the following updates to the original line of code
 responsible for saving the image to file:
 
 ```python
-new_log = cmdprov.new_log(infile_logs={inargs.pr_file: dset.attrs['history']})
-plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
+new_log = cmdprov.new_log(infile_logs={inargs.pr_file: dset.attrs["history"]})
+plt.savefig(
+    inargs.output_file,
+    metadata={"History": new_log},
+    dpi=200,
+    bbox_inches="tight",
+    facecolor="white",
+)
 ```
 
 When we execute `plot_precipitation_climatology.py`,
@@ -140,9 +147,9 @@ if someone tries to generate a format that isn't PNG,
 and in the exercises we'll add more valid formats to the script.
 
 ```python
-image_format = inargs.output_file.split('.')[-1])
-if image_format != 'png':
-    raise ValueError('Output file must have the PNG image file extension .png')
+image_format = inargs.output_file.split(".")[-1])
+if image_format != "png":
+    raise ValueError("Output file must have the PNG image file extension .png")
 ```
 
 Putting this altogether,
@@ -155,19 +162,19 @@ def main(inargs):
     log_lev = logging.DEBUG if inargs.verbose else logging.WARNING
     logging.basicConfig(level=log_lev, filename=inargs.logfile) 
 
-    dset = xr.open_dataset(inargs.pr_file)
+    ds = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
 
     try:
-        input_units = clim.attrs['units']
+        input_units = clim.attrs["units"]
     except KeyError:
         raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
 
-    if input_units == 'kg m-2 s-1':
+    if input_units == "kg m-2 s-1":
         clim = convert_pr_units(clim)
-        logging.info('Units converted from kg m-2 s-1 to mm/day')
-    elif input_units == 'mm/day':
+        logging.info("Units converted from kg m-2 s-1 to mm/day")
+    elif input_units == "mm/day":
         pass
     else:
         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
@@ -176,80 +183,89 @@ def main(inargs):
         sftlf_file, realm = inargs.mask
         clim = apply_mask(clim, sftlf_file, realm)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season,
-                gridlines=inargs.gridlines, levels=inargs.cbar_levels)
+    create_plot(
+        clim,
+        ds.attrs["source_id"],
+        inargs.season,
+        gridlines=inargs.gridlines,
+        levels=inargs.cbar_levels,
+    )
     
-    image_format = inargs.output_file.split('.')[-1]
-    if image_format != 'png':
-        raise ValueError('Output file must have the PNG image file extension .png')
-    new_log = cmdprov.new_log(infile_logs={inargs.pr_file: dset.attrs['history']})
-    plt.savefig(inargs.output_file, metadata={'History': new_log}, dpi=200)
-```
-
-> ## Handling different image formats
-> 
-> The [`plt.savefig` documentation](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.savefig.html)
-> provides information on the metadata keys accepted by
-> PNG, PDF, EPS and PS image formats.
-> 
-> Using that information as a guide,
-> add a new function called `get_log_and_key`
-> to the `plot_precipitation_climatology.py` script.
-> It should take the precipitation file name, history attribute,
-> and plot type as arguments and return the updated command log and
-> the appropriate metadata key for PNG, PDF, EPS or PS image formats.
-> 
-> When you're done,
-> the final lines of the `main` function should read as follows:
-> 
-> ```python
-> log_key, new_log = get_log_and_key(inargs.pr_file,
->                                    dset.attrs['history'],
->                                    inargs.output_file.split('.')[-1])
-> plt.savefig(inargs.output_file, metadata={log_key: new_log}, dpi=200)
-> ```
-> 
-> > ## Solution
-> > 
-> > The new function could read as follows:
-> > 
-> > ```
-> > def get_log_and_key(pr_file, history_attr, plot_type):
-> >    """Get key and command line log for image metadata.
-> >   
-> >    Different image formats allow different metadata keys.
-> >   
-> >    Args:
-> >      pr_file (str): Input precipitation file
-> >      history_attr (str): History attribute from pr_file
-> >      plot_type (str): File format for output image
-> >   
-> >    """
-> >    
-> >    valid_keys = {'png': 'History',
-> >                  'pdf': 'Title',
-> >                  'eps': 'Creator',
-> >                  'ps' : 'Creator'}    
-> > 
-> >    if plot_type in valid_keys.keys():
-> >        log_key = valid_keys[plot_type]
-> >    else:
-> > ```
-
-```
-       raise ValueError(f"Image format not one of: {*[*valid_keys],}")
+    image_format = inargs.output_file.split(".")[-1]
+    if image_format != "png":
+        raise ValueError("Output file must have the PNG image file extension .png")
+    new_log = cmdprov.new_log(infile_logs={inargs.pr_file: ds.attrs["history"]})
+    plt.savefig(
+        inargs.output_file,
+        metadata={"History": new_log},
+        dpi=200,
+        bbox_inches="tight",
+        facecolor="white",
+    )
 ```
 
 :::::::::::::::::::::::::::::::::::::::  challenge
 
+## Handling different image formats
+
+The [`plt.savefig` documentation](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.savefig.html)
+provides information on the metadata keys accepted by
+PNG, PDF, EPS and PS image formats.
+ 
+Using that information as a guide,
+add a new function called `get_log_and_key`
+to the `plot_precipitation_climatology.py` script.
+It should take the precipitation file name, history attribute,
+and plot type as arguments and return the updated command log and
+the appropriate metadata key for PNG, PDF, EPS or PS image formats.
+
+When you're done,
+the final lines of the `main` function should read as follows:
+
+```python
+log_key, new_log = get_log_and_key(
+    inargs.pr_file,
+    ds.attrs["history"],
+    inargs.output_file.split(".")[-1],
+)
+plt.savefig(
+    inargs.output_file,
+    metadata={log_key: new_log},
+    dpi=200,
+    bbox_inches="tight",
+    facecolor="white",
+)
+```
+
 :::::::::::::::  solution
 
-new\_log = cmdprov.new\_log(infile\_logs={pr\_file: history\_attr})
+The new function could read as follows:
 
-return log\_key, new\_log
-
-```
-{: .language-python}
+```python
+def get_log_and_key(pr_file, history_attr, plot_type):
+    """Get key and command line log for image metadata.
+   
+    Different image formats allow different metadata keys.
+   
+    Args:
+      pr_file (str): Input precipitation file
+      history_attr (str): History attribute from pr_file
+      plot_type (str): File format for output image
+   
+    """
+    
+    valid_keys = {"png": "History",
+                  "pdf": "Title",
+                  "eps": "Creator",
+                  "ps" : "Creator",
+    }
+    if plot_type in valid_keys.keys():
+        log_key = valid_keys[plot_type]
+    else:
+        raise ValueError(f"Image format not one of: {*[*valid_keys],}")
+    new_log = cmdprov.new_log(infile_logs={pr_file: history_attr})
+   
+    return log_key, new_log
 ```
 
 :::::::::::::::::::::::::
@@ -282,16 +298,16 @@ def convert_pr_units(darray):
     """Convert kg m-2 s-1 to mm day-1.
     
     Args:
-      darray (xarray.DataArray): Precipitation data
+      da (xarray.DataArray): Precipitation data
     """
 
-    darray.data = darray.data * 86400
-    darray.attrs['units'] = 'mm/day'
+    da.data = da.data * 86400
+    da.attrs["units"] = "mm/day"
 
-    assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
-    assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
+    assert da.data.min() >= 0.0, "There is at least one negative precipitation value"
+    assert da.data.max() < 2000, "There is a precipitation value/s > 2000 mm/day"
 
-    return darray
+    return da
 
 
 def main(inargs):
@@ -301,42 +317,49 @@ def main(inargs):
     logging.basicConfig(level=log_lev, filename=inargs.logfile)
 
     in_dset = xr.open_dataset(inargs.pr_file)
-    clim = in_dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = in_ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
 
     try:
-        input_units = clim.attrs['units']
+        input_units = clim.attrs["units"]
     except KeyError:
         raise KeyError(f"Precipitation variable in {inargs.pr_file} does not have a units attribute")
 
-    if input_units == 'kg m-2 s-1':
+    if input_units == "kg m-2 s-1":
         clim = convert_pr_units(clim)
-        logging.info('Units converted from kg m-2 s-1 to mm/day')
-    elif input_units == 'mm/day':
+        logging.info("Units converted from kg m-2 s-1 to mm/day")
+    elif input_units == "mm/day":
         pass
     else:
         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
 
-    out_dset = clim.to_dataset()
-    out_dset.attrs = in_dset.attrs
-    out_dset.to_netcdf(inargs.output_file)
+    out_ds = clim.to_dataset()
+    out_ds.attrs = in_ds.attrs
+    out_ds.to_netcdf(inargs.output_file)
    
 
-if __name__ == '__main__':
-    description='Calculate the seasonal precipitation climatology.'
+if __name__ == "__main__":
+    description = "Calculate the seasonal precipitation climatology."
     parser = argparse.ArgumentParser(description=description)
     parser.add_argument("pr_file", type=str, help="Precipitation data file")
     parser.add_argument("output_file", type=str, help="Output file name")
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
-                        help='Change the minimum logging reporting level from WARNING (default) to DEBUG')
-    parser.add_argument('--logfile', type=str, default=None,
-                        help='Name of log file (by default logging information is printed to the screen)')
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Change the minimum logging reporting level from WARNING (default) to DEBUG",
+    )
+    parser.add_argument(
+        "--logfile",
+        type=str,
+        default=None,
+        help="Name of log file (by default logging information is printed to the screen)",
+    )
     args = parser.parse_args()  
     main(args)
 ```
 
 :::::::::::::::  solution
-
-## Solution
 
 The beginning of the script would need to be updated to import
 the `cmdline_provenance` library:
@@ -349,22 +372,24 @@ The body of the `main` function would then need to be updated
 to write the new command log to the history attribute of the output dataset:
 
 ```python
-out_dset.attrs = in_dset.attrs
-new_log = cmdprov.new_log(infile_logs={inargs.pr_file: in_dset.attrs['history']})
-out_dset.attrs['history'] = new_log
-out_dset.to_netcdf(inargs.output_file)
+out_ds.attrs = in_ds.attrs
+new_log = cmdprov.new_log(infile_logs={inargs.pr_file: in_ds.attrs["history"]})
+out_ds.attrs["history"] = new_log
+out_ds.to_netcdf(inargs.output_file)
 ```
 
 :::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
 
-:::::::::::::::  solution
+:::::::::::::::::::::::::::::::::::::::  challenge
 
 ## plot\_precipitation\_climatology.py
 
 At the conclusion of this lesson your `plot_precipitation_climatology.py` script
 should look something like the following:
+
+:::::::::::::::  solution
 
 ```python
 import logging
@@ -378,7 +403,7 @@ import cmocean
 import cmdline_provenance as cmdprov
 
 
-def convert_pr_units(darray):
+def convert_pr_units(da):
     """Convert kg m-2 s-1 to mm day-1.
     
     Args:
@@ -386,34 +411,34 @@ def convert_pr_units(darray):
    
     """
     
-    darray.data = darray.data * 86400
-    darray.attrs['units'] = 'mm/day'
+    da.data = da.data * 86400
+    da.attrs["units"] = "mm/day"
     
-    assert darray.data.min() >= 0.0, 'There is at least one negative precipitation value'
-    assert darray.data.max() < 2000, 'There is a precipitation value/s > 2000 mm/day'
+    assert da.data.min() >= 0.0, "There is at least one negative precipitation value"
+    assert da.data.max() < 2000, "There is a precipitation value/s > 2000 mm/day"
     
-    return darray
+    return da
 
 
 def apply_mask(darray, sftlf_file, realm):
     """Mask ocean or land using a sftlf (land surface fraction) file.
    
     Args:
-      darray (xarray.DataArray): Data to mask
+      da (xarray.DataArray): Data to mask
       sftlf_file (str): Land surface fraction file
       realm (str): Realm to mask
    
     """
   
-    dset = xr.open_dataset(sftlf_file)
+    ds = xr.open_dataset(sftlf_file)
     if realm.lower() == 'land':
-        masked_darray = darray.where(dset['sftlf'].data < 50)
+        masked_da = da.where(ds["sftlf"].data < 50)
     elif realm.lower() == 'ocean':
-        masked_darray = darray.where(dset['sftlf'].data > 50)   
+        masked_da = da.where(ds["sftlf"].data > 50)   
     else:
         raise ValueError("""Mask realm is not 'ocean' or 'land'""")
 
-    return masked_darray
+    return masked_da
 
 
 def create_plot(clim, model, season, gridlines=False, levels=None):
@@ -435,17 +460,19 @@ def create_plot(clim, model, season, gridlines=False, levels=None):
         
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-    clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=levels,
-                                          extend='max',
-                                          transform=ccrs.PlateCarree(),
-                                          cbar_kwargs={'label': clim.units},
-                                          cmap=cmocean.cm.haline_r)
+    clim.sel(season=season).plot.contourf(
+        ax=ax,
+        levels=levels,
+        extend="max",
+        transform=ccrs.PlateCarree(),
+        cbar_kwargs={"label": clim.units},
+        cmap=cmocean.cm.haline_r
+    )
     ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
     
-    title = f'{model} precipitation climatology ({season})'
+    title = f"{model} precipitation climatology ({season})"
     plt.title(title)
 
 
@@ -461,11 +488,12 @@ def get_log_and_key(pr_file, history_attr, plot_type):
    
     """
     
-    valid_keys = {'png': 'History',
-                  'pdf': 'Title',
-                  'svg': 'Title',
-                  'eps': 'Creator',
-                  'ps' : 'Creator'}    
+    valid_keys = {"png": "History",
+                  "pdf": "Title",
+                  "svg": "Title",
+                  "eps": "Creator",
+                  "ps" : "Creator",
+    }    
 
     assert plot_type in valid_keys.keys(), f"Image format not one of: {*[*valid_keys],}"
     log_key = valid_keys[plot_type]
@@ -480,19 +508,19 @@ def main(inargs):
     log_lev = logging.INFO if inargs.verbose else logging.WARNING
     logging.basicConfig(level=log_lev, filename=inargs.logfile)
 
-    dset = xr.open_dataset(inargs.pr_file)
+    ds = xr.open_dataset(inargs.pr_file)
     
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
 
     try:
-        input_units = clim.attrs['units']
+        input_units = clim.attrs["units"]
     except KeyError:
         raise KeyError("Precipitation variable in {inargs.pr_file} must have a units attribute")
 
-    if input_units == 'kg m-2 s-1':
+    if input_units == "kg m-2 s-1":
         clim = convert_pr_units(clim)
-        logging.info('Units converted from kg m-2 s-1 to mm/day')
-    elif input_units == 'mm/day':
+        logging.info("Units converted from kg m-2 s-1 to mm/day")
+    elif input_units == "mm/day":
         pass
     else:
         raise ValueError("""Input units are not 'kg m-2 s-1' or 'mm/day'""")
@@ -501,46 +529,81 @@ def main(inargs):
         sftlf_file, realm = inargs.mask
         clim = apply_mask(clim, sftlf_file, realm)
 
-    create_plot(clim, dset.attrs['source_id'], inargs.season,
-                gridlines=inargs.gridlines, levels=inargs.cbar_levels)
+    create_plot(
+        clim,
+        ds.attrs["source_id"],
+        inargs.season,
+        gridlines=inargs.gridlines,
+        levels=inargs.cbar_levels,
+    )
                 
-    log_key, new_log = get_log_and_key(inargs.pr_file,
-                                       dset.attrs['history'],
-                                       inargs.output_file.split('.')[-1])
-    plt.savefig(inargs.output_file, metadata={log_key: new_log}, dpi=200)
+    log_key, new_log = get_log_and_key(
+        inargs.pr_file,
+        ds.attrs["history"],
+        inargs.output_file.split('.')[-1],
+    )
+    plt.savefig(
+        inargs.output_file,
+        metadata={log_key: new_log},
+        dpi=200,
+        bbox_inches="tight",
+        facecolor="white",
+    )
 
 
-if __name__ == '__main__':
-    description='Plot the precipitation climatology for a given season.'
+if __name__ == "__main__":
+    description = "Plot the precipitation climatology for a given season."
     parser = argparse.ArgumentParser(description=description)
     
     parser.add_argument("pr_file", type=str, help="Precipitation data file")
     parser.add_argument("season", type=str, help="Season to plot")
     parser.add_argument("output_file", type=str, help="Output file name")
 
-    parser.add_argument("--gridlines", action="store_true", default=False,
-                        help="Include gridlines on the plot")
-    parser.add_argument("--cbar_levels", type=float, nargs='*', default=None,
-                        help='list of levels / tick marks to appear on the colorbar')
-    parser.add_argument("--mask", type=str, nargs=2,
-                        metavar=('SFTLF_FILE', 'REALM'), default=None,
-                        help="""Provide sftlf file and realm to mask ('land' or 'ocean')""")
-    parser.add_argument('-v', '--verbose', action='store_true', default=False,
-                        help='Change the minimum logging reporting level from WARNING (default) to DEBUG')
-    parser.add_argument('--logfile', type=str, default=None,
-                        help='Name of log file (by default logging information is printed to the screen)')
+    parser.add_argument(
+        "--gridlines",
+        action="store_true",
+        default=False,
+        help="Include gridlines on the plot",
+    )
+    parser.add_argument(
+        "--cbar_levels",
+        type=float,
+        nargs="*",
+        default=None,
+        help="list of levels / tick marks to appear on the colorbar",
+    )
+    parser.add_argument(
+        "--mask",
+        type=str,
+        nargs=2,
+        metavar=("SFTLF_FILE", "REALM"),
+        default=None,
+        help="""Provide sftlf file and realm to mask ('land' or 'ocean')""",
+    )
+    parser.add_argument(
+        "-v",
+        "--verbose",
+        action="store_true",
+        default=False,
+        help="Change the minimum logging reporting level from WARNING (default) to DEBUG",
+    )
+    parser.add_argument(
+        "--logfile",
+        type=str,
+        default=None,
+        help="Name of log file (by default logging information is printed to the screen)",
+    )
 
     args = parser.parse_args()
-    
     main(args)
 ```
 
 :::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
 
 :::::::::::::::::::::::::::::::::::::::: keypoints
 
 - It is possible (in only a few lines of code) to record the provenance of a data file or image.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
-
-

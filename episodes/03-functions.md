@@ -29,27 +29,30 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cmocean
 
-accesscm2_pr_file = 'data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc'
 
-dset = xr.open_dataset(accesscm2_pr_file)
+accesscm2_pr_file = "data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc"
 
-clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+ds = xr.open_dataset(accesscm2_pr_file)
+
+clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
 
 clim.data = clim.data * 86400
-clim.attrs['units'] = 'mm/day'
+clim.attrs['units'] = "mm/day"
 
 fig = plt.figure(figsize=[12,5])
 ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-clim.sel(season='JJA').plot.contourf(ax=ax,
-                                     levels=np.arange(0, 13.5, 1.5),
-                                     extend='max',
-                                     transform=ccrs.PlateCarree(),
-                                     cbar_kwargs={'label': clim.units},
-                                     cmap=cmocean.cm.haline_r)
+clim.sel(season="JJA").plot.contourf(
+    ax=ax,
+    levels=np.arange(0, 13.5, 1.5),
+    extend="max",
+    transform=ccrs.PlateCarree(),
+    cbar_kwargs={"label": clim.units},
+    cmap=cmocean.cm.haline_r,
+)
 ax.coastlines()
 
-model = dset.attrs['source_id']
-title = f'{model} precipitation climatology (JJA)'
+model = ds.attrs["source_id"]
+title = f"{model} precipitation climatology (JJA)"
 plt.title(title)
 
 plt.show()
@@ -84,27 +87,29 @@ def plot_pr_climatology(pr_file, season, gridlines=False):
     
     """
 
-    dset = xr.open_dataset(pr_file)
+    ds = xr.open_dataset(pr_file)
 
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
 
     clim.data = clim.data * 86400
-    clim.attrs['units'] = 'mm/day'
+    clim.attrs["units"] = "mm/day"
 
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-    clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=np.arange(0, 13.5, 1.5),
-                                          extend='max',
-                                          transform=ccrs.PlateCarree(),
-                                          cbar_kwargs={'label': clim.units},
-                                          cmap=cmocean.cm.haline_r)
+    clim.sel(season=season).plot.contourf(
+        ax=ax,
+        levels=np.arange(0, 13.5, 1.5),
+        extend="max",
+        transform=ccrs.PlateCarree(),
+        cbar_kwargs={"label": clim.units},
+        cmap=cmocean.cm.haline_r,
+    )
     ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
     
-    model = dset.attrs['source_id']
-    title = f'{model} precipitation climatology ({season})'
+    model = ds.attrs["source_id"]
+    title = f"{model} precipitation climatology ({season})"
     plt.title(title)
 ```
 
@@ -129,7 +134,7 @@ plot_pr_climatology(pr_file, season, gridlines=False)
 We can now use this function to create exactly the same plot as before:
 
 ```python
-plot_pr_climatology('data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc', 'JJA')
+plot_pr_climatology("data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc", "JJA")
 plt.show()
 ```
 
@@ -138,7 +143,7 @@ plt.show()
 Plot a different model and season:
 
 ```python
-plot_pr_climatology('data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc', 'DJF')
+plot_pr_climatology("data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc", "DJF")
 plt.show()
 ```
 
@@ -150,14 +155,17 @@ to change the default behaviour of the function
 that the user will only want to change occasionally):
 
 ```python
-plot_pr_climatology('data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc',
-                    'DJF', gridlines=True)
+plot_pr_climatology(
+    "data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc",
+    "DJF",
+    gridlines=True,
+)
 plt.show()
 ```
 
 ![](fig/03-functions-accessesm-djf-gridlines.png){alt='Precipitation climatology'}
 
-:::::::::::::::::::::::::::::::::::::::::  callout
+:::::::::::::::::::::::::::::::::::::::  challenge
 
 ## Short functions
 
@@ -185,10 +193,10 @@ def plot_pr_climatology(pr_file, season, gridlines=False):
 
     """
 
-    dset = xr.open_dataset(pr_file)
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    ds = xr.open_dataset(pr_file)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
     clim = convert_pr_units(clim)
-    create_plot(clim, dset.attrs['source_id'], season, gridlines=gridlines)
+    create_plot(clim, ds.attrs["source_id"], season, gridlines=gridlines)
     plt.show()
 ```
 
@@ -198,21 +206,19 @@ functions using code from the existing `plot_pr_climatology` function.
 
 :::::::::::::::  solution
 
-## Solution
-
 ```python
-def convert_pr_units(darray):
+def convert_pr_units(da):
     """Convert kg m-2 s-1 to mm day-1.
    
     Args:
-      darray (xarray.DataArray): Precipitation data
+      da (xarray.DataArray): Precipitation data
    
     """
    
-    darray.data = darray.data * 86400
-    darray.attrs['units'] = 'mm/day'
+    da.data = da.data * 86400
+    da.attrs['units'] = "mm/day"
    
-    return darray
+    return da
 
 
 def create_plot(clim, model, season, gridlines=False):
@@ -230,17 +236,19 @@ def create_plot(clim, model, season, gridlines=False):
        
     fig = plt.figure(figsize=[12,5])
     ax = fig.add_subplot(111, projection=ccrs.PlateCarree(central_longitude=180))
-    clim.sel(season=season).plot.contourf(ax=ax,
-                                          levels=np.arange(0, 13.5, 1.5),
-                                          extend='max',
-                                          transform=ccrs.PlateCarree(),
-                                          cbar_kwargs={'label': clim.units},
-                                          cmap=cmocean.cm.haline_r)
+    clim.sel(season=season).plot.contourf(
+        ax=ax,
+        levels=np.arange(0, 13.5, 1.5),
+        extend="max",
+        transform=ccrs.PlateCarree(),
+        cbar_kwargs={"label": clim.units},
+        cmap=cmocean.cm.haline_r,
+    )
     ax.coastlines()
     if gridlines:
         plt.gca().gridlines()
    
-    title = f'{model} precipitation climatology ({season})'
+    title = f"{model} precipitation climatology ({season})"
     plt.title(title)
 
 
@@ -254,14 +262,18 @@ def plot_pr_climatology(pr_file, season, gridlines=False):
 
     """
 
-    dset = xr.open_dataset(pr_file)
-    clim = dset['pr'].groupby('time.season').mean('time', keep_attrs=True)
+    ds = xr.open_dataset(pr_file)
+    clim = ds["pr"].groupby("time.season").mean("time", keep_attrs=True)
     clim = convert_pr_units(clim)
-    create_plot(clim, dset.attrs['source_id'], season, gridlines=gridlines)
+    create_plot(clim, ds.attrs["source_id"], season, gridlines=gridlines)
     plt.show()
 ```
 
 :::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::::::::::::::::
+
+:::::::::::::::::::::::::::::::::::::::::  callout
 
 ## Writing your own modules
 
