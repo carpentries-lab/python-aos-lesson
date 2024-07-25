@@ -17,5 +17,5 @@
 "episodes/10-large-data.md" "909dba426cb9409b6124181662c31af4" "site/built/10-large-data.md" "2024-07-25"
 "instructors/instructor-notes.md" "858a8aea24f020d8732ac71b2601f2e6" "site/built/instructor-notes.md" "2024-07-25"
 "learners/reference.md" "4e0dcbc7892af6f9610d44d356e66617" "site/built/reference.md" "2024-07-25"
-"learners/setup.md" "f7dab776e69c6169a24fd924b5095f69" "site/built/setup.md" "2024-07-25"
+"learners/setup.md" "d86e41df032ef642f234e5014b28178a" "site/built/setup.md" "2024-07-25"
 "profiles/learner-profiles.md" "60b93493cf1da06dfd63255d73854461" "site/built/learner-profiles.md" "2024-07-25"

@@ -40,7 +40,13 @@
     <loc>https://fishtree-attempt.github.io/python-aos-lesson/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://fishtree-attempt.github.io/python-aos-lesson/aio.html</loc>
+  </url>
+  <url>
     <loc>https://fishtree-attempt.github.io/python-aos-lesson/helper_lesson_check.html</loc>
+  </url>
+  <url>
+    <loc>https://fishtree-attempt.github.io/python-aos-lesson/images.html</loc>
   </url>
   <url>
     <loc>https://fishtree-attempt.github.io/python-aos-lesson/index.html</loc>
@@ -85,10 +91,22 @@
     <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/aio.html</loc>
+  </url>
+  <url>
     <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/helper_lesson_check.html</loc>
   </url>
   <url>
+    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/images.html</loc>
+  </url>
+  <url>
     <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/index.html</loc>
+  </url>
+  <url>
+    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/instructor-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/key-points.html</loc>
   </url>
   <url>
     <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/paper.html</loc>
@@ -98,6 +116,12 @@
   </url>
   <url>
     <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/reference.html</loc>
+  </url>
+  <url>
+    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://fishtree-attempt.github.io/python-aos-lesson/key-points.html</loc>
   </url>
   <url>
     <loc>https://fishtree-attempt.github.io/python-aos-lesson/paper.html</loc>
