@@ -261,7 +261,7 @@ plt.show()
 
 The default colorbar used by matplotlib is `viridis`.
 It used to be `jet`,
-but that was changed a couple of years ago in response to the
+but that was changed in response to the
 [\#endtherainbow](https://www.climate-lab-book.ac.uk/2014/end-of-the-rainbow/) campaign.
 
 Putting all the code together
@@ -334,7 +334,7 @@ clim.plot.contourf(
 Rather than plot the annual climatology,
 edit the code so that it plots the June-August (JJA) season.
 
-(Hint: the [groupby]() functionality can be used to
+(Hint: the `groupby` functionality can be used to
 group all the data into seasons prior to averaging over the time axis)
 
 :::::::::::::::  solution
