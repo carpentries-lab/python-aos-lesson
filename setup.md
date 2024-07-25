@@ -9,13 +9,13 @@ you will need to download the following two Python scripts and four netCDF files
 and place them in a new folder/directory:
 
 1. Make a new folder in your Desktop called `data-carpentry`.
-2. Download [script\_template.py][template\_script] and [plot\_precipitation\_climatology.py][precip\_script] and move them into that folder.
+2. Download [script\_template.py][template-script] and [plot\_precipitation\_climatology.py][precip-script] and move them into that folder.
 3. Make a new folder in your `data_carpentry` folder called `data`.
   Download the following files and place them in that folder:
-  - [pr\_Amon\_ACCESS-CM2\_historical\_r1i1p1f1\_gn\_201001-201412.nc][pr\_access-cm\_file]
-  - [pr\_Amon\_ACCESS-ESM1-5\_historical\_r1i1p1f1\_gn\_201001-201412.nc][pr\_access-esm\_file]
-  - [sftlf\_fx\_ACCESS-CM2\_historical\_r1i1p1f1\_gn.nc][sftlf\_access-cm\_file]
-  - [sftlf\_fx\_ACCESS-ESM1-5\_historical\_r1i1p1f1\_gn.nc][sftlf\_access-esm\_file]
+  - [pr\_Amon\_ACCESS-CM2\_historical\_r1i1p1f1\_gn\_201001-201412.nc][pr-accesscm-file]
+  - [pr\_Amon\_ACCESS-ESM1-5\_historical\_r1i1p1f1\_gn\_201001-201412.nc][pr-accessesm-file]
+  - [sftlf\_fx\_ACCESS-CM2\_historical\_r1i1p1f1\_gn.nc][sftlf-accesscm-file]
+  - [sftlf\_fx\_ACCESS-ESM1-5\_historical\_r1i1p1f1\_gn.nc][sftlf-accessesm-file]
 
 ## Software installation
 
@@ -130,11 +130,9 @@ To check that everything is installed correctly, follow the instructions below.
 
 - At the Bash Shell, type `python --version`. You should see the version of your Python program listed, with a reference to Anaconda (i.e. the default Python program on your laptop needs to be the Anaconda installation of Python).
 
-[pr\_access-cm\_file]: {{"/data/pr\_Amon\_ACCESS-CM2\_historical\_r1i1p1f1\_gn\_201001-201412.nc" | relative\_url}}
-[pr\_access-esm\_file]: {{"/data/pr\_Amon\_ACCESS-ESM1-5\_historical\_r1i1p1f1\_gn\_201001-201412.nc" | relative\_url}}
-[sftlf\_access-cm\_file]: {{"/data/sftlf\_fx\_ACCESS-CM2\_historical\_r1i1p1f1\_gn.nc" | relative\_url }}
-[sftlf\_access-esm\_file]: {{"/data/sftlf\_fx\_ACCESS-ESM1-5\_historical\_r1i1p1f1\_gn.nc" | relative\_url}}
-[template\_script]: {{"/code/script\_template.py" | relative\_url}}
-[precip\_script]: {{"code/plot\_precipitation\_climatology.py" | relative\_url}}
-
-
+[pr-accesscm-file]: https://carpentries-lab.github.io/python-aos-lesson/data/pr_Amon_ACCESS-CM2_historical_r1i1p1f1_gn_201001-201412.nc
+[pr-accessesm-file]: https://carpentries-lab.github.io/python-aos-lesson/data/pr_Amon_ACCESS-ESM1-5_historical_r1i1p1f1_gn_201001-201412.nc
+[sftlf-accesscm-file]: https://carpentries-lab.github.io/python-aos-lesson/data/sftlf_fx_ACCESS-CM2_historical_r1i1p1f1_gn.nc
+[sftlf-accessesm-file]: https://carpentries-lab.github.io/python-aos-lesson/data/sftlf_fx_ACCESS-ESM1-5_historical_r1i1p1f1_gn.nc
+[template-script]: https://carpentries-lab.github.io/python-aos-lesson/code/script_template.py
+[precip-script]: https://carpentries-lab.github.io/python-aos-lesson/code/plot_precipitation_climatology.py
