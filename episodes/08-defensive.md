@@ -47,7 +47,7 @@ write unit tests to make sure each component of our program produces expected ou
 and use a logging framework to report on program activity.
 In this lesson, we'll look at how error handling, assertions and logging
 can make the unit conversion in our program more reliable,
-and we'll provide links to further information on unit testing.
+and we'll provide links to further information on unit .
 
 ## Types of errors
 
@@ -327,7 +327,7 @@ An assertion checks that something is true at a particular point in the program.
 For programs that are more complex (or research critical) than `plot_precipitation_climatology.py`,
 it's a good idea to take the next step and check the overall behavior of entire pieces (or units) of code.
 Related concepts like unit testing and continuous integration are beyond the scope of this lesson,
-but *Research Software Engineering With Python* has a [chapter on testing](https://merely-useful.github.io/py-rse/testing.html)
+but *Research Software Engineering With Python* has a [chapter on testing](https://third-bit.com/py-rse/testing.html)
 that is well worth a read.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
