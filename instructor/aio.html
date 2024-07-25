@@ -462,14 +462,14 @@ files, we need to consider what Python libraries are best suited to the
 task.</p>
 <p>For reading, writing and analysing data stored in the netCDF file
 format, atmosphere and ocean scientists will typically do most of their
-work with either the <a href="https://xarray.pydata.org/en/stable/" class="external-link">xarray</a> or <a href="https://scitools.org.uk/iris/" class="external-link">iris</a> libraries. These libraries
-are built on top of more generic data science libraries like numpy and
-matplotlib, to make the types of analysis we do faster and more
-efficient. To learn more about the PyAOS “stack” shown in the diagram
-below (i.e. the collection of libraries that are typically used for data
-analysis and visualisation in the atmosphere and ocean sciences), check
-out the <a href="https://pyaos.github.io/stack/" class="external-link">overview of the PyAOS
-stack</a> at the PyAOS community site.</p>
+work with either the <a href="https://docs.xarray.dev" class="external-link">xarray</a> or <a href="https://scitools-iris.readthedocs.io/" class="external-link">iris</a> libraries. These
+libraries are built on top of more generic data science libraries like
+numpy and matplotlib, to make the types of analysis we do faster and
+more efficient. To learn more about the PyAOS “stack” shown in the
+diagram below (i.e. the collection of libraries that are typically used
+for data analysis and visualisation in the atmosphere and ocean
+sciences), check out the <a href="https://pyaos.github.io/stack/" class="external-link">overview of the PyAOS stack</a> at
+the PyAOS community site.</p>
 <figure><img src="../fig/01-pyaos-stack.svg" alt="PyAOS stack" class="figure mx-auto d-block"></figure></section><section><h2 class="section-heading" id="python-distributions-for-data-science">Python distributions for data science<a class="anchor" aria-label="anchor" href="#python-distributions-for-data-science"></a>
 <a class="anchor" aria-label="anchor" href="#python-distributions-for-data-science"></a>
 </h2>
@@ -485,19 +485,20 @@ pain of installing these dependencies, a number of scientific Python
 most popular data science libraries and their dependencies
 pre-installed, and some also come with a package manager to assist with
 installing additional libraries that weren’t pre-installed. Today the
-most popular distribution for data science is <a href="https://www.anaconda.com/distribution/" class="external-link">Anaconda</a>, which comes
+most popular distribution for data science is <a href="https://docs.anaconda.com/anaconda/" class="external-link">Anaconda</a>, which comes
 with a package (and environment) manager called <a href="https://conda.io/docs/" class="external-link">conda</a>.</p>
 </section><section><h2 class="section-heading" id="introducing-conda">Introducing conda<a class="anchor" aria-label="anchor" href="#introducing-conda"></a>
 <a class="anchor" aria-label="anchor" href="#introducing-conda"></a>
 </h2>
 <hr class="half-width">
-<p>According to the <a href="https://docs.anaconda.com/anaconda/#anaconda-navigator-or-conda" class="external-link">latest
-documentation</a>, Anaconda comes with over 250 of the most widely used
-data science libraries (and their dependencies) pre-installed. In
-addition, there are several thousand more libraries available via the
-<code>conda install</code> command, which can be executed using the Bash
-Shell or Anaconda Prompt (Windows only). It is also possible to install
-packages using the Anaconda Navigator graphical user interface.</p>
+<p>According to the <a href="%5Bhttps://docs.anaconda.com/anaconda/" class="external-link">latest documentation</a>,
+Anaconda comes with over 300 of the most widely used data science
+libraries (and their dependencies) pre-installed. In addition, there are
+several thousand more libraries available via the Anaconda Public
+Repository, which can be installed by running the
+<code>conda install</code> command the Bash Shell or Anaconda Prompt
+(Windows only). It is also possible to install packages using the
+Anaconda Navigator graphical user interface.</p>
 <div id="conda-in-the-shell-on-windows" class="callout">
 <div class="callout-square">
 <i class="callout-icon" data-feather="bell"></i>
@@ -534,8 +535,8 @@ package you want is available.)</p>
 </h3>
 <div class="callout-content">
 <p>If you don’t want to install the entire Anaconda distribution, you
-can install <a href="https://conda.pydata.org/miniconda.html" class="external-link">Miniconda</a> instead. It
-essentially comes with conda and nothing else.</p>
+can install <a href="https://docs.anaconda.com/miniconda/" class="external-link">Miniconda</a>
+instead. It essentially comes with conda and nothing else.</p>
 </div>
 </div>
 </div>
@@ -548,18 +549,16 @@ ocean science, one of the most important features that Anaconda provides
 is the <a href="https://anaconda.org" class="external-link">Anaconda Cloud</a> website, where
 the community can contribute conda installation packages. This is
 critical because many of our libraries have a small user base, which
-means they’ll never make it into the top few thousand data science
-libraries supported by Anaconda.</p>
+means they’ll never make it into the Anaconda Public Repository.</p>
 <p>You can search Anaconda Cloud to find the command needed to install
 the package. For instance, here is the search result for the
 <code>iris</code> package:</p>
 <figure><img src="../fig/01-iris-search.png" alt="Iris search on Anaconda Cloud" class="figure mx-auto d-block"></figure><p>As you can see, there are often multiple versions of the same package
-up on Anaconda Cloud. To try and address this duplication problem, <a href="https://conda-forge.github.io/" class="external-link">conda-forge</a> has been launched,
-which aims to be a central repository that contains just a single
-(working) version of each package on Anaconda Cloud. You can therefore
-expand the selection of packages available via
-<code>conda install</code> beyond the chosen few thousand by adding the
-conda-forge channel:</p>
+up on Anaconda Cloud. To try and address this duplication problem, <a href="https://conda-forge.org/" class="external-link">conda-forge</a> has been launched, which
+aims to be a central repository that contains just a single (working)
+version of each package on Anaconda Cloud. You can therefore expand the
+selection of packages available via <code>conda install</code> beyond
+the chosen few thousand by adding the conda-forge channel:</p>
 <div class="codewrapper sourceCode" id="cb2">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -575,7 +574,7 @@ cause headaches like binary incompatibilities.</p>
 <hr class="half-width">
 <p>For these particular lessons we will use <code>xarray</code>, but all
 the same tasks could be performed with <code>iris</code>. We’ll also
-install <a href="https://dask.org/" class="external-link"><code>dask</code></a>
+install <a href="https://www.dask.org/" class="external-link"><code>dask</code></a>
 (<code>xarray</code> uses this for parallel processing), <a href="https://unidata.github.io/netcdf4-python/" class="external-link"><code>netCDF4</code></a>
 (<code>xarray</code> requires this to read netCDF files), <a href="https://scitools.org.uk/cartopy/" class="external-link"><code>cartopy</code></a> (to
 help with geographic plot projections), <a href="https://matplotlib.org/cmocean/" class="external-link"><code>cmocean</code></a> (for
@@ -614,7 +613,7 @@ Navigator.)</p>
 <p>If you’ve got multiple data science projects on the go, installing
 all your packages in the same conda environment can get a little messy.
 (By default they are installed in the root/base environment.) It’s
-therefore common practice to <a href="https://conda.io/docs/user-guide/tasks/manage-environments.html" class="external-link">create
+therefore common practice to <a href="https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html" class="external-link">create
 separate conda environments</a> for the various projects you’re working
 on.</p>
 <p>For instance, we could create an environment called
@@ -676,28 +675,13 @@ exact environment using the YAML file:</p>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="ex">$</span> conda env create <span class="at">-f</span> pyaos-lesson.yml</span></code></pre>
 </div>
-<p>For ease of sharing the YAML file, it can be uploaded to your account
-at the Anaconda Cloud website,</p>
-<div class="codewrapper sourceCode" id="cb11">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">$</span> conda env upload <span class="at">-f</span> pyaos-lesson.yml</span></code></pre>
-</div>
-<p>so that others can re-create the environment by simply refering to
-your Anaconda username:</p>
-<div class="codewrapper sourceCode" id="cb12">
-<h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
-</h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="ex">$</span> conda env create damienirving/pyaos-lesson</span>
-<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="ex">$</span> conda activate pyaos-lesson</span></code></pre>
-</div>
 <p>The ease with which others can recreate your environment (on any
 operating system) is a huge breakthough for reproducible research.</p>
 <p>To delete the environment:</p>
-<div class="codewrapper sourceCode" id="cb13">
+<div class="codewrapper sourceCode" id="cb11">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="ex">$</span> conda env remove <span class="at">-n</span> pyaos-lesson</span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="ex">$</span> conda env remove <span class="at">-n</span> pyaos-lesson</span></code></pre>
 </div>
 </div>
 </div>
@@ -721,10 +705,10 @@ $</code></pre>
 <p>The <code>&gt;&gt;&gt;</code> prompt indicates that you are now
 talking to the Python interpreter.</p>
 <p>A more powerful alternative to the default Python interpreter is
-IPython (Interactive Python). The <a href="https://ipython.readthedocs.io/en/stable/" class="external-link">online
-documentation</a> outlines all the special features that come with
-IPython, but as an example, it lets you execute bash shell commands
-without having to exit the IPython interpreter:</p>
+IPython (Interactive Python). The <a href="https://ipython.readthedocs.io" class="external-link">online documentation</a> outlines
+all the special features that come with IPython, but as an example, it
+lets you execute bash shell commands without having to exit the IPython
+interpreter:</p>
 <pre><code>$ ipython
 Python 3.7.1 (default, Dec 14 2018, 13:28:58)
 Type 'copyright', 'credits' or 'license' for more information
@@ -760,11 +744,11 @@ code, equations, visualizations and narrative text.</li>
 data (and the plotting functionality of xarray) in the next few lessons.
 A notebook can be launched from our <code>data-carpentry</code>
 directory using the Bash Shell:</p>
-<div class="codewrapper sourceCode" id="cb16">
+<div class="codewrapper sourceCode" id="cb14">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="ex">$</span> cd ~/Desktop/data-carpentry</span>
-<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="ex">$</span> jupyter notebook <span class="kw">&amp;</span></span></code></pre>
+<pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="ex">$</span> cd ~/Desktop/data-carpentry</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="ex">$</span> jupyter notebook <span class="kw">&amp;</span></span></code></pre>
 </div>
 <p>(The <code>&amp;</code> allows you to come back and use the bash
 shell without closing your notebook first.)</p>
@@ -779,9 +763,8 @@ before creating a new Python 3 notebook:</p>
 <h3 class="callout-title">JupyterLab<a class="anchor" aria-label="anchor" href="#jupyterlab"></a>
 </h3>
 <div class="callout-content">
-<p>The Jupyter team have recently launched <a href="https://blog.jupyter.org/jupyterlab-is-ready-for-users-5a6f039b8906" class="external-link">JupyterLab</a>
-which combines the Jupyter Notebook with many of the features common to
-an IDE.</p>
+<p>If you like Jupyter Notebooks you might want to try <a href="https://jupyterlab.readthedocs.io" class="external-link">JupyterLab</a>, which combines
+the Jupyter Notebook with many of the features common to an IDE.</p>
 </div>
 </div>
 </div>
@@ -813,10 +796,9 @@ need to install jupyter too.)</p>
 </button>
 <div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
-<p>The <a href="https://carpentries-lab.github.io/python-aos-lesson/setup.html" class="external-link">setup
-menu</a> at the top of the page contains drop-down boxes explaining how
-to install the Python libraries using the Bash Shell or Anaconda
-Navigator.</p>
+<p>The <a href="https://carpentries-lab.github.io/python-aos-lesson/#software-installation" class="external-link">software
+installation instructions</a> explain how to install the Python
+libraries using the Bash Shell or Anaconda Navigator.</p>
 </div>
 </div>
 </div>
@@ -841,13 +823,13 @@ these lessons before clicking to create a new Python 3 notebook:</p>
 <figure><img src="../fig/01-launch-notebook.png" alt="Launch Jupyter notebook" class="figure mx-auto d-block"></figure><p>Once your notebook is open, import <code>xarray</code>,
 <code>catropy</code>, <code>matplotlib</code> and <code>numpy</code>
 using the following Python commands:</p>
-<div class="codewrapper sourceCode" id="cb17">
+<div class="codewrapper sourceCode" id="cb15">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
-<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
-<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="im">import</span> cartopy.crs <span class="im">as</span> ccrs</span>
-<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="im">import</span> xarray <span class="im">as</span> xr</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="im">import</span> cartopy.crs <span class="im">as</span> ccrs</span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span></code></pre>
 </div>
 <p>(Hint: Hold down the shift and return keys to execute a code cell in
 a Jupyter Notebook.)</p>
@@ -1152,8 +1134,7 @@ DataArrays much easier.</p>
 <span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a>plt.show()</span></code></pre>
 </div>
 <figure><img src="../fig/02-visualisation-viridis.png" alt="Precipitation climatology" class="figure mx-auto d-block"></figure><p>The default colorbar used by matplotlib is <code>viridis</code>. It
-used to be <code>jet</code>, but that was changed a couple of years ago
-in response to the <a href="https://www.climate-lab-book.ac.uk/2014/end-of-the-rainbow/" class="external-link">#endtherainbow</a>
+used to be <code>jet</code>, but that was changed in response to the <a href="https://www.climate-lab-book.ac.uk/2014/end-of-the-rainbow/" class="external-link">#endtherainbow</a>
 campaign.</p>
 <p>Putting all the code together (and reversing viridis so that wet is
 purple and dry is yellow)…</p>
@@ -1237,7 +1218,7 @@ ocean salinity data.</p>
 <div class="callout-content">
 <p>Rather than plot the annual climatology, edit the code so that it
 plots the June-August (JJA) season.</p>
-<p>(Hint: the <a href="">groupby</a> functionality can be used to group
+<p>(Hint: the <code>groupby</code> functionality can be used to group
 all the data into seasons prior to averaging over the time axis)</p>
 </div>
 </div>
@@ -1545,7 +1526,7 @@ function.</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb9">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -1710,8 +1691,8 @@ and/or take notes on a new data analysis task. Once you’ve scoped out
 the task (as we have for plotting the precipitation climatology), that
 code can be transferred to a Python script so that it can be executed at
 the command line. It’s likely that your data processing workflows will
-include command line utilities from the CDO and NCO projects in addition
-to Python code, so the command line is the natural place to manage your
+include command line utilities from the <a href="https://code.mpimet.mpg.de/projects/cdo" class="external-link">CDO</a> and <a href="https://nco.sourceforge.net/" class="external-link">NCO</a> projects in addition to
+Python code, so the command line is the natural place to manage your
 workflows (e.g. using shell scripts or make files).</p>
 <p>In general, the first thing that gets added to any Python script is
 the following:</p>
@@ -2929,9 +2910,9 @@ there.</p>
 suggestion for <code>git checkout</code> instead of
 <code>git restore</code>. As of Git version 2.29,
 <code>git restore</code> is still an experimental command and operates
-as a specialized form of <code>git checkout</code>.
-<code>git checkout HEAD plot_precipitation_climatology</code> is the
-equivalent command.</p>
+as a specialized form of <code>git checkout</code>.</p>
+<p><code>git checkout HEAD plot_precipitation_climatology.py</code> is
+the equivalent command.</p>
 </div>
 </div>
 </div>
@@ -4027,7 +4008,7 @@ unit tests to make sure each component of our program produces expected
 outputs, and use a logging framework to report on program activity. In
 this lesson, we’ll look at how error handling, assertions and logging
 can make the unit conversion in our program more reliable, and we’ll
-provide links to further information on unit testing.</p>
+provide links to further information on unit .</p>
 <section><h2 class="section-heading" id="types-of-errors">Types of errors<a class="anchor" aria-label="anchor" href="#types-of-errors"></a>
 <a class="anchor" aria-label="anchor" href="#types-of-errors"></a>
 </h2>
@@ -4321,8 +4302,8 @@ than <code>plot_precipitation_climatology.py</code>, it’s a good idea to
 take the next step and check the overall behavior of entire pieces (or
 units) of code. Related concepts like unit testing and continuous
 integration are beyond the scope of this lesson, but <em>Research
-Software Engineering With Python</em> has a <a href="https://merely-useful.github.io/py-rse/testing.html" class="external-link">chapter on
-testing</a> that is well worth a read.</p>
+Software Engineering With Python</em> has a <a href="https://third-bit.com/py-rse/testing.html" class="external-link">chapter on testing</a>
+that is well worth a read.</p>
 </div>
 </div>
 </div>
@@ -4583,7 +4564,7 @@ the screen.)</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>The basic configuration command at the top of the <code>main</code>
 function
@@ -4627,7 +4608,7 @@ that it raises a <code>ValueError</code> if the realm is not
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb37">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -4662,7 +4643,7 @@ something like the following:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb38">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5091,7 +5072,7 @@ in <code>plot_precipitation_climatology.py</code> looks like:</p>
 <h3 class="callout-title">Handling different image formats<a class="anchor" aria-label="anchor" href="#handling-different-image-formats"></a>
 </h3>
 <div class="callout-content">
-<p>The <a href="https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.savefig.html" class="external-link"><code>plt.savefig</code>
+<p>The <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html" class="external-link"><code>plt.savefig</code>
 documentation</a> provides information on the metadata keys accepted by
 PNG, PDF, EPS and PS image formats.</p>
 <p>Using that information as a guide, add a new function called
@@ -5126,7 +5107,7 @@ should read as follows:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
 <div class="accordion-body">
 <p>The new function could read as follows:</p>
 <div class="codewrapper sourceCode" id="cb12">
@@ -5259,7 +5240,7 @@ output netCDF file?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
 <div class="accordion-body">
 <p>The beginning of the script would need to be updated to import the
 <code>cmdline_provenance</code> library:</p>
@@ -5302,7 +5283,7 @@ something like the following:</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution3" aria-expanded="false" aria-controls="collapseSolution3">
   <h4 class="accordion-header" id="headingSolution3"> Show me the solution </h4>
 </button>
-<div id="collapseSolution3" class="accordion-collapse collapse" aria-labelledby="headingSolution3" data-bs-parent="#accordionSolution3">
+<div id="collapseSolution3" class="accordion-collapse collapse" data-bs-parent="#accordionSolution3" aria-labelledby="headingSolution3">
 <div class="accordion-body">
 <div class="codewrapper sourceCode" id="cb16">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
@@ -5585,7 +5566,7 @@ the 1850-2014 period for the high resolution CNRM-CM6-1-HR model.</p>
 <div class="callout-content">
 <p>Instructors teaching this lesson can download the CNRM-CM6-1-HR daily
 precipitation data from the Earth System Grid Federation (ESGF). See the
-<a href="https://carpentries-lab.github.io/python-aos-lesson/guide/index.html" class="external-link">instructor
+<a href="https://carpentries-lab.github.io/python-aos-lesson/instructor/instructor-notes.html" class="external-link">instructor
 notes</a> for details. Since it is a very large download (45 GB),
 learners are not expected to download the data. (None of the exercises
 at the end of the lesson require downloading the data.)</p>
@@ -5912,8 +5893,8 @@ operations (like <code>max</code>) work on Dask arrays.</p>
 aren’t built into <code>xarray</code> (e.g. an interpolation routine
 from the SciPy library) we’d first need to use the
 <code>apply_ufunc</code> or <code>map_blocks</code> function to make
-those operations “Dask-aware”. The <a href="https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/06_xarray_and_dask.html#Automatic-parallelization-with-apply_ufunc-and-map_blocks" class="external-link">xarray
-tutorial</a> from SciPy 2020 explains how to do this.</p>
+those operations “Dask-aware”. There’s an <a href="https://docs.xarray.dev/en/stable/examples/apply_ufunc_vectorize_1d.html" class="external-link">xarray
+tutorial</a> that explains how to do this.</p>
 </div>
 </div>
 </div>
@@ -5940,7 +5921,7 @@ multi-file dataset? What are the pros and cons of these options?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Other options include writing a loop to process each netCDF file one
 at a time or a series of sub-regions one at a time.</p>
@@ -5972,7 +5953,7 @@ have available and how much memory?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Run the following two commands in your notebook to setup the client
 and then type <code>client</code> to view the display of

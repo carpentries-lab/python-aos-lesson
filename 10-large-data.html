@@ -399,7 +399,7 @@ the 1850-2014 period for the high resolution CNRM-CM6-1-HR model.</p>
 <div class="callout-content">
 <p>Instructors teaching this lesson can download the CNRM-CM6-1-HR daily
 precipitation data from the Earth System Grid Federation (ESGF). See the
-<a href="https://carpentries-lab.github.io/python-aos-lesson/guide/index.html" class="external-link">instructor
+<a href="https://carpentries-lab.github.io/python-aos-lesson/instructor/instructor-notes.html" class="external-link">instructor
 notes</a> for details. Since it is a very large download (45 GB),
 learners are not expected to download the data. (None of the exercises
 at the end of the lesson require downloading the data.)</p>
@@ -726,8 +726,8 @@ operations (like <code>max</code>) work on Dask arrays.</p>
 aren’t built into <code>xarray</code> (e.g. an interpolation routine
 from the SciPy library) we’d first need to use the
 <code>apply_ufunc</code> or <code>map_blocks</code> function to make
-those operations “Dask-aware”. The <a href="https://xarray-contrib.github.io/xarray-tutorial/scipy-tutorial/06_xarray_and_dask.html#Automatic-parallelization-with-apply_ufunc-and-map_blocks" class="external-link">xarray
-tutorial</a> from SciPy 2020 explains how to do this.</p>
+those operations “Dask-aware”. There’s an <a href="https://docs.xarray.dev/en/stable/examples/apply_ufunc_vectorize_1d.html" class="external-link">xarray
+tutorial</a> that explains how to do this.</p>
 </div>
 </div>
 </div>
@@ -754,7 +754,7 @@ multi-file dataset? What are the pros and cons of these options?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution1" aria-expanded="false" aria-controls="collapseSolution1">
   <h4 class="accordion-header" id="headingSolution1"> Show me the solution </h4>
 </button>
-<div id="collapseSolution1" class="accordion-collapse collapse" data-bs-parent="#accordionSolution1" aria-labelledby="headingSolution1">
+<div id="collapseSolution1" class="accordion-collapse collapse" aria-labelledby="headingSolution1" data-bs-parent="#accordionSolution1">
 <div class="accordion-body">
 <p>Other options include writing a loop to process each netCDF file one
 at a time or a series of sub-regions one at a time.</p>
@@ -786,7 +786,7 @@ have available and how much memory?</p>
 <button class="accordion-button solution-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSolution2" aria-expanded="false" aria-controls="collapseSolution2">
   <h4 class="accordion-header" id="headingSolution2"> Show me the solution </h4>
 </button>
-<div id="collapseSolution2" class="accordion-collapse collapse" data-bs-parent="#accordionSolution2" aria-labelledby="headingSolution2">
+<div id="collapseSolution2" class="accordion-collapse collapse" aria-labelledby="headingSolution2" data-bs-parent="#accordionSolution2">
 <div class="accordion-body">
 <p>Run the following two commands in your notebook to setup the client
 and then type <code>client</code> to view the display of
