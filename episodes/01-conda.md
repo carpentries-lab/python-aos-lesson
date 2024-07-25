@@ -54,7 +54,7 @@ a number of scientific Python "distributions" have been released over the years.
 These come with the most popular data science libraries and their dependencies pre-installed,
 and some also come with a package manager to assist with installing
 additional libraries that weren't pre-installed.
-Today the most popular distribution for data science is [Anaconda](https://www.anaconda.com/distribution/),
+Today the most popular distribution for data science is [Anaconda](https://docs.anaconda.com/anaconda/),
 which comes with a package (and environment) manager called [conda](https://conda.io/docs/).
 
 ## Introducing conda
