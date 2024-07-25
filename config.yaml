@@ -14,7 +14,7 @@ carpentry: 'cp'
 title: 'Python for Atmosphere and Ocean Scientists'
 
 # Date the lesson was created (YYYY-MM-DD, this is empty by default)
-created: 
+created: 2018-01-15 
 
 # Comma-separated list of keywords for the lesson
 keywords: 'software, data, lesson, The Carpentries'
