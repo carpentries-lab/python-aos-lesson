@@ -208,7 +208,7 @@ def main(inargs):
 
 ## Handling different image formats
 
-The [`plt.savefig` documentation](https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.savefig.html)
+The [`plt.savefig` documentation](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.savefig.html)
 provides information on the metadata keys accepted by
 PNG, PDF, EPS and PS image formats.
  

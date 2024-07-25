@@ -29,7 +29,7 @@ we need to consider what Python libraries are best suited to the task.
 
 For reading, writing and analysing data stored in the netCDF file format,
 atmosphere and ocean scientists will typically do most of their work with either the
-[xarray](https://xarray.pydata.org/en/stable/) or [iris](https://scitools.org.uk/iris/) libraries.
+[xarray](https://docs.xarray.dev) or [iris](https://scitools-iris.readthedocs.io/) libraries.
 These libraries are built on top of more generic data science libraries like numpy and matplotlib,
 to make the types of analysis we do faster and more efficient.
 To learn more about the PyAOS "stack" shown in the diagram below
@@ -54,15 +54,15 @@ a number of scientific Python "distributions" have been released over the years.
 These come with the most popular data science libraries and their dependencies pre-installed,
 and some also come with a package manager to assist with installing
 additional libraries that weren't pre-installed.
-Today the most popular distribution for data science is [Anaconda](https://www.anaconda.com/distribution/),
+Today the most popular distribution for data science is [Anaconda](https://docs.anaconda.com/anaconda/),
 which comes with a package (and environment) manager called [conda](https://conda.io/docs/).
 
 ## Introducing conda
 
-According to the [latest documentation](https://docs.anaconda.com/anaconda/#anaconda-navigator-or-conda),
-Anaconda comes with over 250 of the most widely used data science libraries (and their dependencies) pre-installed.
-In addition, there are several thousand more libraries available via the `conda install` command,
-which can be executed using the Bash Shell or Anaconda Prompt (Windows only).
+According to the [latest documentation]([https://docs.anaconda.com/anaconda/),
+Anaconda comes with over 300 of the most widely used data science libraries (and their dependencies) pre-installed.
+In addition, there are several thousand more libraries available via the Anaconda Public Repository, 
+which can be installed by running the `conda install` command the Bash Shell or Anaconda Prompt (Windows only).
 It is also possible to install packages using the Anaconda Navigator graphical user interface.
 
 :::::::::::::::::::::::::::::::::::::::::  callout
@@ -93,7 +93,7 @@ OR using Anaconda Navigator:
 ## Miniconda
 
 If you don't want to install the entire Anaconda distribution,
-you can install [Miniconda](https://conda.pydata.org/miniconda.html) instead.
+you can install [Miniconda](https://docs.anaconda.com/miniconda/) instead.
 It essentially comes with conda and nothing else.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -105,8 +105,7 @@ one of the most important features that Anaconda provides is the
 [Anaconda Cloud](https://anaconda.org) website,
 where the community can contribute conda installation packages.
 This is critical because many of our libraries have a small user base,
-which means they'll never make it into the top few thousand data science libraries
-supported by Anaconda.
+which means they'll never make it into the Anaconda Public Repository.
 
 You can search Anaconda Cloud to find the command needed to install the package.
 For instance, here is the search result for the `iris` package:
@@ -115,7 +114,7 @@ For instance, here is the search result for the `iris` package:
 
 As you can see, there are often multiple versions of the same package up on Anaconda Cloud.
 To try and address this duplication problem,
-[conda-forge](https://conda-forge.github.io/) has been launched,
+[conda-forge](https://conda-forge.org/) has been launched,
 which aims to be a central repository that contains just a single (working) version
 of each package on Anaconda Cloud.
 You can therefore expand the selection of packages available via `conda install`
@@ -137,7 +136,7 @@ because mixing packages from multiple channels can cause headaches like binary i
 For these particular lessons we will use `xarray`,
 but all the same tasks could be performed with `iris`.
 We'll also install
-[`dask`](https://dask.org/) (`xarray` uses this for parallel processing),
+[`dask`](https://www.dask.org/) (`xarray` uses this for parallel processing),
 [`netCDF4`](https://unidata.github.io/netcdf4-python/) (`xarray` requires this to read netCDF files),
 [`cartopy`](https://scitools.org.uk/cartopy/) (to help with geographic plot projections),
 [`cmocean`](https://matplotlib.org/cmocean/) (for nice color palettes) and
@@ -172,7 +171,7 @@ If you've got multiple data science projects on the go,
 installing all your packages in the same conda environment can get a little messy.
 (By default they are installed in the root/base environment.)
 It's therefore common practice to
-[create separate conda environments](https://conda.io/docs/user-guide/tasks/manage-environments.html)
+[create separate conda environments](https://conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html)
 for the various projects you're working on.
 
 For instance, we could create an environment called `pyaos-lesson` for this lesson.
@@ -231,20 +230,6 @@ using the YAML file:
 $ conda env create -f pyaos-lesson.yml
 ```
 
-For ease of sharing the YAML file,
-it can be uploaded to your account at the Anaconda Cloud website,
-
-```bash
-$ conda env upload -f pyaos-lesson.yml
-```
-
-so that others can re-create the environment by simply refering to your Anaconda username:
-
-```bash
-$ conda env create damienirving/pyaos-lesson
-$ conda activate pyaos-lesson
-```
-
 The ease with which others can recreate your environment (on any operating system)
 is a huge breakthough for reproducible research.
 
@@ -278,7 +263,7 @@ $
 The `>>>` prompt indicates that you are now talking to the Python interpreter.
 
 A more powerful alternative to the default Python interpreter is IPython (Interactive Python).
-The [online documentation](https://ipython.readthedocs.io/en/stable/)
+The [online documentation](https://ipython.readthedocs.io)
 outlines all the special features that come with IPython,
 but as an example, it lets you execute bash shell commands
 without having to exit the IPython interpreter:
@@ -342,8 +327,7 @@ Python 3 notebook:
 
 ## JupyterLab
 
-The Jupyter team have recently launched
-[JupyterLab](https://blog.jupyter.org/jupyterlab-is-ready-for-users-5a6f039b8906)
+If you like Jupyter Notebooks you might want to try [JupyterLab](https://jupyterlab.readthedocs.io),
 which combines the Jupyter Notebook with many of the features common to an IDE.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -365,10 +349,8 @@ you'll need to install jupyter too.)
 
 :::::::::::::::  solution
 
-The [setup menu](https://carpentries-lab.github.io/python-aos-lesson/setup.html)
-at the top of the page
-contains drop-down boxes explaining how to install the Python libraries
-using the Bash Shell or Anaconda Navigator.
+The [software installation instructions](https://carpentries-lab.github.io/python-aos-lesson/#software-installation)
+explain how to install the Python libraries using the Bash Shell or Anaconda Navigator.
 
 :::::::::::::::::::::::::
 
@@ -412,5 +394,3 @@ import numpy as np
 - Use conda to install and manage your Python environments.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::::
-
-
