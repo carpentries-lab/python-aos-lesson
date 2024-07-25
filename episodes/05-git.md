@@ -649,7 +649,8 @@ you may see a suggestion for `git checkout` instead of `git restore`.
 As of Git version 2.29,
 `git restore` is still an experimental command
 and operates as a specialized form of `git checkout`.
-`git checkout HEAD plot_precipitation_climatology`
+
+`git checkout HEAD plot_precipitation_climatology.py`
 is the equivalent command.
 
 
