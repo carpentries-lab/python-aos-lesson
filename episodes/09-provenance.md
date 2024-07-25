@@ -407,7 +407,7 @@ def convert_pr_units(da):
     """Convert kg m-2 s-1 to mm day-1.
     
     Args:
-      darray (xarray.DataArray): Precipitation data
+      da (xarray.DataArray): Precipitation data
    
     """
     
