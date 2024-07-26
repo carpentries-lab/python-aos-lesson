@@ -1,135 +1,135 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/01-conda.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/01-conda.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/02-visualisation.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/02-visualisation.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/03-functions.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/03-functions.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/04-cmdline.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/04-cmdline.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/05-git.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/05-git.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/06-github.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/06-github.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/07-vectorisation.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/07-vectorisation.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/08-defensive.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/08-defensive.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/09-provenance.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/09-provenance.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/10-large-data.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/10-large-data.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/404.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/404.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/CODE_OF_CONDUCT.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/LICENSE.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/aio.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/aio.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/helper_lesson_check.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/helper_lesson_check.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/images.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/images.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/index.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/index.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/01-conda.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/01-conda.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/02-visualisation.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/02-visualisation.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/03-functions.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/03-functions.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/04-cmdline.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/04-cmdline.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/05-git.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/05-git.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/06-github.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/06-github.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/07-vectorisation.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/07-vectorisation.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/08-defensive.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/08-defensive.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/09-provenance.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/09-provenance.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/10-large-data.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/10-large-data.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/404.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/404.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/CODE_OF_CONDUCT.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/CODE_OF_CONDUCT.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/LICENSE.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/aio.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/aio.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/helper_lesson_check.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/helper_lesson_check.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/images.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/images.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/index.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/index.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/instructor-notes.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/instructor-notes.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/key-points.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/key-points.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/paper.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/paper.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/profiles.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/profiles.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor/reference.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor/reference.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/instructor-notes.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/instructor-notes.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/key-points.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/key-points.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/paper.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/paper.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/profiles.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/profiles.html</loc>
   </url>
   <url>
-    <loc>https://fishtree-attempt.github.io/python-aos-lesson/reference.html</loc>
+    <loc>https://carpentries-lab.github.io/python-aos-lesson/reference.html</loc>
   </url>
 </urlset>
