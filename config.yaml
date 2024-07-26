@@ -8,7 +8,7 @@
 # lc: Library Carpentry
 # cp: Carpentries (to use for instructor training for instance)
 # incubator: The Carpentries Incubator
-carpentry: 'cp'
+carpentry: 'lab'
 
 # Overall title for pages.
 title: 'Python for Atmosphere and Ocean Scientists'
@@ -34,6 +34,8 @@ branch: 'main'
 
 # Who to contact if there are any issues
 contact: 'irving.damien@gmail.com'
+
+doi: 'https://doi.org/10.21105/jose.00037'
 
 # Navigation ------------------------------------------------
 #
